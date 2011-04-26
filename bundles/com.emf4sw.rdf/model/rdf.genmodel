@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText=""
+    modelDirectory="/com.emf4sw.rdf/src" editDirectory="/com.emf4sw.rdf.edit/src"
+    editorDirectory="/com.emf4sw.rdf.editor/src" modelPluginID="com.emf4sw.rdf" modelName="RDF"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    bundleManifest="false" complianceLevel="6.0" copyrightFields="false" providerRootExtendsClass=""
+    editPluginID="com.emf4sw.rdf.edit" editorPluginID="com.emf4sw.rdf.editor" runtimeVersion="2.5">
+  <foreignModel>rdf.ecore</foreignModel>
+  <genPackages prefix="RDF" basePackage="com.emf4sw" disposableProviderFactory="true"
+      ecorePackage="rdf.ecore#/">
+    <genClasses image="false" ecoreClass="rdf.ecore#//URIElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute rdf.ecore#//URIElement/URI"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//URIElement/namespace"/>
+      <genOperations ecoreOperation="rdf.ecore#//URIElement/getLocalName"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//Namespace">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute rdf.ecore#//Namespace/prefix"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//Namespace/graph"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//RDFGraph">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute rdf.ecore#//RDFGraph/nodes"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//RDFGraph/resources"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//RDFGraph/properties"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//RDFGraph/blankNodes"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//RDFGraph/datatypes"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//RDFGraph/literals"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference rdf.ecore#//RDFGraph/triples"/>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/isEquivalentTo">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/isEquivalentTo/graph"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/add">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/add/graph"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/union">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/union/graph"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/diff">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/diff/graph"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/addTriple">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/addTriple/subject"/>
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/addTriple/property"/>
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/addTriple/object"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/listSubjectsWithProperty">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/listSubjectsWithProperty/property"/>
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/listSubjectsWithProperty/object"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/listSubjects"/>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/getResource">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/getResource/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/getProperty">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/getProperty/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/getDatatype">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/getDatatype/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/getBlankNode">
+        <genParameters ecoreParameter="rdf.ecore#//RDFGraph/getBlankNode/nodeID"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/listAllTriples"/>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/listAllResources"/>
+      <genOperations ecoreOperation="rdf.ecore#//RDFGraph/listAllProperties"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//DocumentGraph">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference rdf.ecore#//DocumentGraph/namespaces"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//DocumentGraph/subGraphs"/>
+      <genOperations ecoreOperation="rdf.ecore#//DocumentGraph/getNamedGraph">
+        <genParameters ecoreParameter="rdf.ecore#//DocumentGraph/getNamedGraph/uri"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//Triple">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//Triple/subject"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//Triple/predicate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//Triple/object"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//Triple/graph"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="rdf.ecore#//Node">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute rdf.ecore#//Node/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute rdf.ecore#//Node/comment"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//Node/objectOf"/>
+      <genOperations ecoreOperation="rdf.ecore#//Node/isTypeOf">
+        <genParameters ecoreParameter="rdf.ecore#//Node/isTypeOf/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//Node/getTypes"/>
+      <genOperations ecoreOperation="rdf.ecore#//Node/getStringValue">
+        <genParameters ecoreParameter="rdf.ecore#//Node/getStringValue/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//Node/getValues">
+        <genParameters ecoreParameter="rdf.ecore#//Node/getValues/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//Node/getURIValues">
+        <genParameters ecoreParameter="rdf.ecore#//Node/getURIValues/uri"/>
+      </genOperations>
+      <genOperations ecoreOperation="rdf.ecore#//Node/getObject">
+        <genParameters ecoreParameter="rdf.ecore#//Node/getObject/uri"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="rdf.ecore#//SubjectNode">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//SubjectNode/subjectOf"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//NamedGraph">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//NamedGraph/document"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//BlankNode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute rdf.ecore#//BlankNode/nodeID"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//BlankNode/graph"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//TripleNode">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//TripleNode/triple"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//Resource">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//Resource/graph"/>
+      <genOperations ecoreOperation="rdf.ecore#//Resource/isTypeOf">
+        <genParameters ecoreParameter="rdf.ecore#//Resource/isTypeOf/uri"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//Property">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//Property/predicateOf"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//Datatype"/>
+    <genClasses image="false" ecoreClass="rdf.ecore#//Literal">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute rdf.ecore#//Literal/lexicalForm"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute rdf.ecore#//Literal/lang"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//Literal/datatype"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference rdf.ecore#//Literal/graph"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="rdf.ecore#//RDFSContainer"/>
+    <genClasses ecoreClass="rdf.ecore#//RDFBag">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//RDFBag/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//RDFAlt">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//RDFAlt/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//RDFSeq">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//RDFSeq/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="rdf.ecore#//RDFList">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference rdf.ecore#//RDFList/elements"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

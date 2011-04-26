@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://www.emf4sw.org/2008/RDF"
+            class="com.emf4sw.rdf.RDFPackage"
+            genModel="model/rdf.genmodel"/>
+   </extension>
+</plugin>
