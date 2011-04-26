@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: RDF Json
+Bundle-SymbolicName: com.emf4sw.rdf.json
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: eclipselabs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.5.0",
+ com.emf4sw.rdf;bundle-version="0.7.0"
+Export-Package: com.emf4sw.rdf.json,
+ com.emf4sw.rdf.resource.impl
+Import-Package: org.codehaus.jackson,
+ org.codehaus.jackson.map,
+ org.codehaus.jackson.node

@@ -1,0 +1,255 @@
+-- @atlcompiler atl2006
+
+-- @path RDF=/com.emf4sw.rdf/model/rdf.ecore
+-- @nsURI Model=http://www.eclipse.org/emf/2002/Ecore
+
+module RDF;
+create OUT: RDF from IN: Model, IN2:Properties;
+
+uses RDFHelpers;
+uses EcoreHelpers;
+
+helper def: Graph: String = 'http://default';
+
+helper def: namespaces: Map(String, String) = 
+	let 
+		packages: Sequence(OclAny) = 
+			Model!EObject.allInstancesFrom('IN')->collect(e | 
+				e.eClass())->flatten()->collect(e | e.ePackage)->flatten()
+	in 
+		packages->iterate(it; res: Map(String, String) = Map{} |
+			if (it.oclIsKindOf(Model!EPackage)) then 
+				res->including(it.nsPrefix, it.nsURI)
+			else res endif
+		);
+
+helper context OclAny def: getGraph(): String = 
+	let annotation: ecore!EAnnotation = 
+		self.eAnnotations->any(e | e.source = 'emf4sw.NamedGraph')
+	in if (annotation.oclIsUndefined()) then
+		thisModule.Graph
+	else 
+		if annotation.details.containsKey('uri') then
+			annotation.details.get('uri')
+		else thisModule.Graph endif
+	endif;
+
+unique lazy rule DocumentGraph {
+	from s: String
+	to
+		r: RDF!DocumentGraph (
+			URI <- s,
+			namespaces <- thisModule.namespaces.getKeys()->collect(e | thisModule.addNamespace(e))
+		)
+}
+
+unique lazy rule NamedGraph {
+ 	from s: String
+ 	to
+  		r : RDF!NamedGraph (
+  			URI <- s,
+  			graph <- thisModule.DocumentGraph(thisModule.Graph),
+			document <- thisModule.DocumentGraph(thisModule.Graph)
+  		)
+}
+
+lazy rule addNamespace {
+ from
+  ns : String
+ using {
+  	uri: String = thisModule.namespaces.get(ns);
+  }
+ to
+  r : RDF!Namespace (
+   prefix <- ns,
+   URI <- if (uri.endsWith('#') or uri.endsWith('/')) then uri else uri + '#' endif 
+  )
+}
+
+lazy rule MakeTriple {
+ from
+  s : OclAny,
+  p : String,
+  o : OclAny,
+  g : String
+ to
+  r : RDF!Triple (
+   subject <- s,
+   predicate <- predicate,
+   object <- o,
+   graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  predicate : RDF!Property (
+   URI <- p,
+   graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  )
+}
+
+lazy rule MakeTripleWithLiteral {
+ from
+  s : OclAny,
+  p : String,
+  o : OclAny,
+  t : String,
+  g : String
+ to
+  r : RDF!Triple (
+   	subject <- s,
+   	predicate <- predicate,
+   	object <- object,
+	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  predicate : RDF!Property (
+   	URI <- p,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  object : RDF!Literal (
+   	lexicalForm <- o.asString(o.getClass().getSimpleName()), 
+   	datatype <- datatype,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  datatype : RDF!Datatype (
+   	URI <- t,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  )
+}
+
+lazy rule MakeTripleWithURI {
+ from
+  s : OclAny,
+  p : String,
+  o : OclAny,
+  g : String
+ to
+  r : RDF!Triple (
+   	subject <- s,
+   	predicate <- predicate,
+   	object <- object_,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  predicate : RDF!Property (
+   	URI <- p,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  object_ : RDF!Resource (
+   	URI <- o,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  )
+}
+
+lazy rule UUB {
+ from
+  s : String,
+  p : String,
+  o : OclAny,
+  g : String
+ to
+  r : RDF!Triple (
+   	subject <- s_,
+   	predicate <- predicate,
+   	object <- o,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  s_: RDF!Resource (
+  	URI <- s,
+	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  predicate : RDF!Property (
+   	URI <- p,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  )
+--  object_ : RDF!BlankNode (
+--   	nodeID <- o,
+--   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+--  )
+}
+
+lazy rule BUU {
+ from
+  s : OclAny,
+  p : String,
+  o : String,
+  g : String
+ to
+  r : RDF!Triple (
+   	subject <- s,
+   	predicate <- predicate,
+   	object <- object_,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+--  s_: RDF!BlankNode (
+--  	nodeID <- s,
+--	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+--  ),
+  predicate : RDF!Property (
+   	URI <- p,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  object_ : RDF!Resource (
+   	URI <- o,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  )
+}
+
+--lazy 
+rule UUU(s : String,p : String,o : OclAny,g : String) {
+ to
+  r : RDF!Triple (
+   	subject <- s_,
+   	predicate <- predicate,
+   	object <- o,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  s_: RDF!Resource (
+  	URI <- s.debug(s), 
+	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  ),
+  predicate : RDF!Property (
+   	URI <- p,
+   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+  )
+--  ,
+--  object_ : RDF!Resource (
+--   	URI <- o,
+--   	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+--  )
+}
+
+helper def: datatypes: Map(String, String) = Map {
+	('Literal', 'http://www.w3.org/2000/01/rdf-schema#Literal'),
+	('String', 'http://www.w3.org/2001/XMLSchema#string'),
+	('Integer', 'http://www.w3.org/2001/XMLSchema#int'),
+	('Boolean', 'http://www.w3.org/2001/XMLSchema#boolean'),
+	('UnlimitedNatural', 'http://www.w3.org/2001/XMLSchema#integer' ),
+	('Byte', 'http://www.w3.org/2001/XMLSchema#byte'),
+	('Currency', 'http://www.w3.org/2001/XMLSchema#decimal'),
+	('Date', 'http://www.w3.org/2001/XMLSchema#date'),
+	('Double', 'http://www.w3.org/2001/XMLSchema#double'),
+	('Float', 'http://www.w3.org/2001/XMLSchema#float'),
+	('Long', 'http://www.w3.org/2001/XMLSchema#long'),
+	('Short', 'http://www.w3.org/2001/XMLSchema#short'),
+	('Single', 'http://www.w3.org/2001/XMLSchema#short'),
+	('Variant', 'http://www.w3.org/2001/XMLSchema#string'),
+	('EString', 'http://www.w3.org/2001/XMLSchema#string'),
+	('EInteger', 'http://www.w3.org/2001/XMLSchema#int'),
+	('EBoolean', 'http://www.w3.org/2001/XMLSchema#boolean'),
+	('EBooleanObject', 'http://www.w3.org/2001/XMLSchema#boolean'),
+	('EByte', 'http://www.w3.org/2001/XMLSchema#byte'),
+	('EByteArray', 'http://www.w3.org/2001/XMLSchema#hexBinary'),
+	('EByteObject', 'http://www.w3.org/2001/XMLSchema#byte'),
+	('EChar', 'http://www.w3.org/2001/XMLSchema#string'),
+	('ECharacterObject', 'http://www.w3.org/2001/XMLSchema#string'),
+	('EDate', 'http://www.w3.org/2001/XMLSchema#date'),
+	('EDouble', 'http://www.w3.org/2001/XMLSchema#double'),
+	('EDoubleObject', 'http://www.w3.org/2001/XMLSchema#double'),
+	('EFloat', 'http://www.w3.org/2001/XMLSchema#float'),
+	('EFloatObject', 'http://www.w3.org/2001/XMLSchema#float'),
+	('EInt', 'http://www.w3.org/2001/XMLSchema#int'),
+	('EIntegerObject', 'http://www.w3.org/2001/XMLSchema#int'),
+	('ELong', 'http://www.w3.org/2001/XMLSchema#long'),
+	('ELongObject', 'http://www.w3.org/2001/XMLSchema#long'),
+	('EShort', 'http://www.w3.org/2001/XMLSchema#short'),
+	('EShortObject', 'http://www.w3.org/2001/XMLSchema#short'),
+	('EBigDecimal', 'http://www.w3.org/2001/XMLSchema#decimal'),
+	('EBigInteger', 'http://www.w3.org/2001/XMLSchema#integer')	
+};

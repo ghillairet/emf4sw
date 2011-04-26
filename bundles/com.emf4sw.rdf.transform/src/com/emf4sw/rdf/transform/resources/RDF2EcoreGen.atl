@@ -1,0 +1,447 @@
+-- @atlcompiler atl2006
+
+-- @nsURI Model=http://www.eclipse.org/emf/2002/Ecore
+
+module RDF2ModelGen;
+create OUT:ATL from IN:Model;
+
+uses RDFGenHelpers;
+uses RDFHelpers;
+uses EcoreHelpers;
+
+helper def: allClasses: Set(Model!EClass) = Model!EClass.allInstancesFrom('IN');
+
+--	module model2rdf;
+--	create OUT:RDF from IN:MODEL;
+endpoint rule Module() {
+	to
+		a: ATL!Module (
+			commentsBefore <- '-- @atlcompiler atl2006\n',
+			name <- 'RDF2MODEL',
+			elements <- Sequence {
+				thisModule.MakeIsValidHelper(OclAny),
+				thisModule.allClasses->select(e | not e.abstract)
+			},			
+			outModels <- Sequence{ out },
+			inModels <- Sequence{ in1, in2, in3 }
+		),
+		in1: ATL!OclModel ( name <- 'IN', metamodel <- thisModule.Rdf(thisModule.mapping) ),
+		in2: ATL!OclModel ( name <- 'IN2', metamodel <- thisModule.Properties(thisModule.mapping) ),
+		in3: ATL!OclModel ( name <- 'IN3', metamodel <- thisModule.Ecore(thisModule.mapping) ),
+		out: ATL!OclModel ( name <- 'OUT', metamodel <- thisModule.Model(thisModule.mapping) )
+	
+	do { thisModule.mapping <- a; }
+}
+
+unique lazy rule Model {
+	from o: OclAny
+	to
+		model: ATL!OclModel ( name <- 'Model' )
+}
+
+unique lazy rule Ecore {
+	from o: OclAny
+	to
+		model: ATL!OclModel ( name <- 'Ecore' )
+}
+
+unique lazy rule Properties {
+	from o: OclAny
+	to
+		model: ATL!OclModel ( name <- 'Properties' )
+}
+
+unique lazy rule Rdf {
+	from o: OclAny
+	to
+		model: ATL!OclModel ( name <- 'RDF' )
+}
+
+---	
+---	rule Resource2EObject {
+---		from r: RDF!Resource ( 
+---			Ecore!EClass.allInstances()->any(e | e.name='EClassName').isValidObject(r) 
+---		)
+---		to
+---			e: MODEL!EClassName (
+---				attr1 <- r.getValue('property')			
+---			)
+---	}
+rule Class2Rule 
+{
+	from e: Model!EClass
+	(
+		not e.abstract
+	)
+	using {
+		features: Sequence (Model!EStructuralFeatur) = e.getEAllStructuralFeatures();
+		ones: Sequence(Model!EStructuralFeature) = features->select(s | s.oclIsKindOf(Model!EAttribute) and s.upperBound = 1);
+		manys: Sequence(Model!EStructuralFeature) = features->select(s | s.oclIsKindOf(Model!EReference) or s.upperBound <> 1);
+	}
+	to
+		a: ATL!MatchedRule (
+			name <- e.name,
+			inPattern <- inp,
+			outPattern <- outp,
+			actionBlock <- action ),
+
+		---
+		--- IN
+		inp: ATL!InPattern ( 
+			elements <- thisModule.EClass2SimpleInElement(e),
+			filter <- filter_el
+		),
+		
+		---
+		--- Filter
+		filter_el: ATL!OperationCallExp (
+			operationName <- 'isValidObject'
+		,	arguments <- filter_args
+		,	source <- filter_src 
+		),
+		filter_args: ATL!VariableExp (
+			referredVariable <- thisModule.EClass2SimpleInElement(e) 
+		),
+		
+		filter_src: ATL!IteratorExp (
+			name <- 'any'
+		,	source <- it_src
+		,	body <- it_body
+		,	iterators <- it_it
+		),
+		it_src: ATL!OperationCallExp (
+			operationName <- 'allInstancesFrom'
+		,	source <- it_src_el
+		,	arguments <- all_args
+		),
+		all_args: ATL!StringExp (stringSymbol <- 'IN3'),
+		it_src_el: ATL!OclModelElement (
+			name <- 'EClass'
+		,	model <- thisModule.Ecore(thisModule.mapping)			
+		),
+		it_body: ATL!OperatorCallExp (
+			operationName <- '='
+		,	source <- body_src
+		,	arguments <- body_args
+		),
+		body_src: ATL!NavigationOrAttributeCallExp (
+			name <- 'name'
+		,	source <- nav_src
+		),
+		nav_src: ATL!VariableExp (referredVariable <- it_it),
+		body_args: ATL!StringExp(stringSymbol <- e.name),
+		it_it: ATL!Iterator (varName <- 'it'),
+
+		---
+		--- OUT
+		outp: ATL!OutPattern ( elements <- out_el ),
+		out_el: ATL!SimpleOutPatternElement (
+			varName <- 'o',
+			type <- out_el_type,
+			bindings <- Sequence {
+				manys->collect(f | thisModule.EStructuralFeature2Binding(f, e)) 
+			} ),
+		out_el_type: ATL!OclModelElement (
+			name <- e.name, 
+			model <- thisModule.Model(thisModule.mapping) ),
+			
+		action: ATL!ActionBlock (
+			statements <- ones->collect(o | thisModule.EStructuralFeatureOne2Statement(o, e)) 
+		)
+}
+
+unique lazy rule EClass2SimpleInElement {
+	from e: Model!EClass(
+		not e.abstract
+	)
+	to
+		a: ATL!SimpleInPatternElement ( 
+			varName <- 'r',
+			type <- in_el_type ),
+		in_el_type: ATL!OclModelElement (
+			name <- 'Node', 
+			model <- thisModule.Rdf(thisModule.mapping) )
+}
+
+lazy abstract rule EStructuralFeature2Binding {
+	from e: Model!EStrucuralFeature, c: Model!EClass (e.upperBound <> 1)
+	to
+		a: ATL!Binding (
+			propertyName <- e.name,
+			value <- val
+		),
+		val: ATL!OclExpression (),
+		source_var: ATL!VariableExp (
+			referredVariable <- thisModule.EClass2SimpleInElement(c)
+		)
+}
+
+--
+-- name <- r.getStringValues(uri)->collect(e | e.convertTo(type))
+--
+lazy rule EAttributeMany2Binding extends EStructuralFeature2Binding {
+	from e: Model!EAttribute, c: Model!EClass 
+	(
+		e.upperBound <> 1 and (not e.eType.oclIsTypeOf(Model!EEnum))
+	)
+	to
+		a: ATL!Binding (),
+		val: ATL!IteratorExp (
+			name <- 'collect',
+			iterators <- it,
+			body <- val_body,
+			source <- val_src
+		),
+		val_body: ATL!OperationCallExp (
+			operationName <- 'convertTo',
+			arguments <- args,
+			source <- it_exp
+		),
+		it: ATL!Iterator (varName <- 'it'),
+		it_exp: ATL!VariableExp (referredVariable <- it),
+		args: ATL!StringExp (
+			stringSymbol <- e.eType.name
+		),
+		val_src: ATL!OperationCallExp (
+			operationName <- 'getStringValues',
+			source <- source_var,
+			arguments <- val_src_args
+		),
+		val_src_args: ATL!StringExp (
+			stringSymbol <- e.getURI()
+		)
+}
+
+lazy abstract rule EStructuralFeatureOne2Statement {
+	from e: Model!EStrucuralFeature, c: Model!EClass
+	to
+		a: ATL!IfStat (
+			condition <- cond,
+			thenStatements <- thens
+		),
+		cond: ATL!OperationCallExp (
+			operationName <- 'isValid',
+			arguments <- cond_src,
+			source <- cond_args
+		),
+		cond_args: ATL!VariableExp (
+			referredVariable <- thisModuleVar
+		),
+		cond_src: ATL!OperationCallExp (
+			source <- cond_var,
+			arguments <- cond_var_args
+		),
+		cond_var_args: ATL!StringExp (
+			stringSymbol <- e.getURI()
+		),
+		cond_var: ATL!VariableExp (
+			referredVariable <- thisModule.EClass2SimpleInElement(c)
+		),
+		thens: ATL!BindingStat (
+			source <- thens_src, 
+			value <- val
+		),
+		thens_src: ATL!NavigationOrAttributeCallExp (
+			name <- e.name,
+			source <- thens_src_src
+		),
+		thens_src_src: ATL!VariableExp (
+			referredVariable <- thisModule.resolveTemp(c, 'out_el')
+		),
+		source_var: ATL!VariableExp (
+			referredVariable <- thisModule.EClass2SimpleInElement(c)
+		),
+		val_var: ATL!VariableExp (
+			referredVariable <- thisModule.EClass2SimpleInElement(c)
+		),
+		val: ATL!OperationCallExp (),
+		
+		thisModuleVar: ATL!VariableDeclaration (varName <- 'thisModule') 
+}
+
+lazy rule EAttributeEEnum2Binding extends EStructuralFeatureOne2Statement {
+	from e: Model!EAttribute, c: Model!EClass 
+	(
+		e.upperBound = 1 and e.eType.oclIsTypeOf(Model!EEnum)
+	)
+	to
+		a: ATL!IfStat (),
+		cond_src: ATL!OperationCallExp (
+			operationName <- 'getStringValue'
+		),
+		val: ATL!OperationCallExp (
+			operationName <- 'getStringValue',
+			source <- source_var,
+			arguments <- val_src_args
+		),
+		val_src_args: ATL!StringExp (
+			stringSymbol <- e.getURI()
+		)
+}
+
+--
+-- if not r.getStringValue().oclIsUndefined() then 
+--		e.foo <- r.getStringValue
+--
+lazy rule EAttribute2Binding extends EStructuralFeatureOne2Statement {
+	from e: Model!EAttribute, c: Model!EClass 
+	(
+		not e.eType.oclIsTypeOf(Model!EEnum)
+	)
+	to
+		a: ATL!IfStat (	),
+		cond_src: ATL!OperationCallExp (
+			operationName <- 'getStringValue'
+		),
+		-- then
+		val: ATL!OperationCallExp (
+			operationName <- 'convertTo',
+			arguments <- args,
+			source <- val_src
+		),
+		args: ATL!StringExp (
+			stringSymbol <- e.eType.name
+		),
+		val_src: ATL!OperationCallExp (
+			operationName <- 'getStringValue',
+			source <- source_var,
+			arguments <- val_src_args
+		),
+
+		val_var_args: ATL!StringExp (
+			stringSymbol <- e.getRdfType()
+		),
+		
+		val_src_args: ATL!StringExp (
+			stringSymbol <- e.getRdfType()
+		)
+}
+
+--
+--	if not r.getValues().isEmptry() then
+--		e.foo <- r.getValues().first()
+--
+lazy rule EReferenceIsNotCreate2Binding extends EStructuralFeature2Binding {
+	from e: Model!EReference, c: Model!EClass 
+	to
+		a: ATL!Binding (),
+		
+		val: ATL!CollectionOperationCallExp (
+			operationName <- 'first',
+			source <- val_src
+		),
+		val_src: ATL!OperationCallExp (
+			operationName <- 'getValues',
+			source <- source_var,
+			arguments <- args
+		),
+		args: ATL!StringExp (
+			stringSymbol <- e.getURI()
+		)
+}
+
+helper context Model!EReference def: isCreate(): Boolean =
+	let a: Model!EAnnotation =
+		self.eAnnotations->any(e | e.source='Create')
+	in
+		if (not a.oclIsUndefined()) then
+			a.getDetails().containsKey('name')
+		else false endif;
+
+helper context Model!EReference def: CreateClass(): String =
+	self.eAnnotations->any(e | e.source='Create').getDetails().get('name');
+	
+
+lazy rule EReferenceIsCreate2Binding extends EStructuralFeature2Binding {
+	from e: Model!EReference, c: Model!EClass 
+	(
+		(e.upperBound = 1) and (e.isCreate())
+	)
+	to
+		a: ATL!Binding (
+			value <- val
+		),
+		val: ATL!VariableExp (
+			referredVariable <- _create 
+		),
+		_create: ATL!SimpleOutPatternElement (
+			varName <- e.CreateClass(),
+			type <- out_type,
+			bindings <- create_bind,
+			outPattern <- thisModule.resolveTemp(c, 'outp')
+		),
+		out_type: ATL!OclModelElement (
+			name <- e.CreateClass(), 
+			model <- thisModule.Model(thisModule.mapping)
+		),
+		create_bind: ATL!Binding (
+			propertyName <- 'URI',
+			value <- create_bind_val 
+		),
+		create_bind_val: ATL!NavigationOrAttributeCallExp (
+			name <- 'URI',
+			source <- create_bind_src 
+		),
+		create_bind_src: ATL!CollectionOperationCallExp (
+			operationName <- 'first',
+			source <- val_src
+		),
+		val_src: ATL!OperationCallExp (
+			operationName <- 'getValues',
+			source <- source_var,
+			arguments <- args
+		),
+		args: ATL!StringExp (
+			stringSymbol <- e.getURI()
+		)
+}
+
+lazy rule EReference2Binding extends EStructuralFeature2Binding {
+	from e: Model!EReference, c: Model!EClass 
+	(
+		e.upperBound <> 1
+	)
+	to
+		a: ATL!Binding (),
+		val: ATL!OperationCallExp (
+			operationName <- 'getValues',
+			source <- source_var,
+			arguments <- args
+		),
+		args: ATL!StringExp (
+			stringSymbol <- e.getURI()
+		)
+}
+
+--helper def: isValid(s: String): Boolean =
+--	if (s.oclIsUndefined()) then false
+--		else s.trim().size() > 0 endif;
+unique lazy rule MakeIsValidHelper {
+	from o: OclAny
+	to
+		a: ATL!Helper (definition <- def_),
+		def_: ATL!OclFeatureDefinition (feature <- feat),
+		feat: ATL!Operation (
+			body <- body_
+		,	name <- 'isValid'
+		,	parameters <- param
+		,	returnType <- ret
+		),
+		param: ATL!Parameter (varName <- 's', type <- param_type),
+		param_type: ATL!StringType (),
+		ret: ATL!BooleanType (),
+		body_: ATL!IfExp (
+			condition <- cond,
+			thenExpression <- then_,
+			elseExpression <- else_			
+		),
+		cond: ATL!OperationCallExp (operationName <- 'oclIsUndefined', source <- cond_src),
+		cond_src: ATL!VariableExp (referredVariable <- param),
+		then_: ATL!BooleanExp (booleanSymbol <- false),
+		
+		else_: ATL!OperatorCallExp (operationName <- '>', arguments <- arg, source <- else_src),
+		arg: ATL!IntegerExp (integerSymbol <- 0),
+		else_src: ATL!OperationCallExp (operationName <- 'size', source <- else_src_src),
+		else_src_src: ATL!OperationCallExp (operationName <- 'trim', source <- else_src_src_src),
+		else_src_src_src: ATL!VariableExp (referredVariable <- param)
+}

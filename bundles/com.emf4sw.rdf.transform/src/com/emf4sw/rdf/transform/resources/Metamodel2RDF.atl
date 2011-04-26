@@ -1,0 +1,344 @@
+-- @atlcompiler atl2006
+
+-- @path RDF=/com.emf4sw.rdf/model/rdf.ecore
+-- @nsURI Model=http://www.eclipse.org/emf/2002/Ecore
+
+module Metamodel2RDF;
+create OUT: RDF from IN: Model;
+
+uses RDFHelpers;
+
+helper def: elements: Set(Model!EModelElement) = Model!EModelElement.allInstancesFrom('IN');
+
+rule EPackage2Ontology {
+	from m: Model!EPackage
+	to
+		r: RDF!Resource (
+			URI <- m.getURI()
+		,	label <- m.name
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(m, thisModule.RDF + 'type', thisModule.OWL + 'Ontology', thisModule.Graph)
+			}
+		)
+}
+
+--@emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#Class")
+--@emf4sw.SubClassOf(subClassOf="@emf4sw.UnionOf(
+--		unionOf=http://www.w3.org/2002/07/owl#Class,
+--		unionOf=@emf4sw.AllValuesFrom(
+--			onProperty=hasBrother
+--			allValuesFrom=Person
+--		)
+--	)")
+--@emf4sw.EquivalentClass(uri="http://www.w3.org/2002/07/owl#Class")
+--class Person {}
+
+--self rdfs:subClassOf [
+--	a owl:Class ;
+--	owl:unionOf (
+--		http://www.w3.org/2002/07/owl#Class
+--	,	[ 	
+--			a owl:Restriction ; 
+--			owl:onProperty :hasBrother ;
+--			owl:allValuesFrom :Person
+--		] ) ]
+
+rule EClass2Resource {
+	from m: Model!EClass
+	using
+	{
+		subClassOf: Set(Model!EAnnotation) = m.eAnnotations->select(e | e.source.endsWith('SubClassOf'));
+		equivalentClasses: Set(Model!EAnnotation) = m.eAnnotations->select(e | e.source.endsWith('EquivalentClass'));
+		disjointClasses: Set(Model!EAnnotation) = m.eAnnotations->select(e | e.source.endsWith('DisjointWith'));
+	}
+	to
+		r: RDF!Resource (
+			URI <- m.getURI()
+		,	label <- m.name
+		,	graph <- thisModule.DocumentGraph(thisModule.Graph)
+		,	subjectOf <- 
+				Sequence {
+					thisModule.MakeTripleWithURI(m, thisModule.RDF + 'type', thisModule.OWL + 'Class', thisModule.Graph)
+				,	subClassOf->collect(e |
+					let s: String = e.details.get('subClassOf') in
+					if thisModule.isURI(s) then 
+						thisModule.MakeTripleWithURI(m, thisModule.RDFS + 'subClassOf', s, thisModule.Graph)
+					else
+						thisModule.MakeTriple(m, thisModule.RDFS + 'subClassOf', 
+							if s.isUnion() then
+								thisModule.UnionOf(s)
+							else if s.isAllValues() then
+								thisModule.AllValuesFrom(s, thisModule.Graph)
+							else 
+								thisModule.Resource(s, thisModule.Graph) 
+							endif endif
+							, thisModule.Graph)
+					endif
+					)
+				,	equivalentClasses->collect(e |
+						thisModule.MakeTripleWithURI(m, 
+							thisModule.OWL + 'equivalentClass', 
+							e.details.get('equivalentClass'), 
+							thisModule.Graph)
+					)
+				,	disjointClasses->collect(e |
+						thisModule.MakeTripleWithURI(m, 
+							thisModule.OWL + 'disjointWith', 
+							e.details.get('disjointClass'), 
+							thisModule.Graph)
+					)
+				}
+		)
+}
+
+--"@emf4sw.UnionOf(
+--		unionOf=http://www.w3.org/2002/07/owl#Class,
+--		unionOf=@emf4sw.AllValuesFrom(
+--			onProperty=hasBrother,
+--			allValuesFrom=Person
+--		)
+--	)"
+
+--{
+--	unionOf=http://www.w3.org/2002/07/owl#Class, 
+--	unionOf=@emf4sw.AllValuesFrom(onProperty=hasBrother, allValuesFrom=Person)
+--}
+helper def: parse(s: String): TupleType(type:String, values:Set(TupleType(k:String, v:String))) =
+	let expr: String = thisModule.expression(s) in
+	if not expr.oclIsUndefined() 
+	then
+		let
+			content: Set(String) = s.substring(expr.size() + 1, s.size() - 1).trim().split_annotation()
+		in
+		let
+			map: Set(TupleType(k:String, v:String)) = content->iterate(it; res: Set(TupleType(k:String, v:String)) = Set{} |
+				let _k: String = it.substring(1, it.indexOf('=')).trim() in
+				let _v: String = it.substring(it.indexOf('=') + 2, it.size()).trim() in 
+				res->including(Tuple{k=_k, v=_v}) 
+			)
+		in
+			Tuple { type=thisModule.exprMap.get(expr), values=map }
+	else OclUndefined endif;
+
+helper def: isURI(s: String): Boolean = s.startsWith('http://');
+helper def: isModelElement(s: String): Boolean = not thisModule.elements->any(e | e.name = s).oclIsUndefined();
+helper context String def: isUnion(): Boolean = self.startsWith('@emf4sw.UnionOf(');
+helper context String def: isAllValues(): Boolean = self.startsWith('@emf4sw.AllValuesFrom(');
+helper def: expression(s : String): String =  
+	if s.startsWith('@emf4sw.UnionOf(') then '@emf4sw.UnionOf('
+	else if s.startsWith('@emf4sw.IntersectionOf(') then '@emf4sw.IntersectionOf('
+	else if s.startsWith('@emf4sw.ComplementOf(') then '@emf4sw.ComplementOf('
+	else if s.startsWith('@emf4sw.SubClassOf(') then '@emf4sw.SubClassOf('
+	else if s.startsWith('@emf4sw.EquivalentClass(') then '@emf4sw.EquivalentClass('
+	else if s.startsWith('@emf4sw.DisjointWith(') then '@emf4sw.DisjointWith('
+	else if s.startsWith('@emf4sw.SubPropertyOf(') then '@emf4sw.SubPropertyOf('
+	else if s.startsWith('@emf4sw.AllValuesFrom(') then '@emf4sw.AllValuesFrom('
+	else if s.startsWith('@emf4sw.SomeValuesFrom(') then '@emf4sw.SomeValuesFrom('
+	else if s.startsWith('@emf4sw.HasValue(') then '@emf4sw.HasValue('
+	else OclUndefined 
+	endif endif endif endif endif endif endif endif endif endif;
+	
+helper def: exprMap: Map(String, String) =
+	Map {
+		('@emf4sw.UnionOf(', 'UnionOf')
+	,	('@emf4sw.IntersectionOf(', 'IntersectionOf')
+	,	('@emf4sw.ComplementOf(', 'ComplementOf')				
+	};
+	
+--	[ 
+--	  	a owl:Class ;
+--		owl:unionOf (
+--			http://www.w3.org/2002/07/owl#Class
+--		,	[ 	
+--				a owl:Restriction ; 
+--				owl:onProperty :hasBrother ;
+--				owl:allValuesFrom :Person
+--			] ) ]
+	
+lazy rule UnionOf {
+	from s: String
+	using {
+		parsed: TupleType(type:String, values:Set(TupleType(k:String, v:String))) = thisModule.parse(s);
+		inv_values: Sequence(OclAny) = parsed.values->select(e | e.k = 'unionOf').inverse();
+	}
+	to
+		r: RDF!BlankNode (
+			nodeID <- '__union__' + s.size()
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(r, thisModule.RDF + 'type', thisModule.OWL + 'Class', thisModule.Graph),
+				thisModule.MakeTriple(r, thisModule.OWL + 'unionOf', list, thisModule.Graph)
+			} 
+		),
+		list: RDF!List (
+			elements <- 
+				inv_values->collect(e | 
+					if thisModule.isURI(e.v) then 
+						thisModule.Resource(e.v, thisModule.Graph)
+					else
+						thisModule.AllValuesFrom(e.v, thisModule.Graph)
+					endif)
+		)
+	do {
+		thisModule.ID <- thisModule.ID +1;
+	}
+}
+
+lazy rule IntersectionOf {
+	from s: String
+	using {
+		parsed: TupleType(type:String, values:Set(TupleType(k:String, v:String))) = thisModule.parse(s);
+		inv_values: Sequence(OclAny) = parsed.values->select(e | e.k = 'intersectionOf').inverse();
+	}
+	to
+		r: RDF!BlankNode (
+			nodeID <- '__intersection__' + s.size()
+		,	graph <- thisModule.DocumentGraph(thisModule.Graph)
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(r, thisModule.RDF + 'type', thisModule.OWL + 'Class', thisModule.Graph),
+				thisModule.MakeTriple(r, thisModule.OWL + 'intersectionOf', list, thisModule.Graph
+				)
+			} 
+		),
+		list: RDF!List (
+			graph <- thisModule.DocumentGraph(thisModule.Graph)
+		,	elements <- 
+				inv_values->collect(e | 
+					if thisModule.isURI(e.v) then 
+						thisModule.Resource(e.v, thisModule.Graph)
+					else
+						thisModule.AllValuesFrom(e.v, thisModule.Graph)
+					endif)
+		)
+	do {
+		thisModule.ID <- thisModule.ID +1;
+	}
+}
+
+lazy rule AllValuesFrom {
+	from s: String, g: OclAny
+	using {
+		parsed: TupleType(type:String, values:Set(TupleType(k:String, v:String))) = thisModule.parse(s);
+		onProperty: String = parsed.values->any(e | e.k = 'onProperty').v;
+		allValues: String = parsed.values->any(e | e.k = 'allValuesFrom').v;
+	}
+	to
+		r: RDF!BlankNode (
+			nodeID <- '__all__' + s.size()
+		,	graph <- thisModule.DocumentGraph(g)
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(r, thisModule.RDF + 'type', thisModule.OWL + 'Restriction', g),
+				thisModule.MakeTripleWithURI(r, thisModule.OWL + 'onProperty', onProperty, g),
+				thisModule.MakeTripleWithURI(r, thisModule.OWL + 'allValuesFrom', allValues, g)
+			}
+		)
+	do {
+		thisModule.ID <- thisModule.ID +1;
+	}
+}
+
+lazy rule SomeValuesFrom {
+	from s: String, g: OclAny
+	using {
+		parsed: TupleType(type:String, values:Set(TupleType(k:String, v:String))) = thisModule.parse(s);
+		onProperty: String = parsed.values->any(e | e.k = 'onProperty').v;
+		allValues: String = parsed.values->any(e | e.k = 'someValuesFrom').v;
+	}
+	to
+		r: RDF!BlankNode (
+			nodeID <- '__some__' + s.size()
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(r, thisModule.RDF + 'type', thisModule.OWL + 'Restriction', g),
+				thisModule.MakeTripleWithURI(r, thisModule.OWL + 'onProperty', onProperty, g),
+				thisModule.MakeTripleWithURI(r, thisModule.OWL + 'someValuesFrom', allValues, g)
+			}
+		)
+	do {
+		thisModule.ID <- thisModule.ID +1;
+	}
+}
+
+lazy rule Resource {
+	from s: String, g: OclAny
+	to
+		r: RDF!Resource (URI <- s, graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif)
+}
+
+helper def: ID: Integer = 1;
+
+lazy rule BlankNode {
+	from g: OclAny
+	to	r: RDF!BlankNode (
+		nodeID <- thisModule.ID.toString(),
+		graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+	)
+	do {
+		thisModule.ID <- thisModule.ID +1;
+	}
+}
+
+--[] rdfs:subPropertyOf family:hasUncle;
+--   owl:propertyChain (
+--     family:hasFather
+--     family:hasBrother
+--     ).
+lazy rule PropertyChain {
+	from m: Model!EAnnotation
+	using {
+		chain: Sequence(String) = m.details.get('propertyChain').trim().split(',').asSequence();
+		inv_chain: Sequence(String) = chain.inverse(); -- chain needs to be inverted, otherwise order is not respected when filling elements. 
+	}
+	to
+		r: RDF!BlankNode (
+			subjectOf <- Sequence {
+				thisModule.MakeTriple(r, thisModule.OWL + 'propertyChain', list, thisModule.Graph)
+			}
+		),
+		list: RDF!List (
+			graph <- thisModule.DocumentGraph(thisModule.Graph)
+		,	elements <- inv_chain->collect(e | thisModule.Resource(e.trim(), thisModule.Graph))
+		)
+}
+
+rule EAttribute2Resource {
+	from m: Model!EAttribute
+	to
+		r: RDF!Resource (
+			URI <- m.getURI()
+		,	graph <- thisModule.DocumentGraph(thisModule.Graph)
+		,	label <- m.name
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(m, thisModule.RDF + 'type', thisModule.OWL + 'DatatypeProperty', thisModule.Graph)
+			}
+		)
+}
+
+rule EReference2Resource {
+	from m: Model!EReference
+	using {
+		annotations: Set(Model!EAnnotation) = m.eAnnotations;
+		subPropertyOf: Set(Model!EAnnotation) = annotations->select(e | e.source.endsWith('SubPropertyOf'));
+		equivalentProperties: Set(Model!EAnnotation) = annotations->select(e | e.source.endsWith('EquivalentProperty'));
+		disjointProperties: Set(Model!EAnnotation) = annotations->select(e | e.source.endsWith('DisjointWith'));
+		propertyChains: Set(Model!EAnnotation) = annotations->select(e | e.source.endsWith('PropertyChain'));
+		isSymmetric: Boolean = not annotations->any(e | e.source.endsWith('Symmetric')).oclIsUndefined();
+	}
+	to
+		r: RDF!Resource (
+			URI <- m.getURI()
+		,	graph <- thisModule.DocumentGraph(thisModule.Graph)
+		,	label <- m.name
+		,	subjectOf <- Sequence {
+				thisModule.MakeTripleWithURI(m, thisModule.RDF + 'type', thisModule.OWL + 'ObjectProperty', thisModule.Graph)
+			,	if (isSymmetric) then
+					thisModule.MakeTripleWithURI(m, thisModule.RDF + 'type', thisModule.OWL + 'SymmetricProperty', thisModule.Graph)
+				else Sequence {} endif
+			},
+			objectOf <- Sequence {
+				propertyChains->collect(e | 
+					thisModule.MakeTriple(
+						thisModule.PropertyChain(e), 
+						thisModule.RDFS + 'subPropertyOf', m, thisModule.Graph)
+				)
+			}
+		)
+}

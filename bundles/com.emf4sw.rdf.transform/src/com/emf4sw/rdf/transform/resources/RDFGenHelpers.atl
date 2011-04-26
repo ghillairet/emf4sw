@@ -1,0 +1,45 @@
+-- @atlcompiler atl2006
+
+library RDFGenHelpers;
+
+helper context Model!EClass def: getGraph(): String = 
+	let annotation: Model!EAnnotation = 
+		self.eAnnotations->any(e | e.source = 'Graph' or e.source = 'PutGraph')
+	in if (annotation.oclIsUndefined()) then
+		thisModule.Graph
+	else 
+		if annotation.details.containsKey('uri') then
+			annotation.details.get('uri')
+		else thisModule.Graph endif
+	endif;
+
+helper context Model!EClass def: getID(): Model!EStructuralFeature =
+	let features: Set(Model!EStructuralFeature) = 
+		self.getEAllStructuralFeatures()
+	in 
+		let annotated: Model!EStructuralFeature = 
+				features->any(e | e.hasIdAnnotation())
+		in 
+		if (not annotated.oclIsUndefined()) then
+			annotated
+		else 
+			let 
+				id: Model!EStructuralFeature = features->any(e | e.isID()) 
+			in 
+			if (not id.oclIsUndefined()) then 
+				id
+			else features->any(e | e.name = 'name') endif
+		endif;
+
+helper context Model!EAnnotation def: getIdBase(class: Model!EClass): String =
+	if (self.details.containsKey('base')) then
+		self.details.get('base').regexReplaceAll('\\[Class\\]', class.getName().toLower())
+	else self.getURI() endif;
+		
+helper context Model!EStructuralFeature def: hasIdAnnotation(): Boolean =
+	self.eAnnotations->exists(e | e.source = 'Id');
+
+helper context Model!EStructuralFeature def: getIdAnnotation(): Model!EAnnotation =
+	self.eAnnotations->any(e | e.source = 'Id');
+
+

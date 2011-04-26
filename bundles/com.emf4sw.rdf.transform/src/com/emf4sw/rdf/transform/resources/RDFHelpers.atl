@@ -1,0 +1,20 @@
+-- @atlcompiler atl2006
+
+-- @path RDF=/com.emf4sw.rdf/model/rdf.ecore
+-- @nsURI Model=http://www.eclipse.org/emf/2002/Ecore
+
+library RDFHelpers;
+
+
+helper def: RDF: String = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+helper def: RDFS: String = 'http://www.w3.org/2000/01/rdf-schema#';
+helper def: OWL: String = 'http://www.w3.org/2002/07/owl#';
+
+helper def: set(any : OclAny) : Set(OclAny) =
+ Set{ any }->flatten()->reject(e | e.oclIsUndefined());
+ 
+helper context OclAny def: isAnonymous(): Boolean = 
+	not self.eAnnotations->any(e | e.source = 'Anonymous').oclIsUndefined();
+
+helper def: isOwlElement(uri: String): Boolean = uri.startsWith(thisModule.OWL);
+

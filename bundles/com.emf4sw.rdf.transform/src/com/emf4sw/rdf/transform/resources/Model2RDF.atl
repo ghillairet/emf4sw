@@ -1,0 +1,83 @@
+-- @atlcompiler atl2006
+
+-- @path Properties=/com.atl.common/model/Properties.ecore
+-- @path RDF=/com.emf4sw.rdf/model/rdf.ecore
+-- @nsURI Model=http://www.eclipse.org/emf/2002/Ecore
+
+module Model2Rdf;
+create OUT:RDF from IN:Model, IN2:Properties;
+
+uses RDFHelpers;
+uses PropertiesHelpers;
+
+--- NAMESPACES
+helper def: NS_EMF4SW: String = 'http://www.eclipselabs.org/emf4sw/rdf-ecore#';
+helper def: etype: String = thisModule.NS_EMF4SW + 'etype';
+
+--- PROPERTY HELPERS
+helper def: PROPERTY: Properties!PropertyMap = Properties!PropertyMap.allInstancesFrom('IN2').first();
+helper def: BASE(): String = thisModule.PROPERTY.get('OPTION_BASE_NAMESPACE');
+	
+rule EObject2Node {
+	from e: Model!EObject
+	using 
+	{
+		features: Sequence(OclAny) = e.getFeatures();
+		g: String = e.eClass().getGraph();
+		annotations: Set(Model!EAnnotation) = e.eClass().getEAnnotations();
+--		types: Set(Model!EAnnotation) = annotations->select(a | a.source.contains('OWLClass'));
+	}
+	to	
+		r: RDF!Resource (
+			URI <- e.getID()
+		,	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif
+		,	subjectOf <- Sequence {
+				---TODO: This one should be optional 
+--				thisModule.MakeTripleWithURI(e, thisModule.etype, e.eClass().getURI(), e.eClass().getGraph()),
+--				---TODO: Check returned types 
+--				if (types.isEmpty()) then
+--					e.eTypes()->collect(t | 
+--						thisModule.MakeTripleWithURI(e, thisModule.RDF + 'type', t, e.eClass().getGraph()))
+--				else
+					e.eClass().getAllRdfTypes()->collect(uri | 
+						thisModule.MakeTripleWithURI(e, 
+							thisModule.RDF + 'type', 
+							uri,
+							e.eClass().getGraph()))
+--				endif
+				,
+				features->collect(f |
+					let 
+						val: Sequence(OclAny) = thisModule.set( e.eGet(f) ) 
+					in
+					let
+						ann: Set(Model!EAnnotation)= f.getEAnnotations()
+					in
+					Sequence {
+						val->collect(v |
+							Sequence {
+								if (f.oclIsKindOf(Model!EReference))
+								then
+									if (v.oclIsKindOf(Model!EDataType)) -- ???
+									then
+										thisModule.MakeTripleWithURI(e, f.getURI(), v.getRdfId(), e.eClass().getGraph())
+									else
+										thisModule.MakeTriple(e, f.getURI(), v, e.eClass().getGraph()) 
+									endif
+								else 
+									thisModule.MakeTripleWithLiteral(e, f.getURI(), v, f.getType(), e.eClass().getGraph())
+								endif
+							})
+			}->flatten()
+		)}
+	)
+}
+
+unique lazy rule BlankNode {
+	from id: String
+	to
+		r: RDF!BlankNode (
+			nodeID <- id
+--		,	graph <- if (g = thisModule.Graph) then thisModule.DocumentGraph(g) else thisModule.NamedGraph(g) endif 
+		)
+}

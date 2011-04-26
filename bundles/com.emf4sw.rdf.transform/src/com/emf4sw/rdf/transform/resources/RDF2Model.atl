@@ -1,0 +1,101 @@
+-- @atlcompiler atl2006
+
+-- @path RDF=/com.emf4sw.rdf/model/rdf.ecore
+-- @nsURI Ecore=http://www.eclipse.org/emf/2002/Ecore
+
+module RDF2Model;
+create OUT:Model from IN:RDF, IN2:Properties, IN3: Ecore;
+
+uses PropertiesHelpers;
+uses EcoreHelpers;
+
+helper context Ecore!EPackage def: getNamespace(): String = 
+	if self.nsURI.endsWith('/') or self.nsURI.endsWith('#') 
+	then 
+		self.nsURI 
+	else 
+		self.nsURI + '#' 
+	endif;
+
+--- NAMESPACES
+helper def: NS_EMF4SW: String = 'http://www.eclipselabs.org/emf4sw/rdf-ecore#';
+helper def: etype: String = thisModule.NS_EMF4SW + 'etype';
+
+--- PROPERTY HELPERS
+helper def: PROPERTY: Properties!PropertyMap = Properties!PropertyMap.allInstancesFrom('IN2').first();
+
+
+helper context RDF!Node def: isDirectTypeOf(uri: String): Boolean = false;
+	
+helper context RDF!Resource def: isDirectTypeOf(uri: String): Boolean = 
+	let eTypes: Set(RDF!Triple) = 
+		self.subjectOf->select(e | e.predicate.URI = thisModule.etype)
+	in 
+	if (eTypes.isEmpty()) then
+		self.isTypeOf(uri)
+	else 
+		eTypes->collect(e | e.object)->select(e | e.oclIsKindOf(RDF!Resource))->exists(e | e.URI = uri)
+	endif;
+	
+helper context RDF!Resource def: getEClass(): Ecore!EClass =
+	Ecore!EClass.allInstances()->any(E | E.getRdfType() = self.URI);
+
+helper context RDF!Resource def: getTypes(): Set(String) = 
+	self.subjectOf->select(e | e.predicate.URI = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')->collect(e | 
+		e.object)->select(e | e.oclIsKindOf(RDF!Resource))->collect(e | e.URI)->flatten()->asSet();
+
+helper context RDF!Resource def: isTypeOf(uri: String): Boolean =
+	self.listTypes()->exists(e | e = uri);
+
+helper context Ecore!EClass def: isValidObject(res: RDF!Resource): Boolean =
+	if (res.oclIsKindOf(RDF!Resource)) then
+		if thisModule.OPTION_USE_STRICT_VALIDATION() then
+			self.strictValidationOf(res)
+		else self.relaxValidationOf(res) endif
+	else false endif;
+
+helper context Ecore!EClass def: relaxValidationOf(res: RDF!Resource): Boolean =
+	self.getAllRdfTypes().symetricDifference(res.getTypes()).isEmpty();
+
+helper context Ecore!EClass def: strictValidationOf(res: RDF!Resource): Boolean =
+	-- check rdf types
+	if (not res.isTypeOf(self.getRdfType())) then false
+	else
+		-- check properties types
+		let triples: Set(RDF!Triple) = res.subjectOf in
+		let features: Set(Ecore!EStructuralFeature) = self.eAllStructuralFeatures in
+		let properties: Set(RDF!Property) = triples->collect(e | e.predicate) in
+		let propertiesNotFeatures: Set(RDF!Property) = 
+			properties->reject(e | features->collect(f | f.getRdfType())->includes(e.URI)) in
+		
+		features->iterate(it; res: Boolean = false |
+			res = res and it.isValidFor(triples->select(e | e.predicate.URI = it.getRdfType()))
+		)
+	endif;
+
+helper context Ecore!EClass def: getRdfType(): String = 
+	if (self.getEAnnotation('rdf').oclIsUndefined()) then
+		self.ePackage.getNamespace() + self.name
+	else self.getEAnnotation('rdf').source.get('uri') endif;
+
+helper context Ecore!EStructuralFeature def: getRdfType(): String = 
+	if (self.getEAnnotation('rdf').oclIsUndefined()) then
+		self.eContainingClass.ePackage.getNamespace() + self.name
+	else self.getEAnnotation('rdf').source.get('uri') endif;
+
+helper context Ecore!EAttribute def: isValidFor(seq: Sequence(RDF!Triple)): Boolean = true;
+--	let datatype: Ecore!EDataType = self.eType in
+--	let objects: Set(RDF!Node) = seq->collect(e | e.object) in
+--	if (objects->forAll(e | e.oclIsKindOf(RDF!Literal))) then
+--		objects->forAll(e | 
+--			if (datatype.oclIsUndefined()) then true else
+--				thisModule.datatypes.get(datatype.name) = e.datatype.URI
+--			endif)
+--	else false endif;
+
+helper context Ecore!EReference def: isValidFor(seq: Sequence(RDF!Triple)): Boolean =
+	let type: Ecore!EClass = self.eType in
+	let objects: Set(RDF!Node) = seq->collect(e | e.object) in
+	if (objects->forAll(e | e.oclIsKindOf(RDF!Resource))) then
+		objects->forAll(e | e.isTypeOf(type.getRdfType()))
+	else false endif;

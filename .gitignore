@@ -3,3 +3,6 @@
 /bundles/com.emf4sw.rdf/bin
 /bundles/com.emf4sw.rdf.jena/.settings
 /bundles/com.emf4sw.rdf.jena/.settings
+/bundles/com.emf4sw.rdf.transform/.settings
+/bundles/com.emf4sw.rdf.sesame/.settings
+/bundles/org.openrdf/.settings

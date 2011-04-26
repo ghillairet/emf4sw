@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EMF4SW RDF Sesame
+Bundle-SymbolicName: com.emf4sw.rdf.sesame
+Bundle-Version: 0.7.0.qualifier
+Bundle-Vendor: eclipselabs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.emf4sw.rdf.resource.impl,
+ com.emf4sw.rdf.sesame
+Import-Package: com.emf4sw.rdf,
+ com.emf4sw.rdf.resource,
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore.resource,
+ org.openrdf.model,
+ org.openrdf.model.impl,
+ org.openrdf.repository,
+ org.openrdf.repository.sail,
+ org.openrdf.rio,
+ org.openrdf.rio.helpers,
+ org.openrdf.rio.rdfxml,
+ org.openrdf.rio.rdfxml.util,
+ org.openrdf.rio.turtle,
+ org.openrdf.sail.memory

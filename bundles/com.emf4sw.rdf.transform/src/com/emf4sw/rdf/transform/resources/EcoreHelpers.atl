@@ -1,0 +1,117 @@
+-- @atlcompiler atl2006
+-- @nsURI Ecore=http://www.eclipse.org/emf/2002/Ecore
+
+library EcoreHelpers;
+
+--- PROPERTY HELPERS
+helper def: OPTION_DIRECT_TYPE_ONLY(): Boolean = 
+	if thisModule.PROPERTY.containsKey('OPTION_DIRECT_TYPE_ONLY') then
+		let doIt: String = thisModule.get('OPTION_DIRECT_TYPE_ONLY') in
+			doIt = 'true'
+	else false endif;
+
+helper def: OPTION_NO_ECORE_TYPE(): Boolean = 
+	if thisModule.PROPERTY.containsKey('OPTION_NO_ECORE_TYPE') then
+		let doIt: String = thisModule.get('OPTION_NO_ECORE_TYPE') in
+			doIt = 'true'
+	else false endif;
+
+helper def: OPTION_USE_STRICT_VALIDATION(): Boolean = 
+	if thisModule.PROPERTY.containsKey('OPTION_USE_STRICT_VALIDATION') then
+		let doIt: String = thisModule.get('OPTION_USE_STRICT_VALIDATION') in
+			doIt = 'true'
+	else false endif;
+
+---	EPackage helpers
+helper context Model!EPackage def: getURI(): String = self.nsURI;
+-- Returns well formed URI for an EPackage
+helper context Model!EPackage def: getNamespace(): String = 
+	if self.nsURI.endsWith('/') or self.nsURI.endsWith('#') 
+	then 
+		self.nsURI 
+	else 
+		self.nsURI + '#' 
+	endif;
+
+---	EClass helpers
+helper context Model!EClass def: getURI(): String = self.ePackage.getNamespace() + self.name;
+
+helper context OclAny def: getAllRdfTypes(): Set(String) =
+	Set{self.getRdfTypes(), self.eAllSuperTypes->collect(E | E.getRdfTypes())}->flatten();
+	
+helper context OclAny def: getRdfTypes(): Set(String) =
+	let 
+		annotations: Set(Model!EAnnotation) = self.eAnnotations->select(e | 
+			e.source.endsWith('OWLClass') or e.source.endsWith('Entity'))
+	in 
+	if (annotations.isEmpty()) 
+	then 
+		Set{self.getURI()}
+	else
+		annotations->collect(a |if a.details.containsKey('uri') then a.details.get('uri') else Set{} endif)->flatten()
+	endif;
+		
+---	EStructuralFeature helpers
+helper context Model!EStructuralFeature def: getURI(): String = self.eContainingClass.ePackage.getNamespace() + self.name;
+
+helper context OclAny def: getRdfType(): String =
+	let 
+		annotation: OclAny = self.getEAnnotation('rdf')
+	in if (annotation.oclIsUndefined()) then 
+		self.eContainingClass.ePackage.getNamespace() + self.name
+	else
+	if (annotation.details.containsKey('uri')) then
+			annotation.details.get('uri')
+		else 	
+			self.eContainingClass.ePackage.getNamespace() + self.name 
+		endif
+	endif;
+
+---	EDataType helpers
+helper context OclAny def: getType(): String =  
+	let val: String = 
+		thisModule.datatypes.get(self.eType.name) 
+	in
+		if (val.oclIsUndefined()) then 
+			thisModule.datatypes.get('Literal') 
+		else val endif;
+
+---	EObject helpers
+helper context OclAny def: getFeatures(): Sequence(OclAny) = 
+	self.eClass().getEAllStructuralFeatures()->reject(f | 
+		f.isVolatile() or f.isUnsettable() or f.isTransient() or f.isDerived());
+
+--- Return the types of an object
+-- return all hierarchy types if OPTION_DIRECT_TYPE_ONLY set to false, direct type otherwise
+helper context OclAny def: eTypes(): Set(String) =
+	Set{self.eClass().getURI()}
+	->union(
+		if thisModule.OPTION_DIRECT_TYPE_ONLY() then Set{} else 
+			Set{self.eClass().eAllSuperTypes->collect(e | e.getURI())}
+		endif)->flatten();
+
+--- Return the unique object URI
+helper context OclAny def: getID(): String = 
+	let id: Model!EAttribute = self.eClass().eAllAttributes->any(e | e.iD) in 
+	if (not id.oclIsUndefined()) then
+		let ann_id: Model!EAnnotation = id.getEAnnotation('Id') in 
+		if (not ann_id.oclIsUndefined()) then
+			ann_id.details.get('base') + self.eGet(id).toString()
+		else
+			thisModule.BASE() + self.eGet(id).toString()
+		endif
+	else
+		let id2: Model!EAttribute =
+			self.eClass().eAllAttributes->any(e | not e.getEAnnotation('Id').oclIsUndefined())
+		in 
+			if (not id2.oclIsUndefined()) then
+				let ns: String = id2.getEAnnotation('Id').details.get('base')
+			in
+				if (ns.oclIsUndefined()) then
+					thisModule.BASE() + self.eGet(id2).toString()
+				else ns + self.eGet(id2) endif
+			else
+				thisModule.BASE() + self.getEcoreId()
+			endif
+	endif;
+	

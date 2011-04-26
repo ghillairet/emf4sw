@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: RDF Transformations
+Bundle-SymbolicName: com.emf4sw.rdf.transform;singleton:=true
+Bundle-Version: 0.7.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.emf4sw.rdf.transform,
+ com.emf4sw.rdf.transform.lib
+Bundle-Vendor: eclipselabs
+Import-Package: com.atl.common.models,
+ com.atl.common.models.resource,
+ com.atl.common.trans,
+ com.atl.common.utils,
+ com.emf4sw.rdf,
+ com.emf4sw.rdf.operations,
+ com.emf4sw.rdf.resource,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.util,
+ org.eclipse.m2m.atl.core.emf,
+ org.eclipse.m2m.atl.engine.emfvm,
+ org.eclipse.m2m.atl.engine.emfvm.lib
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.6.1"
