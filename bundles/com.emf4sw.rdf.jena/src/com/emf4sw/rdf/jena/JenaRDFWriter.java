@@ -1,12 +1,13 @@
-/**
- * 
- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+/*******************************************************************************
+ * Copyright (c) 2011 Guillaume Hillairet.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html.
- * 
- */
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Guillaume Hillairet - initial API and implementation
+ *******************************************************************************/
 package com.emf4sw.rdf.jena;
 
 import org.eclipse.emf.ecore.EObject;
@@ -67,7 +68,7 @@ public class JenaRDFWriter implements RDFWriter<Model> {
 			graph = aGraph;
 		}
 		
-		new RDFGraphExtractor().extract(graph, target);
+		RDFGraphExtractor.extract(graph, target);
 	}
 
 	

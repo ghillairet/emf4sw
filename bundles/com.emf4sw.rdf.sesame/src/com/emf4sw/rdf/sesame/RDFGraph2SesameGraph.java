@@ -1,10 +1,13 @@
-/**
- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+/*******************************************************************************
+ * Copyright (c) 2011 Guillaume Hillairet.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html.
- */
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Guillaume Hillairet - initial API and implementation
+ *******************************************************************************/
 package com.emf4sw.rdf.sesame;
 
 import org.openrdf.model.Graph;
@@ -34,15 +37,11 @@ import com.emf4sw.rdf.URIElement;
  */
 public class RDFGraph2SesameGraph {
 
-	private final RDFGraph graph;
-
 	private final static ValueFactory sesameFactory = new ValueFactoryImpl();
 
-	public RDFGraph2SesameGraph(RDFGraph graph) {
-		this.graph = graph;
-	}
+	private RDFGraph2SesameGraph() {}
 
-	public void to(Graph sesameGraph) {
+	public static void extract(RDFGraph graph, Graph sesameGraph) {
 		for (Triple triple: graph.getTriples()) 
 		{
 			Statement aStatement = extractAsSesameStatement( triple );
@@ -53,10 +52,25 @@ public class RDFGraph2SesameGraph {
 		}
 	}
 
-	public Graph extract() {
+	public static Graph extract(RDFGraph graph) {
 		final Graph aGraph = new GraphImpl();
 	
 		for (Triple triple: graph.getTriples()) 
+		{
+			Statement aStatement = extractAsSesameStatement( triple );
+			if (aStatement != null)
+			{
+				aGraph.add( aStatement );
+			}
+		}
+		
+		return aGraph;
+	}
+	
+	public static Graph extract(Iterable<Triple> triples) {
+		final Graph aGraph = new GraphImpl();
+	
+		for (Triple triple: triples) 
 		{
 			Statement aStatement = extractAsSesameStatement( triple );
 			if (aStatement != null)

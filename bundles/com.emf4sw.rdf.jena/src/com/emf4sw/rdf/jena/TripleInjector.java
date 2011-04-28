@@ -1,10 +1,13 @@
-/**
- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+/*******************************************************************************
+ * Copyright (c) 2011 Guillaume Hillairet.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html.
- */
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Guillaume Hillairet - initial API and implementation
+ *******************************************************************************/
 package com.emf4sw.rdf.jena;
 
 import com.emf4sw.rdf.BlankNode;
@@ -25,11 +28,11 @@ import com.hp.hpl.jena.rdf.model.Statement;
  */
 public class TripleInjector {
 	
-	private final RDFFactory factory = RDFFactory.eINSTANCE;
+	private static final RDFFactory factory = RDFFactory.eINSTANCE;
 	
-	public TripleInjector() {}
+	private TripleInjector() {}
 	
-	public com.emf4sw.rdf.Triple inject(Statement stmt, RDFGraph graph) {
+	public static com.emf4sw.rdf.Triple inject(Statement stmt, RDFGraph graph) {
 		final NodeVisitorInjector visitor = new NodeVisitorInjector(graph);
 		
 		final com.emf4sw.rdf.Node subject = (Node) stmt.getSubject().visitWith(visitor);
@@ -39,7 +42,7 @@ public class TripleInjector {
 		return graph.addTriple(subject, predicate, object);
 	}
 
-	protected com.emf4sw.rdf.Property inject(Property predicate, RDFGraph graph) {
+	protected static com.emf4sw.rdf.Property inject(Property predicate, RDFGraph graph) {
 		if (predicate.getURI() == null) {
 			return null;
 		}
@@ -60,7 +63,7 @@ public class TripleInjector {
 	 * @author <a href="mailto:g.hillairet at gmail.com">Guillaume Hillairet</a>
 	 *
 	 */
-	public class NodeVisitorInjector implements RDFVisitor {
+	public static class NodeVisitorInjector implements RDFVisitor {
 
 		private final RDFGraph graph;
 		

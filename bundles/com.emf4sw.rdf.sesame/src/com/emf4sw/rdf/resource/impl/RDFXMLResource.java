@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2011 Guillaume Hillairet.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Guillaume Hillairet - initial API and implementation
+ *******************************************************************************/
 package com.emf4sw.rdf.resource.impl;
 
 import java.io.IOException;
@@ -69,7 +79,7 @@ public class RDFXMLResource extends SesameResourceImpl implements RDFResource {
 		try {
 			repository.initialize();
 			RepositoryConnection con = repository.getConnection();
-			con.add(new RDFGraph2SesameGraph(this.getGraph()).extract());
+			con.add(RDFGraph2SesameGraph.extract(this.getGraph()));
 			try {
 				org.openrdf.rio.RDFWriter aWriter = new RDFXMLPrettyWriter(outputStream);
 				con.export(aWriter);

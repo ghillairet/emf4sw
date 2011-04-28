@@ -1,10 +1,13 @@
-/**
- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+/*******************************************************************************
+ * Copyright (c) 2011 Guillaume Hillairet.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html.
- */
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Guillaume Hillairet - initial API and implementation
+ *******************************************************************************/
 package com.emf4sw.rdf.jena;
 
 import com.emf4sw.rdf.DocumentGraph;
@@ -23,23 +26,16 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  */
 public class DocumentGraphInjector {
 
-	private final Model aModel;
-
-	private final TripleInjector aTripleInjector;
-
-	private final RDFFactory factory = RDFFactory.eINSTANCE;
+	private static final RDFFactory factory = RDFFactory.eINSTANCE;
 	
-	public DocumentGraphInjector(Model aModel) {
-		this.aModel = aModel;
-		this.aTripleInjector = new TripleInjector();
-	}
+	private DocumentGraphInjector() {}
 
-	public RDFGraph inject(RDFResource resource) {
+	public static RDFGraph inject(Model aModel, RDFResource resource) {
 		final DocumentGraph aGraph = factory.createDocumentGraph();
 		resource.getContents().add(aGraph);
 		
 		for (StmtIterator it = aModel.listStatements(); it.hasNext(); ) {
-			aTripleInjector.inject(it.next(), aGraph);
+			TripleInjector.inject(it.next(), aGraph);
 		}
 		for (String namespace: aModel.getNsPrefixMap().keySet()) {
 			final Namespace ns = factory.createNamespace();
