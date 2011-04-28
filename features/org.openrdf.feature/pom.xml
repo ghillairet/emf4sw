@@ -1,0 +1,14 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>build</artifactId>
+		<groupId>com.emftriple</groupId>
+		<version>0.7.2-SNAPSHOT</version>
+		<relativePath>../../../../emftriple/0.7.2/build/com.emftriple.build/build/pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.emf4sw</groupId>
+	<artifactId>org.openrdf.feature</artifactId>
+	<version>2.3.2</version>
+	<packaging>eclipse-feature</packaging>
+</project>
