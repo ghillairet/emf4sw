@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: RDF Jena Adapter
+Bundle-Name: emf4sw jena adpater
 Bundle-SymbolicName: com.emf4sw.rdf.jena
 Bundle-Version: 0.7.1.qualifier
 Bundle-Vendor: eclipselabs

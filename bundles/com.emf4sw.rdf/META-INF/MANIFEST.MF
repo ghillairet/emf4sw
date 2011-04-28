@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse Modeling for Semantic Web - RDF
+Bundle-Name: emf4sw rdf
 Bundle-SymbolicName: com.emf4sw.rdf;singleton:=true
 Bundle-Version: 0.7.1.qualifier
 Bundle-ClassPath: .
