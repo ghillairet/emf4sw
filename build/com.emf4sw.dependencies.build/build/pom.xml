@@ -8,20 +8,16 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>../../../bundles/com.emf4sw.rdf</module>
-		<module>../../../features/com.emf4sw.rdf.feature</module>
-		<module>../../../bundles/com.emf4sw.rdf.jena</module>
-		<module>../../../features/com.emf4sw.rdf.jena.feature</module>
-		<module>../../../bundles/com.emf4sw.rdf.sesame</module>
-		<module>../../../features/com.emf4sw.rdf.sesame.feature</module>
-		<module>../../../bundles/com.emf4sw.rdf.transform</module>
-		<module>../../../features/com.emf4sw.rdf.transform.feature</module>
-		<module>../../com.emf4sw.repository</module>
+		<module>../../../bundles/org.openjena</module>
+		<module>../../../features/org.openjena.feature</module>
+		<module>../../../bundles/org.openrdf</module>
+		<module>../../../features/org.openrdf.feature</module>
+		<module>../../com.emf4sw.dependencies.repository</module>
 	</modules>
 
 	<properties>
 		<tycho-version>0.11.1</tycho-version>
-		<targets>../../../com.emf4sw.repository/target/</targets>
+		<targets>../../../com.emf4sw.dependencies.repository/target/</targets>
 	</properties>
 
 	<repositories>
@@ -50,20 +46,21 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
-				<artifactId>maven-osgi-source-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<id>attach-source</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>plugin-source</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.sonatype.tycho</groupId> -->
+<!-- 				<artifactId>maven-osgi-source-plugin</artifactId> -->
+<!-- 				<version>${tycho-version}</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>attach-source</id> -->
+<!-- 						<phase>process-classes</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>plugin-source</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> --> 
+<!-- 						<goals> <goal>plugin-source</goal> </goals> </execution> --> 
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
 
 			<plugin>
 				<groupId>org.sonatype.tycho</groupId>
