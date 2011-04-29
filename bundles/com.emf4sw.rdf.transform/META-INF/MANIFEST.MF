@@ -7,6 +7,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.rdf.transform,
  com.emf4sw.rdf.transform.lib
 Bundle-Vendor: eclipselabs
-Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.6.1",
+Require-Bundle: org.eclipse.emf.ecore,
  com.emf4sw.rdf,
  com.atl.common
