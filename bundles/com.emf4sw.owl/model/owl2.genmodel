@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.emf4sw.owl/src"
+    modelPluginID="com.emf4sw.owl" modelName="Owl2" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="6.0"
+    copyrightFields="false" usedGenPackages="../../com.emf4sw.rdf/model/rdf.genmodel#//rdf">
+  <foreignModel>owl2.ecore</foreignModel>
+  <genPackages prefix="OWL" basePackage="com.emf4sw" disposableProviderFactory="true"
+      ecorePackage="owl2.ecore#/">
+    <genClasses ecoreClass="owl2.ecore#//Ontology">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference owl2.ecore#//Ontology/classes"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference owl2.ecore#//Ontology/dataProperties"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference owl2.ecore#//Ontology/objectProperties"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference owl2.ecore#//Ontology/dataRanges"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference owl2.ecore#//Ontology/classExpressions"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference owl2.ecore#//Ontology/owlDatatypes"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="owl2.ecore#//AnnotatedElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference owl2.ecore#//AnnotatedElement/annotations"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="owl2.ecore#//ClassExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ClassExpression/subClassOf"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ClassExpression/superClass"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ClassExpression/disjointClasses"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ClassExpression/equivalentClasses"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//OWLClass"/>
+    <genClasses ecoreClass="owl2.ecore#//ObjectUnionOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectUnionOf/unionOf"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectIntersectionOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectIntersectionOf/intersectionOf"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectComplementOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectComplementOf/complementOf"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectOneOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectOneOf/oneOf"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="owl2.ecore#//ObjectPropertyRestriction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectPropertyRestriction/property"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectSomeValuesFrom">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectSomeValuesFrom/someValuesFrom"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectAllValuesFrom">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectAllValuesFrom/allValuesFrom"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectHasValue">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectHasValue/hasValue"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectHasSelf"/>
+    <genClasses ecoreClass="owl2.ecore#//ObjectExactCardinality">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute owl2.ecore#//ObjectExactCardinality/cardinality"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectExactCardinality/onClass"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectMaxCardinality">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute owl2.ecore#//ObjectMaxCardinality/cardinality"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectMaxCardinality/onClass"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectMinCardinality">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute owl2.ecore#//ObjectMinCardinality/cardinality"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectMinCardinality/onClass"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="owl2.ecore#//DataPropertyRestriction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataPropertyRestriction/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataSomeValuesFrom">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataSomeValuesFrom/someValuesFrom"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataAllValuesFrom">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataAllValuesFrom/allValuesFrom"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataHasValue">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataHasValue/hasValue"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataExactCardinality">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute owl2.ecore#//DataExactCardinality/cardinality"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataExactCardinality/dataRange"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataMaxCardinality">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute owl2.ecore#//DataMaxCardinality/cardinality"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataMaxCardinality/dataRange"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataMinCardinality">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute owl2.ecore#//DataMinCardinality/cardinality"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataMinCardinality/dataRange"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="owl2.ecore#//OWLProperty">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//OWLProperty/domain"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataProperty">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataProperty/range"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectProperty">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectProperty/range"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//ObjectPropertyChain">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//ObjectPropertyChain/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//AnnotationProperty"/>
+    <genClasses image="false" ecoreClass="owl2.ecore#//DataRange"/>
+    <genClasses ecoreClass="owl2.ecore#//OWLDatatype"/>
+    <genClasses ecoreClass="owl2.ecore#//DataComplementOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataComplementOf/dataRange"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataUnionOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataUnionOf/dataRanges"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataIntersectionOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataIntersectionOf/dataRanges"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DataOneOf">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DataOneOf/oneOf"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//DatatypeRestriction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//DatatypeRestriction/datatype"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference owl2.ecore#//DatatypeRestriction/restrictions"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//FacetRestriction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//FacetRestriction/datatype"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//FacetRestriction/value"/>
+    </genClasses>
+    <genClasses ecoreClass="owl2.ecore#//Annotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//Annotation/property"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference owl2.ecore#//Annotation/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

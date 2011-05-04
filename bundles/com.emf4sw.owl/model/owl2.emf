@@ -1,0 +1,265 @@
+@namespace(uri="http://www.w3.org/2002/07/owl", prefix="OWL")
+package owl;
+
+import "platform:/resource/com.emf4sw.rdf/model/rdf.ecore";
+
+@emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#Ontology")
+class Ontology extends rdf.DocumentGraph, AnnotatedElement {
+	@ExtendedMetaData(group="#nodes")
+  	volatile transient derived !resolve val OWLClass[*] classes;	
+  	@ExtendedMetaData(group="#nodes")
+  	volatile transient derived !resolve val DataProperty[*] dataProperties;
+  	@ExtendedMetaData(group="#nodes")
+  	volatile transient derived !resolve val ObjectProperty[*] objectProperties;
+  	@ExtendedMetaData(group="#nodes")
+  	volatile transient derived !resolve val DataRange[*] dataRanges;
+  	@ExtendedMetaData(group="#nodes")
+  	volatile transient derived !resolve val ClassExpression[*] classExpressions;
+  	@ExtendedMetaData(group="#nodes")
+  	volatile transient derived !resolve val OWLDatatype[*] owlDatatypes;
+}
+
+abstract class AnnotatedElement {
+   val Annotation[*] annotations;
+   
+   op void addAnnotation(AnnotationProperty property, Object value);
+}
+
+abstract class ClassExpression extends rdf.SubjectNode, AnnotatedElement {
+	ref OWLProperty[*] keys;
+	ref ClassExpression[*]#superClass subClassOf;
+	ref ClassExpression[*]#subClassOf superClass;
+	ref ClassExpression[*] disjointClasses;
+	ref ClassExpression[*] equivalentClasses;
+}
+
+@emf4sw.OWLClass(uri="http://www.w3.org/2000/01/rdf-schema#Class")
+@emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#Class")
+class OWLClass extends rdf.Resource, ClassExpression {	
+}
+
+class ObjectUnionOf extends ClassExpression, rdf.BlankNode {
+   ref ClassExpression[*] unionOf;
+}
+
+class ObjectIntersectionOf extends ClassExpression, rdf.BlankNode {
+   ref ClassExpression[*] intersectionOf;
+}
+
+class ObjectComplementOf extends ClassExpression, rdf.BlankNode {
+   ref ClassExpression[*] complementOf;
+}
+
+class ObjectOneOf extends ClassExpression, rdf.BlankNode {
+   ref rdf.Resource[*] oneOf;
+}
+
+abstract class ObjectPropertyRestriction extends ClassExpression, rdf.BlankNode {
+	@emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+	ref ObjectProperty property;
+}
+
+class ObjectSomeValuesFrom extends ObjectPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#someValuesFrom")
+  ref ClassExpression someValuesFrom;
+}
+
+class ObjectAllValuesFrom extends ObjectPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#allValuesFrom")
+  ref ClassExpression allValuesFrom;
+}
+
+class ObjectHasValue extends ObjectPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#hasValue") 
+  ref rdf.Resource hasValue;
+}
+
+class ObjectHasSelf extends ObjectPropertyRestriction {
+}
+
+class ObjectExactCardinality extends ObjectPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#cardinality")
+  attr int cardinality;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onClass")
+  ref ClassExpression[?] onClass;
+}
+
+class ObjectMaxCardinality extends ObjectPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#maxCardinality")
+  attr int cardinality;
+ 
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onClass")
+  ref ClassExpression[?] onClass;
+}
+
+class ObjectMinCardinality extends ObjectPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#minCardinality")
+  attr int cardinality;
+ 
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onClass")
+  ref ClassExpression[?] onClass;
+}
+
+abstract class DataPropertyRestriction extends ClassExpression, rdf.BlankNode {
+}
+
+class DataSomeValuesFrom extends DataPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#someValuesFrom")
+  ref DataRange someValuesFrom;
+ 
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+  ref DataProperty[*] properties;
+}
+
+class DataAllValuesFrom extends DataPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#allValuesFrom")
+  ref DataRange allValuesFrom;
+ 
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+  ref DataProperty[*] properties;
+}
+
+class DataHasValue extends DataPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#hasValue")
+  ref rdf.Literal hasValue;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+  ref DataProperty property;
+}
+
+class DataExactCardinality extends DataPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#cardinality")
+  attr int cardinality;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onDataRange")
+  ref DataRange[?] dataRange;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+  ref DataProperty property;
+}
+
+class DataMaxCardinality extends DataPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#maxCardinality")
+  attr int cardinality;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onDataRange")
+  ref DataRange[?] dataRange;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+  ref DataProperty property;
+}
+
+class DataMinCardinality extends DataPropertyRestriction {
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#minCardinality")
+  attr int cardinality;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onDataRange")
+  ref DataRange[?] dataRange;
+  
+  @emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#onProperty")
+  ref DataProperty property;
+}
+
+abstract class OWLProperty extends rdf.Resource, AnnotatedElement {
+   
+}
+
+abstract class ClassProperty extends OWLProperty {
+   attr Boolean[?] isFunctional;
+   
+   @emf4sw.OWLClass(uri="http://www.w3.org/2000/01/rdf-schema#domain")
+   ref ClassExpression[*] domain;
+}
+
+@emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#DatatypeProperty")
+class DataProperty extends ClassProperty {
+   @emf4sw.OWLClass(uri="http://www.w3.org/2000/01/rdf-schema#range")
+   ref DataRange[*] range;
+   
+   ref DataProperty[*] equivalentProperties;
+   ref DataProperty[*] subPropertyOf;
+   ref DataProperty[*] disjointProperties;
+}
+
+@emf4sw.OWLClass(uri="http://www.w3.org/2002/07/owl#ObjectProperty")
+class ObjectProperty extends ClassProperty {
+   attr Boolean[?] isInverseFunctional;
+   attr Boolean[?] isSymmetric;
+   attr Boolean[?] isAsymmetric;
+   attr Boolean[?] isTransitive;
+   attr Boolean[?] isReflexive;
+   attr Boolean[?] isIrreflexive;
+   
+   ref ObjectProperty[*] inverseOf;
+   
+   @emf4sw.OWLClass(uri="http://www.w3.org/2000/01/rdf-schema#range")
+   ref ClassExpression[*] range;
+   
+   ref ObjectProperty[*] equivalentProperties;
+   ref ObjectProperty[*] subPropertyOf;
+   ref ObjectProperty[*] disjointProperties;
+}
+
+class ObjectPropertyChain extends ObjectProperty {
+   ordered ref ObjectProperty[*] properties;
+}
+
+class AnnotationProperty extends OWLProperty {
+   
+}
+
+abstract class DataRange extends rdf.SubjectNode, AnnotatedElement {
+   
+}
+
+class OWLDatatype extends rdf.Datatype, DataRange {
+   
+}
+
+class DataComplementOf extends DataRange {
+    ref DataRange dataRange;
+}
+
+class DataUnionOf extends DataRange {
+  ref DataRange[*] dataRanges;
+}
+
+class DataIntersectionOf extends DataRange {
+  ref DataRange[*] dataRanges;
+}
+
+class DataOneOf extends DataRange {
+	ref rdf.Literal[*] oneOf;
+}
+
+class DatatypeRestriction extends DataRange {
+  ref DataRange ~datatype;
+  val FacetRestriction[*] restrictions;
+}
+
+class DatatypeDefinition {
+	ref DataRange[1] dataRange;
+	ref OWLDatatype[1] ~datatype;   
+}
+
+class FacetRestriction {
+  ref DataRange ~datatype;
+  ref rdf.Literal value;
+}
+
+class Annotation extends AnnotatedElement {
+   ref AnnotationProperty property;
+   ref rdf.Literal value;
+}
+
+class Individual extends rdf.Resource {
+ 	ref Individual[*] sameAs;
+ 	ref Individual[*] differentFrom;
+ 	
+ 	op ClassExpression[*] getClasses();
+ 	op void addObjectValue(ObjectProperty property, Individual value);
+ 	op void addObjectValues(ObjectProperty property, Individual[*] values);
+ 	op void addDataValue(DataProperty property, rdf.Literal value);
+ 	op void addDataValues(DataProperty property, rdf.Literal[*] values);
+}
