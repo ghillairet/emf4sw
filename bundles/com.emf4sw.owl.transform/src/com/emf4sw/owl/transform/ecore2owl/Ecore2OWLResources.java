@@ -1,25 +1,18 @@
 package com.emf4sw.owl.transform.ecore2owl;
 
-import static com.atl.common.models.Models.ecore;
-import static com.atl.common.models.Models.inject;
 import static com.atl.common.models.Models.register;
-import static com.atl.common.models.Models.setOf;
-import static com.atl.common.trans.Transformations.transform;
 
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.m2m.atl.core.emf.EMFModel;
 
 import com.atl.common.models.Properties;
 import com.atl.common.trans.Transformation;
 import com.emf4sw.owl.OWLPackage;
 import com.emf4sw.owl.resource.OWLFormats;
 import com.emf4sw.owl.resource.OWLResource;
-import com.emf4sw.owl.transform.OWLTransformations;
-import com.emf4sw.owl.transform.utils.OntologySplitter;
 
 /**
  * {@link Ecore2OWLResources}
@@ -32,8 +25,10 @@ import com.emf4sw.owl.transform.utils.OntologySplitter;
  */
 public class Ecore2OWLResources implements Transformation<Resource, List<Resource>> {
 
+	@SuppressWarnings("unused")
 	private final OWLFormats format;
 	
+	@SuppressWarnings("unused")
 	private final Properties<?, ?> properties;
 	
 	static {
@@ -52,14 +47,11 @@ public class Ecore2OWLResources implements Transformation<Resource, List<Resourc
 	
 	@Override
 	public List<Resource> apply(Resource from) {
-		return getOntologies( transform( 
-				setOf(inject(from, ecore()), 
-						inject(properties.serialize(), Properties.getReferenceModel())), 
-							OWLTransformations.ecore2owl(format) ) );
-	}
-
-	private List<Resource> getOntologies(EMFModel model) {
-		return new OntologySplitter().split( model.getResource(), format );
+		throw new UnsupportedOperationException();
+//		return getOntologies( transform( 
+//				setOf(inject(from, ecore()), 
+//						inject(properties.serialize(), Properties.getReferenceModel())), 
+//							OWLTransformations.ecore2owl(format) ) );
 	}
 
 }

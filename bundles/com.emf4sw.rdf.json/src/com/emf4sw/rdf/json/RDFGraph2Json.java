@@ -27,6 +27,7 @@ import com.emf4sw.rdf.Literal;
 import com.emf4sw.rdf.Namespace;
 import com.emf4sw.rdf.Node;
 import com.emf4sw.rdf.Property;
+import com.emf4sw.rdf.SubjectNode;
 import com.emf4sw.rdf.Triple;
 import com.emf4sw.rdf.URIElement;
 import com.emf4sw.rdf.util.RDFSwitch;
@@ -51,7 +52,7 @@ public class RDFGraph2Json {
 			root.putAll(node);
 		}
 		
-		for (Node n: graph.listSubjects()) {
+		for (SubjectNode n: graph.listSubjects()) {
 			final ObjectNode node = mapper.createObjectNode();
 			final ObjectNode a = mapper.createObjectNode();
 			
