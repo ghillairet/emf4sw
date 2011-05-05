@@ -8,7 +8,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.emf4sw</groupId>
-	<artifactId>com.emf4sw.transform</artifactId>
+	<artifactId>com.emf4sw.rdf.transform</artifactId>
 	<version>0.7.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

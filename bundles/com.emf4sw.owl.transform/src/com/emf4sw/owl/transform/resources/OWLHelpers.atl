@@ -1,0 +1,65 @@
+-- @atlcompiler atl2006
+
+-- @path owl=/com.emf4sw.owl/model/owl2.ecore
+
+library OWLHelpers;
+
+helper def: classes: Set(owl!ClassExpression) = owl!ClassExpression.allInstances();
+helper def: unions: Set(owl!ObjectUnionOf) = owl!ObjectUnionOf.allInstances();
+helper def: intersections: Set(owl!ObjectUnionOf) = owl!ObjectIntersectionOf.allInstances();
+--helper def: subClassOf: Set(owl!SubClassOf) = owl!SubClassOf.allInstances();
+
+helper def: properties: Set(owl!ClassProperty) = owl!ClassProperty.allInstances();
+helper def: objectProperties: Set(owl!ObjectProperty) = owl!ObjectProperty.allInstances();
+--helper def: objectRanges: Set(owl!ObjectPropertyRange) = owl!ObjectPropertyRange.allInstances();
+--helper def: objectDomains: Set(owl!ObjectPropertyDomain) = owl!ObjectPropertyDomain.allInstances();
+--
+helper def: dataProperties: Set(owl!DataProperty) = owl!DataProperty.allInstances();
+--helper def: dataRanges: Set(owl!DataPropertyRange) = owl!DataPropertyRange.allInstances();
+--helper def: dataDomains: Set(owl!DataPropertyDomain) = owl!DataPropertyDomain.allInstances();
+--
+--helper def: Thing : owl!OWLClass = owl!OWLClass.allInstances()->any(e | e.name = 'Thing');
+--helper def: XString : owl!DataRange = owl!Datatype.allInstances()->any(e | e.name = 'string');
+--
+--helper context OclAny def: get(): OclAny = self;
+--helper context owl!OWLClass def: get(): owl!ClassExpression = self;
+--helper context owl!PrefixEntityExpression def: get(): owl!ClassExpression = self.reference;
+--helper context owl!ClassExpression def: get(): owl!ClassExpression = self;
+--
+--helper context owl!ClassExpression def: listSubClasses(): Set(owl!ClassExpression) =
+--	thisModule.subClassOf->select(e | e.superClass.get() = self.get())->collect(e | e.subClass.get())->flatten();
+--
+--helper context owl!ClassExpression def: listSuperClasses(): Set(owl!ClassExpression) =
+--	thisModule.subClassOf->select(e | e.subClass.get() = self.get())->collect(e | e.superClass.get())->flatten();
+--
+--helper context owl!ObjectProperty def: get(): owl!ObjectProperty = self;
+--	
+--helper context owl!DataProperty def: get(): owl!DataProperty = self;
+--
+--helper context owl!Entity def: getName(): String = if (self.name.oclIsUndefined()) then '__unnamed__' else self.name.regexReplaceAll('\\.', '_').regexReplaceAll('-', '_') endif;
+--helper context owl!ObjectUnionOf def: getName(): String = '__union__' + thisModule.ID + '__';
+--helper context owl!ObjectIntersectionOf def: getName(): String = '__intersection__' + thisModule.ID + '__';
+--helper context owl!ObjectExactCardinality def: getName(): String = '__cardinality__' + thisModule.ID + '__';
+--helper context owl!ObjectMinCardinality def: getName(): String = '__cardinality__' + thisModule.ID + '__';
+--helper context owl!ObjectMaxCardinality def: getName(): String = '__cardinality__' + thisModule.ID + '__';
+--helper context owl!DataExactCardinality def: getName(): String = '__cardinality__' + thisModule.ID + '__';
+--helper context owl!DataMaxCardinality def: getName(): String = '__cardinality__' + thisModule.ID + '__';
+--helper context owl!DataMinCardinality def: getName(): String = '__cardinality__' + thisModule.ID + '__';
+--helper context owl!ObjectSomeValuesFrom def: getName(): String = '__some_values_from__' + thisModule.ID + '__';
+--helper context owl!ObjectAllValuesFrom def: getName(): String = '__all_values_from__' + thisModule.ID + '__';
+--helper context owl!DataSomeValuesFrom def: getName(): String = '__some_values_from__' + thisModule.ID + '__';
+--helper context owl!DataAllValuesFrom def: getName(): String = '__all_values_from__' + thisModule.ID + '__';
+--helper context owl!PrefixEntityExpression def: getName(): String = self.reference.getName();
+--
+--
+--helper context owl!ObjectProperty def: listRanges(): Set(owl!ClassExpression) =
+--	thisModule.objectRanges->select(e | e.property.get() = self.get())->collect(e | e.range.get())->flatten();
+--
+--helper context owl!ObjectProperty def: listDomains(): Set(owl!ClassExpression) =
+--	thisModule.objectDomains->select(e | e.property.get() = self.get())->collect(e | e.domain.get())->flatten();
+--
+--helper context owl!DataProperty def: listRanges(): Set(owl!DataRange) =
+--	thisModule.dataRanges->select(e | e.property.get() = self.get())->collect(e | e.range.get())->flatten();
+--
+--helper context owl!DataProperty def: listDomains(): Set(owl!ClassExpression) =
+--	thisModule.dataDomains->select(e | e.property.get() = self.get())->collect(e | e.domain.get())->flatten();

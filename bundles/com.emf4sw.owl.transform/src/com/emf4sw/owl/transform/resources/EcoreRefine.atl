@@ -1,0 +1,135 @@
+--- @atlcompiler atl2006
+--- @nsURI ecore=http://www.eclipse.org/emf/2002/Ecore
+
+--- *******************************************************************************
+--- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+--- * All rights reserved. This program and the accompanying materials
+--- * are made available under the terms of the Eclipse Public License v1.0
+--- * which accompanies this distribution, and is available at
+--- * http://www.eclipse.org/legal/epl-v10.html
+--- *
+--- *******************************************************************************/
+
+module EcoreRefine;
+create OUT:ecore from IN:ecore;
+
+helper def: ClassAnnotations: Set(String) = Set {
+		'ObjectUnionOf', 'ObjectIntersectionOf', 
+		'ObjectExactCardinality', 'ObjectMaxCardinality', 'ObjectMinCardinality',
+		'DataExactCardinality', 'DataMaxCardinality', 'DataMinCardinality',
+		'ObjectAllValuesFrom', 'ObjectSomeValuesFrom',
+		'DataAllValuesFrom', 'DataSomeValuesFrom'
+	};
+
+helper context ecore!EClass def: isClassExpression(): Boolean =
+	self.eAnnotations->exists(e | thisModule.ClassAnnotations->includes(e.source));
+
+helper def: classes: Set(ecore!EClass) = ecore!EClass.allInstancesFrom('IN');
+
+helper def: FeatureByEClass: Map(ecore!EClass, Set(ecore!EStructuralFeature)) =
+	thisModule.classes->iterate(it; res: Map(ecore!EClass, Set(ecore!EStructuralFeature)) = Map{} |
+		if (it.isClassExpression()) then res else
+		let 
+			features: Set(ecore!EStructuralFeature) = 
+				it.eStructuralFeatures->union(it.eSuperTypes->collect(e | 
+						if (e.isClassExpression()) then 
+							Set{} 
+						else e.eStructuralFeatures endif))->flatten()->select(e | e.oclIsKindOf(ecore!EStructuralFeature))
+		in
+			res->including(it, features)
+		endif
+	);
+
+helper context ecore!EClass def: hasFeature(set: Set(ecore!EStructuralFeature)): Set(ecore!EStructuralFeature) =
+	let features: Set(ecore!EStructuralFeature) = self.eStructuralFeatures in
+		set->iterate(it; res: Set(ecore!EStructuralFeature) = Set{} |
+			res->union( features->select(e | e.name = it.name) )
+		);
+
+
+rule EPackage2EPackage {
+	from e: ecore!EPackage
+	to
+		o: ecore!EPackage (
+			name <- e.name,
+			nsPrefix <- e.nsPrefix,
+			nsURI <- e.nsURI,
+			eClassifiers <- e.eClassifiers
+		)
+}
+
+rule EClass2EClass {
+	from e: ecore!EClass (
+		not e.isClassExpression()
+	)
+	using {
+		validFeatures: Set(ecore!EStructuralFeature) = 
+				let allSuperFeatures : Set(ecore!EStructuralFeature) = 
+					e.eSuperTypes->collect(s | if (s.isClassExpression()) then Set{} else 
+						thisModule.FeatureByEClass.get(s) endif)->flatten()
+				in 
+					e.eStructuralFeatures.excluding(e.hasFeature(allSuperFeatures)); 
+	}
+	to
+		o: ecore!EClass (
+			name <- e.name,
+			abstract <- e.abstract,
+			eSuperTypes <- e.eSuperTypes,
+			eStructuralFeatures <- validFeatures->collect(f | 
+				thisModule.EStructuralFeature2EStructuralFeature(f))
+		)
+}
+
+lazy abstract rule EStructuralFeature2EStructuralFeature {
+	from e: ecore!EStructuralFeature
+	to
+		o: ecore!EStructuralFeature (
+			name <- e.name,
+			eType <- e.eType,
+			upperBound <- e.upperBound,
+			lowerBound <- e.lowerBound
+		)
+}
+
+lazy rule EAttribute2EAttribute extends EStructuralFeature2EStructuralFeature {
+	from e: ecore!EAttribute
+	to
+		o: ecore!EAttribute (
+		)
+}
+
+lazy rule EReference2EReference extends EStructuralFeature2EStructuralFeature {
+	from e:ecore!EReference
+	using {
+		type: ecore!EClass = 
+			if (e.eType.isClassExpression()) then 
+				thisModule.classes->any(e | e.name= 'Thing') 
+			else e.eType endif;
+	}
+	to
+		o: ecore!EReference (
+			eType <- type
+		)
+}
+
+rule EDataType2EDataType {
+	from e: ecore!EDataType
+	to
+		o: ecore!EDataType (
+			name <- e.name,
+			instanceClassName <- e.getInstanceClassName()
+		)
+}
+
+helper context ecore!EDataType def: getInstanceClassName(): String = 
+	thisModule.DataTypeMap.get(self.name);
+
+helper def: DataTypeMap: Map(String, String) = 
+	Map {
+		('String', 'java.lang.String'),
+		('EString', 'java.lang.String'),
+		('Integer', 'int'),
+		('EInt', 'int'),
+		('Boolean', 'boolean'),
+		('EBoolean', 'boolean')
+	}; 

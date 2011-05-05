@@ -1,0 +1,150 @@
+-- @atlcompiler atl2006
+
+library OWL2EcoreHelpers;
+
+helper def: RDF: String = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+helper def: RDFS: String = 'http://www.w3.org/2000/01/rdf-schema#';
+helper def: OWL: String = 'http://www.w3.org/2002/07/owl#';
+helper def: XSD: String = 'http://www.w3.org/2001/XMLSchema#';
+
+helper def: findLocalName(seq : Sequence(String)) : String =
+	if (seq.isEmpty()) then ''
+	else
+		if (seq.last().regexReplaceAll('[0-9]+(.[0-9]+)?', '').size() <= 1)
+			then thisModule.findLocalName(seq->subSequence(1, seq.size()-1))
+			else seq.last()
+		endif
+	endif;
+
+helper context String def: resolveLocalName() : String =
+	let uri : String = 
+		if (self.startsWith('http://')) then
+			self.substring('http://'.size(), self.size())
+		else self endif 
+	in 
+		let indexOfSharp: Integer = uri.lastIndexOf('#')
+		in if (indexOfSharp < 0) then
+			let splits : Sequence(String) = uri.split('/') in
+				thisModule.findLocalName(splits).regexReplaceAll('\\.', '_')
+			else uri.substring(indexOfSharp + 2, uri.size()) endif;
+			
+helper def: ontologies: Set(owl!Ontology) = owl!Ontology.allInstancesFrom('IN');
+
+helper def: Thing: owl!OWLClass = owl!OWLClass.allInstancesFrom('IN')->any(e | e.getURI() = 'http://www.w3.org/2002/07/owl#Thing');
+
+helper def: allDatatypes: Set(owl!Datatype) = 
+	owl!Datatype.allInstancesFrom('IN')->iterate(it; res: Set(owl!Datatype) = Set{} |
+		if (res->exists(e | e.getURI() = it.getURI())) then res else res->including(it) endif
+	);
+
+helper def: stringDp: owl!OWLDatatype = thisModule.allDatatypes->any(e | e.getURI() = 'http://www.w3.org/2001/XMLSchema#string');
+
+helper context owl!ObjectUnionOf def: getSuperTypes(class: owl!ClassExpression): Set(owl!ClassExpression) =
+	self.unionOf->exists(c | (c = class) or	
+		if (c.oclIsKindOf(owl!EntityExpression)) then 
+			c.getEntity() = self 
+		else OclAny endif);
+
+helper context owl!ClassExpression def: listSuperTypes(): Set(owl!ClassExpression) =
+	let superClasses: Set(owl!ClassExpression)=
+		self.listSuperClasses()->reject(c | c = self)->asSet()
+	in
+	let 
+		others: Set(owl!ClassExpression) =
+			thisModule.unions->select(e | e.getSuperTypes(self))->asSet()
+	in Set{}->union(superClasses)->union(others)->reject(e | e.oclIsUndefined());
+	
+helper def: commaSeparatedNames(col: Collection(OclAny)): String =
+	col->asSet()->iterate(it; res: String = '' | 
+		if (res.isEmpty()) then
+			res.concat(it.getName())
+		else res.concat(', ' + it.getName()) endif );
+	
+--
+--helper def: collectNamespaces: Set(String) = 
+--	owl!OWLClass.allInstancesFrom('IN')->reject(e | e.URI.oclIsUndefined())->union(
+--		owl!OWLProperty.allInstancesFrom('IN'))->iterate(it; res : Set(String) = Set{} |
+--			let
+--				val : String = it.URI.substring(1, it.URI.size()-it.name.size())
+--			in
+--			if (not val.oclIsUndefined()) then 
+--				if (res->includes(val)) then res else res->including(val) endif
+--			else res endif
+--	)->flatten();
+--
+--helper def: allNamespaces: Set(String) = 
+--	thisModule.ontologies->collect(e | e.URI)->flatten()->asSet()->symetricDifference(
+--		thisModule.collectNamespaces
+--	)->flatten()->iterate(it; res : Set(String) = Set{} |
+--		if (not it.oclIsUndefined()) then
+--			if (it.endsWith('#')) then
+--				res->including(it)
+--			else 
+--				if (it.endsWith('/')) then
+--					res->including(it)
+--				else res endif 
+--			endif
+--		else res endif
+--	);
+--
+--helper context owl!EntityProperty def: getMinCard(domain: owl!OWLClass): Integer = 
+--	let res : owl!MinCardinalityRestriction =
+--		domain.subClassOf->select(e | e.oclIsTypeOf(owl!MinCardinalityRestriction))->any(e | e.onProperty = self)
+--	in 
+--	if (not res.oclIsUndefined()) then 
+--		res.minCardinality 
+--	else 0-2 endif;
+--
+--helper context owl!EntityProperty def: getMaxCard(domain: owl!OWLClass): Integer =
+--	let res : owl!MaxCardinalityRestriction = 
+--		domain.subClassOf->select(e | e.oclIsTypeOf(owl!MaxCardinalityRestriction))->any(e | e.onProperty = self)
+--	in 
+--	if (not res.oclIsUndefined()) then 
+--		res.maxCardinality
+--	else 0-3 endif;
+--
+--helper context owl!EntityProperty def: getCard(domain: owl!OWLClass): Integer =
+--	let res : owl!CardinalityRestriction = 
+--		domain.subClassOf->select(e | e.oclIsTypeOf(owl!CardinalityRestriction))->any(e | e.onProperty = self)
+--	in
+--	if (not res.oclIsUndefined()) then
+--		res.cardinality
+--	else 0-4 endif;
+--
+--helper context owl!OWLProperty def: getLower(minCard: Integer, card: Integer): Integer = 
+--	if (minCard = 0-2) then 
+--		if (card = 0-4) then 
+--			if (self.isFunctional)	then 1 
+--				else 0
+--			endif
+--		else card endif
+--	else minCard endif;
+--
+--helper context owl!OWLProperty def: getUpper(maxCard: Integer, card: Integer): Integer = 
+--	if (maxCard = 0-3) then
+--		if (card = 0-4) then
+--			if (self.isFunctional) then 1 
+--				else 0-1
+--			endif
+--		else card endif
+--	else maxCard endif;
+
+helper def: xsd2ecore: Map(String, String) = Map {
+	('http://www.w3.org/2001/XMLSchema#string', 'EString'),
+	('http://www.w3.org/2001/XMLSchema#int', 'EInteger'),
+	('http://www.w3.org/2001/XMLSchema#boolean', 'EBoolean'),
+	('http://www.w3.org/2001/XMLSchema#byte', 'EByte'),
+	('http://www.w3.org/2001/XMLSchema#hexBinary', 'EByteArray'),
+	('http://www.w3.org/2001/XMLSchema#byte', 'EByteObject'),
+	('http://www.w3.org/2001/XMLSchema#date', 'EDate'),
+	('http://www.w3.org/2001/XMLSchema#dateTime', 'EDate'),
+	('http://www.w3.org/2001/XMLSchema#double', 'EDouble'),
+	('http://www.w3.org/2001/XMLSchema#float', 'EFloat'),
+	('http://www.w3.org/2001/XMLSchema#long', 'ELong'),
+	('http://www.w3.org/2001/XMLSchema#short', 'EShort'),
+	('http://www.w3.org/2001/XMLSchema#decimal', 'EBigDecimal'),
+	('http://www.w3.org/2001/XMLSchema#integer', 'EBigInteger') 
+};
+
+
+	

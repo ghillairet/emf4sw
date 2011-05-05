@@ -1,0 +1,372 @@
+-- @atlcompiler atl2006
+-- @nsURI ecore=http://www.eclipse.org/emf/2002/Ecore
+
+library Ecore2OWLHelpers;
+
+helper def: graph: owl!OWLGraph = OclAny;
+
+helper def: RDF: String = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+
+helper def: RDFS: String = 'http://www.w3.org/2000/01/rdf-schema#';
+
+helper def: OWL: String = 'http://www.w3.org/2002/07/owl#';
+
+helper def: XSD: String = 'http://www.w3.org/2001/XMLSchema#';
+
+helper context ecore!EPackage def: getOntology(): ecore!EPackage = self;
+
+helper context ecore!EClassifier def: getOntology(): ecore!EPackage = self.ePackage;
+
+helper context ecore!EStructuralFeature def: getOntology(): ecore!EPackage = self.eContainingClass.ePackage;
+
+helper def: allPackages: Set(ecore!EPackage) = 
+	ecore!EPackage.allInstancesFrom('IN')->asSet();
+
+helper def: allClassifiers: Set(ecore!EClassifier) =
+	ecore!EClassifier.allInstancesFrom('IN')->asSet();
+
+helper def: allClasses: Set(ecore!EClass) = 
+	ecore!EClass.allInstancesFrom('IN')->asSet();
+
+helper def: allFeatures: Set(ecore!EStructuralFeature) = 
+	ecore!EStructuralFeature.allInstancesFrom('IN')->asSet();
+
+helper def: allReferences: Set(ecore!EReference) = 
+	thisModule.allFeatures->select(e | e.oclIsTypeOf(ecore!EReference))->asSet();
+
+helper context ecore!EPackage def: getNamespaces(): Map(String, String) = 
+	let annotations: Set(ecore!EAnnotation) = 
+		self.eAnnotations->select(e | e.source = 'OWL')
+	in if (annotations.isEmpty()) then
+		Map{(self.nsPrefix, self.nsURI)}
+	else
+		annotations->iterate(it; res: Map(String, String) = Map{} |
+			if (it.details.containsKey('prefix') and it.details.containsKey('uri')) then 
+				res->including(it.details.get('prefix'), it.details.get('uri'))
+			else res endif
+		)
+	endif;
+
+helper def: namespaces: Map(String, String) =
+	Map {
+		('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
+	 	('rdfs', 'http://www.w3.org/2000/01/rdf-schema#'),
+	 	('owl', 'http://www.w3.org/2002/07/owl#'),
+		('xsd', 'http://www.w3.org/2001/XMLSchema#')
+	}->union(
+		ecore!EPackage.allInstancesFrom('IN')->iterate(it; res: Map(String, String) = Map{} |
+			res->union(it.getNamespaces())
+		)
+	);
+
+helper context ecore!EStructuralFeature def: isCardinality(): Boolean =
+	if ((self.lowerBound = 0) and (self.upperBound < 0)) then false 
+	else
+		(self.lowerBound = self.upperBound) or (not (self.upperBound > 0) and self.lowerBound > 0) or 
+		(self.upperBound > 0 and self.lowerBound = 0) or
+		(self.upperBound <> self.lowerBound and self.upperBound > 0 and self.lowerBound > 0)
+	endif;
+	
+--	@doc
+--	Load all EClass from referenced metamodels.
+helper def: allReferencedClassMap: Map(ecore!EClass, Set(ecore!EClass)) = 
+	thisModule.allClasses->iterate(it; res: Map(ecore!EClass, Set(ecore!EClass)) = Map{} |
+		let 
+			supers: Set(ecore!EClass) = it.eAllSuperTypes->asSet() 
+		in
+		let 
+			types: Set(ecore!EClass) = it.eStructuralFeatures->select(e | 
+				e.oclIsTypeOf(ecore!EReference))->collect(e | e.eType)->asSet()
+		in
+		let 
+			diff: Set(ecore!EClass) = (supers->union(types) - thisModule.allClasses) 
+		in
+		if (not diff.isEmpty()) then
+			res->including( it, diff )
+		else res endif );
+
+helper def: allReferencedClasses: Set(ecore!EClass) =
+	thisModule.allReferencedClassMap.getValues()->flatten()->asSet();
+
+helper context ecore!EPackage def: getImportedPackages(): Set(ecore!EPackage) =
+	self.eClassifiers->select(e | e.oclIsTypeOf(ecore!EClass))->iterate(it; res: Set(ecore!EPackage) = Set{} | 
+		let importExternal: Set(ecore!EClass) = 
+			thisModule.allReferencedClassMap.get(it) 
+		in
+			(if (not importExternal.oclIsUndefined()) then
+				res->including(importExternal->collect(e | e.ePackage))
+			else res endif)->union(
+		let externalSuperClasses: Set(ecore!EClass) = 
+			it.eSuperTypes->select(e | e.ePackage <> it.ePackage)
+		in
+			res->including(externalSuperClasses->collect(e | e.ePackage))
+		)->union(
+			let externalReferencesTypes: Set(ecore!EReference) =
+				it.eStructuralFeatures->select(e | e.oclIsTypeOf(ecore!EReference))->select(e |
+					e.eType.ePackage <> it.ePackage
+				)
+			in
+				res->including(externalReferencesTypes->collect(e | e.eType.ePackage))
+		)
+	)->flatten();
+
+helper context ecore!EPackage def: allDatatypes() : Set(ecore!EDataType) =
+	self.eClassifiers->select(e | e.oclIsTypeOf(ecore!EClass))->collect(e | 
+		e.eStructuralFeatures)->flatten()->asSet()->select(e | 
+			e.oclIsTypeOf(ecore!EAttribute))->collect(e | e.eType)->flatten()->asSet();
+
+
+helper context ecore!EStructuralFeature def: isMaxCardinality() : Boolean = 
+	( not self.isCardinality() ) and ( self.upperBound >= 0 );
+
+helper context ecore!EStructuralFeature def: isMinCardinality() : Boolean = 
+	( not self.isCardinality() ) and  ( self.lowerBound >= 0 );
+
+helper context ecore!EStructuralFeature def: isExactCardinality() : Boolean = 
+	self.upperBound = self.lowerBound;
+			 
+helper context ecore!EReference def: isInverseFunctional() : Boolean =
+	if self.eOpposite.oclIsUndefined() 
+		then false
+		else self.upperBound = self.eOpposite.upperBound 
+	endif;
+
+helper def: findLocalName(seq : Sequence(String)) : String =
+	if (seq.last().regexReplaceAll('[0-9]+(.[0-9]+)?', '').size() <= 1)
+		then thisModule.findLocalName(seq->subSequence(1, seq.size()-1))
+		else seq.last()
+	endif;
+
+helper context String def: resolveLocalName() : String =
+	let uri : String = 
+			if (self.startsWith('http://')) then
+				self.substring('http://'.size(), self.size())
+			else self endif 
+	in let splits : Sequence(String) = uri.split('/') in
+		thisModule.findLocalName(splits);
+			
+-- annotations helpers
+
+helper context ecore!EPackage def: getURI() : String =
+	let annotation: ecore!EAnnotation = 
+		self.eAnnotations->any(e | e.source = 'OWL')
+	in
+	if (not annotation.oclIsUndefined()) then
+		let uri: String = 
+			annotation.details.get('uri')
+		in
+		if (not uri.oclIsUndefined()) then
+			self.createURI(uri)
+		else self.getDefaultNamespace() endif
+	else self.getDefaultNamespace() endif;
+			
+helper context ecore!EPackage def: getNamespace() : String =
+	let 
+		uri: String = self.getURI()
+	in
+		if (uri.endsWith('/')) then 
+			uri
+		else if (uri.endsWith('#')) then uri 
+			else uri + '#' endif 
+		endif;
+
+helper def: wfNamespace(uri: String): String = 
+	if (uri.oclIsUndefined()) then ''
+	else
+		if (uri.endsWith('/')) then 
+			uri
+		else if (uri.endsWith('#')) then uri 
+			else uri + '#' endif 
+		endif
+	endif;
+
+helper context ecore!EPackage def: getDefaultNamespace(): String =
+	if (self.nsURI.oclIsUndefined()) then
+		self.createURI(self.name)
+	else self.createURI(self.nsURI) endif;
+
+helper context ecore!EPackage def: createURI(uri: String) : String =
+	if (uri.oclIsUndefined()) then 
+		'http://' + self.name 
+	else 
+		if (not uri.startsWith('http://')) then
+			'http://' + uri
+		else uri endif
+	endif;
+
+helper def: allPackageNamespaces: Map(String, String) = 
+	thisModule.allPackages->iterate(it; res: Map(String, String) = Map{} | 
+		let annotations: ecore!Annotation = 
+			it.eAnnotations->select(e | e.source = 'OWL')
+		in
+		annotations->iterate(it2; res2: Map(String, String) = Map{} |
+			if (it2.details.containsKey('prefix') and it2.details.containsKey('uri')) then
+				res2->including(it2.details.get('prefix'), it2.details.get('uri')) 
+			else res2 endif
+		)
+	);
+
+helper context ecore!EClass def: getEAnnotation(): ecore!EAnnotation = 
+	let annotation: ecore!EAnnotation = 
+		self.eAnnotations->any(e | e.source = 'OWLClass')
+	in 
+	if (not annotation.oclIsUndefined()) then annotation
+		else 
+			let ann: ecore!EAnnotation =
+				self.eAnnotations->any(a | a.source = 'UnionClass')
+			in 
+			if (not ann.oclIsUndefined()) then 
+				ann 
+			else ann endif 
+	endif;
+
+helper context ecore!EAttribute def: getEAnnotation(): ecore!EAnnotation = 
+	self.eAnnotations->any(e | e.source = 'DataProperty');
+
+helper context ecore!EReference def: getEAnnotation(): ecore!EAnnotation = 
+	self.eAnnotations->any(e | e.source = 'ObjectProperty');
+
+helper context ecore!EClass def: getURI(): String =
+	let annotation: ecore!EAnnotation = 
+		self.getEAnnotation('OWLClass')
+	in 
+	if (annotation.oclIsUndefined()) then
+		self.ePackage.getNamespace() + self.name
+	else 
+		if (annotation.details.containsKey('uri')) then
+			annotation.details.get('uri')
+		else 
+			if (annotation.details.containsKey('namespace')) then
+				 let ns: String =
+					annotation.details.get('namespace')
+				in
+				let namespace: String =
+					thisModule.wfNamespace( thisModule.allPackageNamespaces.get(ns) )
+				in 
+				if (annotation.details.containsKey('name')) then
+					namespace + annotation.details.get('name')
+				else namespace + self.name endif
+			else 
+				self.ePackage.getNamespace() + self.name 
+			endif
+		endif
+	endif;
+
+helper context ecore!EStructuralFeature def: getURI(): String =
+	let annotation: ecore!EAnnotation = 
+		self.getEAnnotation()
+	in if (annotation.oclIsUndefined()) then 
+		self.eContainingClass.ePackage.getNamespace() + self.name
+	else 
+	if (annotation.details.containsKey('uri')) then
+			annotation.details.get('uri')
+		else 
+			if (annotation.details.containsKey('namespace')) then
+				 let ns: String =
+					annotation.details.get('namespace')
+				in
+				let namespace: String =
+					thisModule.wfNamespace( thisModule.allPackageNamespaces.get(ns) )
+				in 
+				if (annotation.details.containsKey('name')) then
+					namespace + annotation.details.get('name')
+				else namespace + self.name endif
+			else 
+				self.eContainingClass.ePackage.getNamespace() + self.name 
+			endif
+		endif
+	endif;
+
+helper context ecore!ENamedElement def: getName(): String =
+	let annotation: ecore!EAnnotation = 
+		self.getEAnnotation()
+	in
+	if (not annotation.oclIsUndefined()) then
+		if (annotation.details.containsKey('name')) then
+			annotation.details.get('name')
+		else
+			if (annotation.details.containsKey('uri')) then
+				annotation.details.get('uri').resolveLocalName()
+			else self.name endif
+		endif
+	else 
+		self.name 
+	endif;
+
+helper def: datatypes: Map(String, String) = Map {
+	('Literal', 'http://www.w3.org/2000/01/rdf-schema#Literal'),
+	('String', 'http://www.w3.org/2001/XMLSchema#string'),
+	('Integer', 'http://www.w3.org/2001/XMLSchema#int'),
+	('Boolean', 'http://www.w3.org/2001/XMLSchema#boolean'),
+	('UnlimitedNatural', 'http://www.w3.org/2001/XMLSchema#integer' ),
+	('Byte', 'http://www.w3.org/2001/XMLSchema#byte'),
+	('Currency', 'http://www.w3.org/2001/XMLSchema#decimal'),
+	('Date', 'http://www.w3.org/2001/XMLSchema#date'),
+	('Double', 'http://www.w3.org/2001/XMLSchema#double'),
+	('Float', 'http://www.w3.org/2001/XMLSchema#float'),
+	('Long', 'http://www.w3.org/2001/XMLSchema#long'),
+	('Short', 'http://www.w3.org/2001/XMLSchema#short'),
+	('Single', 'http://www.w3.org/2001/XMLSchema#short'),
+	('Variant', 'http://www.w3.org/2001/XMLSchema#string'),
+	('EString', 'http://www.w3.org/2001/XMLSchema#string'),
+	('EInteger', 'http://www.w3.org/2001/XMLSchema#int'),
+	('EBoolean', 'http://www.w3.org/2001/XMLSchema#boolean'),
+	('EBooleanObject', 'http://www.w3.org/2001/XMLSchema#boolean'),
+	('EByte', 'http://www.w3.org/2001/XMLSchema#byte'),
+	('EByteArray', 'http://www.w3.org/2001/XMLSchema#hexBinary'),
+	('EByteObject', 'http://www.w3.org/2001/XMLSchema#byte'),
+	('EChar', 'http://www.w3.org/2001/XMLSchema#string'),
+	('ECharacterObject', 'http://www.w3.org/2001/XMLSchema#string'),
+	('EDate', 'http://www.w3.org/2001/XMLSchema#date'),
+	('EDouble', 'http://www.w3.org/2001/XMLSchema#double'),
+	('EDoubleObject', 'http://www.w3.org/2001/XMLSchema#double'),
+	('EFloat', 'http://www.w3.org/2001/XMLSchema#float'),
+	('EFloatObject', 'http://www.w3.org/2001/XMLSchema#float'),
+	('EInt', 'http://www.w3.org/2001/XMLSchema#int'),
+	('EIntegerObject', 'http://www.w3.org/2001/XMLSchema#int'),
+	('ELong', 'http://www.w3.org/2001/XMLSchema#long'),
+	('ELongObject', 'http://www.w3.org/2001/XMLSchema#long'),
+	('EShort', 'http://www.w3.org/2001/XMLSchema#short'),
+	('EShortObject', 'http://www.w3.org/2001/XMLSchema#short'),
+	('EBigDecimal', 'http://www.w3.org/2001/XMLSchema#decimal'),
+	('EBigInteger', 'http://www.w3.org/2001/XMLSchema#integer')	
+};
+
+helper def: datatypes_names: Map(String, String) = Map {
+	('Literal', 'Literal'),
+	('String', 'string'),
+	('Integer', 'int'),
+	('Boolean', 'boolean'),
+	('UnlimitedNatural', 'integer' ),
+	('Byte', 'byte'),
+	('Currency', 'decimal'),
+	('Date', 'date'),
+	('Double', 'double'),
+	('Float', 'float'),
+	('Long', 'long'),
+	('Short', 'short'),
+	('Single', 'short'),
+	('Variant', 'string'),
+	('EString', 'string'),
+	('EInteger', 'int'),
+	('EBoolean', 'boolean'),
+	('EBooleanObject', 'boolean'),
+	('EByte', 'byte'),
+	('EByteArray', 'hexBinary'),
+	('EByteObject', 'byte'),
+	('EChar', 'string'),
+	('ECharacterObject', 'string'),
+	('EDate', 'date'),
+	('EDouble', 'double'),
+	('EDoubleObject', 'double'),
+	('EFloat', 'float'),
+	('EFloatObject', 'float'),
+	('EInt', 'int'),
+	('EIntegerObject', 'int'),
+	('ELong', 'long'),
+	('ELongObject', 'long'),
+	('EShort', 'short'),
+	('EShortObject', 'short'),
+	('EBigDecimal', 'decimal'),
+	('EBigInteger', 'integer')	
+};

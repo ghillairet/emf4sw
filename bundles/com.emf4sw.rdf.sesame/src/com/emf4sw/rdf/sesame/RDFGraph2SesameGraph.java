@@ -41,10 +41,10 @@ public class RDFGraph2SesameGraph {
 
 	private RDFGraph2SesameGraph() {}
 
-	public static void extract(RDFGraph graph, Graph sesameGraph) {
+	public static void extract(RDFGraph graph, Graph sesameGraph, String namedGraph) {
 		for (Triple triple: graph.getTriples()) 
 		{
-			Statement aStatement = extractAsSesameStatement( triple );
+			Statement aStatement = extractAsSesameStatement(triple, namedGraph);
 			if (aStatement != null) 
 			{
 				sesameGraph.add( aStatement );
@@ -53,11 +53,15 @@ public class RDFGraph2SesameGraph {
 	}
 
 	public static Graph extract(RDFGraph graph) {
+		return extract(graph, null);
+	}
+	
+	public static Graph extract(RDFGraph graph, String namedGraph) {
 		final Graph aGraph = new GraphImpl();
 	
 		for (Triple triple: graph.getTriples()) 
 		{
-			Statement aStatement = extractAsSesameStatement( triple );
+			Statement aStatement = extractAsSesameStatement(triple, namedGraph);
 			if (aStatement != null)
 			{
 				aGraph.add( aStatement );
@@ -68,11 +72,15 @@ public class RDFGraph2SesameGraph {
 	}
 	
 	public static Graph extract(Iterable<Triple> triples) {
+		return extract(triples, null);
+	}
+	
+	public static Graph extract(Iterable<Triple> triples, String namedGraph) {
 		final Graph aGraph = new GraphImpl();
 	
 		for (Triple triple: triples) 
 		{
-			Statement aStatement = extractAsSesameStatement( triple );
+			Statement aStatement = extractAsSesameStatement(triple, namedGraph);
 			if (aStatement != null)
 			{
 				aGraph.add( aStatement );
@@ -82,13 +90,16 @@ public class RDFGraph2SesameGraph {
 		return aGraph;
 	}
 	
-	public static Statement extractAsSesameStatement(Triple triple) {
+	public static Statement extractAsSesameStatement(Triple triple, String namedGraph) {
 		final org.openrdf.model.Resource aResource = asSesameResource( triple.getSubject() );
 		final URI aURI = asSesameURI( triple.getPredicate() );
 		final Value aValue = asSesameValue( triple.getObject());
 		
-		return aResource != null && aURI != null && aValue != null ?
-				sesameFactory.createStatement(aResource, aURI, aValue) :
+		return (aResource != null && aURI != null && aValue != null) ?
+				(namedGraph == null) ?
+					sesameFactory.createStatement(aResource, aURI, aValue) :
+							sesameFactory.createStatement(aResource, aURI, aValue, sesameFactory.createURI(namedGraph))
+					:
 				null;
 	}
 

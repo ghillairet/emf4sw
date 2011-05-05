@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OWL Jena Adapter
+Bundle-SymbolicName: com.emf4sw.owl.jena;singleton:=true
+Bundle-Version: 0.7.0.qualifier
+Bundle-Vendor: eclipselabs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.emf4sw.owl.jena.utils,
+ com.emf4sw.owl.resource.impl
+Require-Bundle: org.eclipse.emf.ecore,
+ com.emf4sw.rdf,
+ org.openjena,
+ com.emf4sw.owl

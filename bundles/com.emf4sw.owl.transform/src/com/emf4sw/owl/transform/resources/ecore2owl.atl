@@ -1,0 +1,442 @@
+-- @atlcompiler atl2006
+
+-- @nsURI owl=http://www.w3.org/2002/07/owl
+-- @nsURI ecore=http://www.eclipse.org/emf/2002/Ecore
+-- @nsURI Properties=http://com.atl.commons/2010/Properties
+
+-- *******************************************************************************
+-- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+-- * All rights reserved. This program and the accompanying materials
+-- * are made available under the terms of the Eclipse Public License v1.0
+-- * which accompanies this distribution, and is available at
+-- * http://www.eclipse.org/legal/epl-v10.html
+-- *******************************************************************************/
+
+module ecore2owl;
+create OUT:owl from IN:ecore, IN2:Properties;
+
+-- 	=============================================================================
+-- 	Ecore2OWL
+-- 	version 1.7
+-- 	release date : 01/03/2010
+-- 	author : Guillaume Hillairet (g.hillairet@gmail.com)
+--  =============================================================================
+
+uses Ecore2OWLHelpers;
+uses PropertiesHelpers;
+
+helper def: Property: Properties!PropertyMap = Properties!PropertyMap.allInstancesFrom('IN2')->first();
+helper def: ECORE2OWL_NO_DOMAIN_NO_RANGE: String = 'ECORE2OWL_NO_DOMAIN_NO_RANGE';
+helper def: ECORE2OWL_NO_CARDINALITIES: String = 'ECORE2OWL_NO_CARDINALITIES';
+helper def: ECORE2OWL_PROPERTY_NAME_ONLY: String = 'ECORE2OWL_PROPERTY_NAME_ONLY';
+helper def: ECORE2OWL_PROPERTY_NAME_DELIMITER: String = 'ECORE2OWL_PROPERTY_NAME_DELIMITER';
+
+helper def: allClasses: Set(ecore!EClass) = ecore!EClass.allInstances().debug('all');
+
+helper def: doCardinalities(): Boolean = 
+	if (thisModule.Property.containsKey(thisModule.ECORE2OWL_NO_CARDINALITIES)) then
+		let doIt: String = thisModule.Property.get(thisModule.ECORE2OWL_NO_CARDINALITIES) in
+			doIt = 'false'
+	else true endif;
+
+helper def: doDomainAndRange(): Boolean = 
+	if (thisModule.Property.containsKey(thisModule.ECORE2OWL_NO_DOMAIN_NO_RANGE)) then
+		let doIt: String = thisModule.Property.get(thisModule.ECORE2OWL_NO_DOMAIN_NO_RANGE) in
+			doIt = 'false'
+	else true endif;
+
+helper def: doPropertyNameOnly(): Boolean = 
+	if (thisModule.Property.containsKey(thisModule.ECORE2OWL_PROPERTY_NAME_ONLY)) then
+		let doIt: String = thisModule.Property.get(thisModule.ECORE2OWL_PROPERTY_NAME_ONLY) in
+			doIt = 'true'
+	else true endif;
+
+helper def: getDelimiter: String = 
+	if (thisModule.Property.containsKey(thisModule.ECORE2OWL_PROPERTY_NAME_DELIMITER)) then
+		let delimiter: String = thisModule.Property.get(thisModule.ECORE2OWL_PROPERTY_NAME_DELIMITER) in
+			delimiter
+	else '_' endif;
+
+helper def: getPropertyName(e: ecore!EStructuralFeature): String =
+	if (thisModule.doPropertyNameOnly()) then 
+		e.name 
+	else e.eContainingClass.name + thisModule.getDelimiter + e.name endif;
+
+helper def: onto: Map(ecore!EPackage, owl!Ontology) = Map{};
+
+helper context ecore!EStructuralFeature def: hasCardinality(): Boolean = 
+	not (self.lowerBound = 0 and self.upperBound < 0);
+
+rule EPackage2Ontology
+{
+	from e: ecore!EPackage
+	using
+	{
+		imported: Set(ecore!EPackage) = e.getImportedPackages();
+		classifiers: Set(ecore!EClassifier) = e.eClassifiers;
+		classes: Set(ecore!EClass) = classifiers->select(c | c.oclIsTypeOf(ecore!EClass));
+	}
+	to 
+		o : owl!Ontology (
+			URI <- e.getURI()
+--		,	imports <- imported->collect(i | thisModule.MakeImportedPackage(i))
+		,	classes <- classes->collect(e | if (e.eIsProxy()) then e.resolve() else e endif).debug('classes')
+		,	objectProperties <- classes->collect(c | c.eAllReferences)->flatten()->asSet()
+		,	dataProperties <- classes->collect(c | c.eAllAttributes)->flatten()->asSet()
+		)
+	do {
+		thisModule.onto.put(e, o);
+	}
+}
+
+unique lazy rule Namespace {
+	from e: ecore!EPackage
+	to
+		o: owl!Namespace (
+			name <- e.name,
+			URI <- e.getNamespace()
+		)
+}
+
+unique lazy rule MakeImportedPackage
+{
+	from e: ecore!EPackage
+	to
+		o : owl!Ontology (
+			URI <- e.getURI()
+		)
+}
+
+--	=============================================================================================
+-- 	Entity
+--	=============================================================================================
+
+rule EClass2Entity {
+	from e: ecore!EClass (e.oclIsTypeOf(ecore!EClass))
+	to
+		o: owl!OWLClass (
+			URI <- e.getURI()
+		,	subClassOf <- Sequence {
+				e.eSuperTypes->reject(e |e.eIsProxy())
+			,	e.eSuperTypes->select(e | e.eIsProxy().debug('is'))->collect(e | thisModule.EClass2EntityProxy(e.resolve()))
+			,	e.eStructuralFeatures->collect(f |
+					if thisModule.doCardinalities() then
+						if f.hasCardinality() then
+							thisModule.PropertyCardinality(f)
+						else Sequence {} endif
+					else Sequence {} endif)}
+			)
+}
+
+unique lazy rule EClass2EntityProxy {
+	from e: ecore!EClass
+	to
+		o: owl!OWLClass (
+			URI <- e.getURI().debug('here')
+		,	subClassOf <- Sequence {
+				e.eSuperTypes->reject(e |e.eIsProxy())
+			,	e.eSuperTypes->select(e | e.eIsProxy())->collect(e | thisModule.EClass2EntityProxy(e.resolve()))
+			,	e.eStructuralFeatures->collect(f |
+					if thisModule.doCardinalities() then
+						if f.hasCardinality() then
+							thisModule.PropertyCardinality(f)
+						else Sequence {} endif
+					else Sequence {} endif)}
+			)
+}
+
+rule EAttribute2Entity {
+	from e: ecore!EAttribute
+	using {
+		name: String = thisModule.getPropertyName(e);
+	}
+	to
+		o: owl!DataProperty (
+			URI <- e.getURI()
+		,	domain <- if thisModule.doDomainAndRange() then e.eContainingClass else Sequence {} endif
+--		,	range <- if thisModule.doDomainAndRange() then e.eType.resolve() else Sequence {} endif
+		)
+}
+
+rule EReference2Entity {
+	from e: ecore!EReference
+	using {
+		name: String = thisModule.getPropertyName(e);
+	}
+	to
+		o: owl!ObjectProperty (
+			URI <- e.getURI()
+		,	domain <- if thisModule.doDomainAndRange() then e.eContainingClass else Sequence {} endif
+		,	range <- if thisModule.doDomainAndRange() then e.eType else Sequence {} endif
+		)
+}
+
+rule EDataType2Entity {
+	from e: ecore!EDataType
+	to
+		o: owl!OWLDatatype (
+--			name <- 
+--				if (thisModule.datatypes_names.get(e.name).oclIsUndefined()) then
+--					'Literal' 
+--				else thisModule.datatypes_names.get(e.name) endif,
+--			namespace <-
+--				if (thisModule.datatypes.get(e.name).oclIsUndefined()) then
+--					thisModule.resolveTemp(e.ePackage, 'rdfs')
+--				else thisModule.resolveTemp(e.ePackage, 'xsd') endif
+		)
+}
+
+lazy rule EEnum2DataOneOf {
+	from e: ecore!EEnum		
+	to
+		o: owl!DataOneOf (
+			literals <- e.eLiterals->collect(e | thisModule.EnumLiteral2Literal(e))
+		)
+}
+
+lazy rule EnumLiteral2Literal {
+	from e: ecore!EEnumLiteral
+	to
+		o: owl!Literal (
+			value <- e.name
+--			datatypeExpression <- exp
+		)
+--		exp: owl!PrefixEntityExpression (
+--			entity <- thisModule.Literal(e.eContainer().ePackage)
+--			namespace <- thisModule.resolveTemp(e.eContainer().ePackage, 'rdfs')
+--		)
+}
+
+unique lazy rule Literal {
+	from e: ecore!EPackage
+	to
+		o: owl!Datatype (
+			name <- 'Literal',
+			namespace <- thisModule.resolveTemp(e, 'rdfs')
+		),
+		d: owl!Declaration (
+			entity <- o
+		)
+}
+
+unique lazy rule MakeImportedClass
+{
+	from e: ecore!EClass, p: ecore!EPackage
+	to  
+		d : owl!Declaration (
+			entity <- o
+		),
+		o: owl!OWLClass (
+			name <- e.name,
+			namespace <- thisModule.Namespace( e.getOntology() )
+		)
+}
+
+unique lazy rule MakeImportedDataType {
+	from e: ecore!EDataType, p: ecore!EPackage
+	to
+		d: owl!Declaration (
+			entity <- thisModule.MakeDatatype(e, p)
+		)
+}
+
+unique lazy rule MakeDatatype {
+	from e: ecore!EDataType, p: ecore!EPackage
+	to
+		o: owl!Datatype (
+			name <- 
+				if (thisModule.datatypes_names.get(e.name).oclIsUndefined()) then
+					'Literal'
+				else thisModule.datatypes_names.get(e.name) endif,
+			namespace <-
+				if (thisModule.datatypes.get(e.name).oclIsUndefined()) then
+					thisModule.resolveTemp(p, 'rdfs')
+				else thisModule.resolveTemp(p, 'xsd') endif		
+		)
+}
+
+lazy rule CreatePrefixEntityExpression {
+	from e: ecore!ENamedElement
+	to
+		o: owl!PrefixEntityExpression ( 
+			reference <- thisModule.ENamedElement2Entity(e),
+			namespace <- thisModule.Namespace( e.getOntology() )
+		)
+}
+
+lazy rule CreateDatatypeExpression {
+	from e: ecore!ENamedElement, p: ecore!EPackage
+	to
+		o: owl!PrefixEntityExpression (
+			reference <- thisModule.MakeDatatype(e, p)			
+		)
+}
+
+----	=============================================================================================
+---- 	Restriction Axiom
+----	=============================================================================================
+	
+lazy abstract rule PropertyCardinality {
+	from property: ecore!EStructuralFeature
+	to 
+		o: owl!EObject ()
+}
+
+----	=============================================================================================
+---- 	ObjectPropertyRestriction Axiom
+----	=============================================================================================
+ 
+lazy abstract rule ObjectPropertyCardinality extends PropertyCardinality 
+{
+	from property: ecore!EReference
+	to 
+		o: owl!ObjectPropertyRestriction (
+			property <- property
+		,	superClass <- property.eContainingClass
+		)
+}
+
+lazy rule ObjectExactCardinality extends ObjectPropertyCardinality {
+	from property: ecore!EReference  (
+		property.upperBound = property.lowerBound
+	)
+	to
+		o : owl!ObjectExactCardinality (
+			cardinality <- property.upperBound
+		,	onClass <- property.eType
+		)
+}
+
+lazy rule ObjectMaxCardinality extends ObjectPropertyCardinality {
+	from property: ecore!EReference  (
+		property.upperBound > 0 and property.lowerBound = 0
+	)
+	to
+		o : owl!ObjectMaxCardinality (
+			cardinality <- property.upperBound
+		,	onClass <- property.eType
+		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+
+lazy rule ObjectMinCardinality extends ObjectPropertyCardinality {
+	from property: ecore!EReference  (
+		property.upperBound < 0 and property.lowerBound > 0
+	)
+	to
+		o : owl!ObjectMinCardinality (
+			cardinality <- property.lowerBound
+		,	onClass <- property.eType
+		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+lazy rule ObjectMinMaxCardinality extends ObjectPropertyCardinality {
+	from property: ecore!EReference  (
+		(property.upperBound <> property.lowerBound) and 
+		(property.upperBound > 0) and 
+		(property.lowerBound > 0)
+	)
+	to
+		o : owl!ObjectMaxCardinality (
+			cardinality <- property.upperBound
+		,	onClass <- property.eType
+		),
+		o2 : owl!ObjectMinCardinality (
+			superClass <- property.eContainingClass
+		,	cardinality <- property.lowerBound
+		,	property <- property
+		,	onClass <- property.eType.eContainingClass
+		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+lazy rule ObjectSomeValuesFrom {
+	from e: ecore!EReference, c: ecore!EClass
+	to
+		o : owl!ObjectAllValuesFrom (
+			property <- e
+		,	superClass <- e.eContainingClass
+		,	someValuesFrom <- e.eType
+		)
+	do {
+		thisModule.onto.get(e.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+----	=============================================================================================
+---- 	DataPropertyRestriction Axiom
+----	=============================================================================================
+	
+lazy abstract rule DataPropertyCardinality extends PropertyCardinality 
+{
+	from property: ecore!EAttribute
+	to	
+		o: owl!DataPropertyRestriction (
+			superClass <- property.eContainingClass
+		,	property <- property
+		)
+}
+
+lazy rule DataExactCardinality extends DataPropertyCardinality {
+	from property: ecore!EAttribute (
+		property.upperBound = property.lowerBound
+	)
+	to
+		o : owl!DataExactCardinality (
+			cardinality <- property.upperBound
+		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+lazy rule DataMinCardinality extends DataPropertyCardinality {
+	from property: ecore!EAttribute (
+		not (property.upperBound > 0) and (property.lowerBound > 0)
+	)
+	to
+		o : owl!DataMinCardinality (
+			cardinality <- property.lowerBound
+		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+lazy rule DataMaxCardinality extends DataPropertyCardinality {
+	from property: ecore!EAttribute (
+		(property.upperBound > 0) and (property.lowerBound = 0)
+	)
+	to
+		o : owl!DataMaxCardinality (
+			cardinality <- property.upperBound
+		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}
+
+rule DataMinMaxCardinality extends DataPropertyCardinality {
+	from property: ecore!EAttribute (
+		property.upperBound <> property.lowerBound and property.upperBound > 0 and property.lowerBound > 0
+	)
+	to
+		o : owl!DataMaxCardinality (
+			cardinality <- property.upperBound
+		)
+--		o2 : owl!DataMinCardinality (
+--			subClass <- thisModule.CreatePrefixEntityExpression(property.eContainingClass),
+--			superClass <- rest2
+--		)
+	do {
+		thisModule.onto.get(property.eContainingClass.ePackage).getClassExpressions().add(o);
+	}
+}

@@ -8,22 +8,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.emf4sw</groupId>
-	<artifactId>com.emf4sw.rdf.jena</artifactId>
+	<artifactId>com.emf4sw.owl</artifactId>
 	<version>0.7.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
-
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>jena</id> -->
-<!-- 			<url>http://openjena.org/repo</url> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
-
-<!-- 	<dependencies> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.hp.hpl.jena</groupId> -->
-<!-- 			<artifactId>jena</artifactId> -->
-<!-- 			<version>2.6.4</version> -->
-<!-- 		</dependency> -->
-<!-- 	</dependencies> -->
 </project>

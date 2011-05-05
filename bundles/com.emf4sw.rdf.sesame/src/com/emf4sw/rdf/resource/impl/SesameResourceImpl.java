@@ -40,7 +40,7 @@ public class SesameResourceImpl extends RDFResourceImpl {
 	@Override
 	public void addDelegate(Triple obj) {
 		try {
-			sesameGraph.add(RDFGraph2SesameGraph.extractAsSesameStatement(obj));
+			sesameGraph.add(RDFGraph2SesameGraph.extractAsSesameStatement(obj, null));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

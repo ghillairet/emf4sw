@@ -1,0 +1,459 @@
+@namespace(uri="http://www.emf4sw.org/2009/OWL", prefix="owl")
+package owl;
+
+class Ontology {
+  val Namespace[*] namespaces;
+  attr String URI;
+  !unique ref Ontology[*] imports;
+  val Annotation[*] annotations;
+  val Axiom[*]#ontology axioms;
+  
+  op ClassExpression[*] listClassExpressions();
+  op OWLClass[*] listClasses();
+  op ObjectProperty[*] listObjectProperties();
+  op DataProperty[*] listDataProperties();
+  op Individual[*] listIndividuals();
+  op NamedIndividual[*] listNamedIndividuals();
+  op Datatype[*] listDatatypes();
+  
+  op OWLClass[1] getOWLClass(String aURI); 
+  op ObjectProperty[1] getObjectProperty(String aURI);
+  op DataProperty[1] getDataProperty(String aURI);
+  op NamedIndividual[1] getNamedIndividual(String aURI);
+  op Namespace[1] getNamespace(String aPrefix);
+  op Annotation[1] getAnnotation(String aURI);
+}
+
+// EntityExpression
+
+abstract class EntityExpression extends DataRange, ClassExpression, Individual, 
+ObjectPropertyExpression, DataPropertyExpression, AnnotationPropertyExpression {
+	op Entity[1] getEntity();
+}
+
+class IRIEntityExpression extends EntityExpression {
+	attr String[1] IRI; 
+} 
+
+class PrefixEntityExpression extends EntityExpression {
+  ref Namespace[1] namespace;
+  ref Entity[1] reference;	
+}
+
+class NoPrefixEntityExpression extends EntityExpression {
+	ref Entity[1] reference;
+}
+
+class Namespace {
+  attr String name;
+  attr String URI;
+}
+
+//class OntologyNamespace {
+//  attr String URI; 
+//}
+
+abstract class Axiom {
+	val Annotation[*] annotations;
+	transient ref Ontology[1]#axioms ontology;
+	
+	op Object accept(Object visitor);
+}
+
+abstract class ClassExpressionAxiom extends Axiom {}
+
+class SubClassOf extends ClassExpressionAxiom {
+  val ClassExpression subClass;
+  val ClassExpression superClass;
+}
+
+class DisjointClasses extends ClassExpressionAxiom {
+  val ClassExpression expression;
+  val ClassExpression[*] disjointClasses;
+}
+
+class EquivalentClasses extends ClassExpressionAxiom {
+  val ClassExpression expression;
+  val ClassExpression[*] equivalentClasses;
+}
+
+class DisjointUnion extends ClassExpressionAxiom {
+  val ClassExpression expression;
+  val ClassExpression[*] disjointClasses;
+}
+
+abstract class ObjectPropertyAxiom extends Axiom {}
+
+class SubObjectPropertyOf extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression subObjectProperty;
+  val ObjectPropertyExpression superObjectProperty;
+}
+
+class ObjectPropertyDomain extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+  val ClassExpression domain;
+}
+
+class ObjectPropertyRange extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+  val ClassExpression range;
+}
+
+class EquivalentObjectProperties extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+  val ObjectPropertyExpression[*] equivalentProperties;
+}
+
+class DisjointObjectProperties extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+  val ObjectPropertyExpression[*] disjointProperties;
+}
+
+class InverseObjectProperties extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+  val ObjectPropertyExpression inverseProperty;
+}
+
+class FunctionalObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+class InverseFunctionalObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+class SymmetricObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+class ReflexiveObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+class IrreflexiveObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+class TransitiveObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+class AssymmetricObjectProperty extends ObjectPropertyAxiom {
+  val ObjectPropertyExpression property;
+}
+
+abstract class DataPropertyAxiom extends Axiom {}
+
+class SubDataPropertyOf extends DataPropertyAxiom {
+  val DataPropertyExpression subDataProperty;
+  val DataPropertyExpression superDataProperty;
+}
+
+class DisjointDataProperties extends DataPropertyAxiom {
+  val DataPropertyExpression property;
+  val DataPropertyExpression[*] disjointProperties;
+}
+
+class EquivalentDataProperties extends DataPropertyAxiom {
+  val DataPropertyExpression property;
+  val DataPropertyExpression[*] equivalentProperties;
+}
+
+class DataPropertyDomain extends DataPropertyAxiom {
+  val DataPropertyExpression property;
+  val ClassExpression domain;
+}
+
+class DataPropertyRange extends DataPropertyAxiom {
+  val DataPropertyExpression property;
+  val DataRange range;
+}
+
+class FunctionalDataProperty extends DataPropertyAxiom {
+  val DataPropertyExpression property;
+}
+
+class AnnotationAxiom extends Axiom {
+  val AnnotationPropertyExpression property;
+}
+
+class AnnotationAssertion extends AnnotationAxiom {
+  val EntityExpression subject;
+  val Literal value;
+}
+
+class SubAnnotationPropertyOf extends AnnotationAxiom {
+  val AnnotationPropertyExpression subAnnotationProperty;
+  val AnnotationPropertyExpression superAnnotationProperty;
+}
+
+class AnnotationPropertyDomain extends AnnotationAxiom {
+  val EntityExpression domain;
+}
+
+class AnnotationPropertyRange extends AnnotationAxiom {
+  val EntityExpression range;
+}
+
+class HasKey extends Axiom {
+  val ClassExpression classExpression;
+}
+
+abstract class DataRange {
+}
+
+class DataComplementOf extends DataRange {
+  val DataRange dataRange;
+}
+
+class DataUnionOf extends DataRange {
+  val DataRange[*] dataRanges;
+}
+
+class DataOneOf extends DataRange {
+  val Literal[*] literals;
+}
+
+class DatatypeRestriction extends DataRange {
+  val DataRange ~datatype;
+  val FacetRestriction[*] restrictions;
+}
+
+class FacetRestriction {
+  val DataRange ~datatype;
+  val Literal value;
+}
+
+class DataIntersectionOf extends DataRange {
+  val DataRange[*] dataRanges;
+}
+
+class DatatypeDefinition extends Axiom {
+  val DataRange ~datatype;
+  val DatatypeRestriction restriction;
+}
+
+class Declaration extends Axiom {
+  val Entity[1] entity;
+}
+
+abstract class Entity {
+  attr String name;
+  ref Namespace[?] namespace;
+  ref EntityExpression[*]#entity expressions;
+  
+  op Ontology[1] getOntology();
+  op String[1] getURI();
+}
+
+class OWLClass extends Entity, ClassExpression {
+}
+
+abstract class OWLProperty extends Entity {}
+
+class ObjectProperty extends OWLProperty {
+	op Boolean isInverseFunctional();
+	op Boolean isTransitive();
+	op Boolean isSymmteric();
+	op Boolean isAssymmteric();
+	op Boolean isReflexive();
+	op Boolean isIrreflexive();
+	op Boolean isFunctional();
+	readonly op ClassExpression[*] listDomains();
+	readonly op ClassExpression[*] listRanges();
+	readonly op ObjectProperty[*] listSubProperties();
+	readonly op ObjectProperty[*] listSuperProperties();
+	readonly op ObjectProperty[*] listInverseProperties();
+	readonly op ObjectProperty[*] listEquivalentProperties();
+	readonly op ObjectProperty[*] listDisjointProperties();	
+}
+
+class DataProperty extends OWLProperty {
+	op Boolean isFunctional();
+	readonly op ClassExpression[*] listDomains();
+	readonly op DataRange[*] listRanges();
+	readonly op DataProperty[*] listSubProperties();
+	readonly op DataProperty[*] listSuperProperties();
+	readonly op DataProperty[*] listEquivalentProperties();
+	readonly op DataProperty[*] listDisjointProperties();
+}
+
+class Datatype extends Entity, DataRange {
+}
+
+class NamedIndividual extends Entity, Individual {
+}
+
+class AnnotationProperty extends Entity, OWLProperty {
+}
+
+abstract class ClassExpression {
+	op ClassExpression[*] listSubClasses();
+	op ClassExpression[*] listSuperClasses();
+	op ClassExpression[*] listEquivalentClasses();
+	op ClassExpression[*] listDisjointClasses();
+	op Individual[*] listInstances();
+	
+	op Object accept(Object visitor);
+}
+
+class ObjectUnionOf extends ClassExpression {
+  val ClassExpression[*] unionOf;
+}
+
+class ObjectIntersectionOf extends ClassExpression {
+  val ClassExpression[*] intersectionOf;
+}
+
+class ObjectComplementOf extends ClassExpression {
+  val ClassExpression complementOf;
+}
+
+class ObjectOneOf extends ClassExpression {
+  val Individual[*] oneOf;
+}
+
+abstract class ObjectPropertyRestriction extends ClassExpression {}
+
+class ObjectSomeValuesFrom extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+  val ClassExpression someValuesFrom;
+}
+
+class ObjectAllValuesFrom extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+  val ClassExpression allValuesFrom;
+}
+
+class ObjectHasValue extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+  val Individual hasValue;
+}
+
+class ObjectHasSelf extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+}
+
+class ObjectExactCardinality extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+  attr int cardinality;
+  val ClassExpression onClass;
+}
+
+class ObjectMaxCardinality extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+  attr int cardinality;
+  val ClassExpression onClass;
+}
+
+class ObjectMinCardinality extends ObjectPropertyRestriction {
+  val ObjectPropertyExpression onProperty;
+  attr int cardinality;
+  val ClassExpression onClass;
+}
+
+abstract class DataPropertyRestriction extends ClassExpression {}
+
+class DataSomeValuesFrom extends DataPropertyRestriction {
+  val DataPropertyExpression[*] onProperties;
+  val DataRange someValuesFrom;
+}
+
+class DataAllValuesFrom extends DataPropertyRestriction {
+  val DataPropertyExpression[*] onProperties;
+  val DataRange allValuesFrom;
+}
+
+class DataHasValue extends DataPropertyRestriction {
+  val DataPropertyExpression onProperty;
+  val Literal hasValue;
+}
+
+class DataExactCardinality extends DataPropertyRestriction {
+  val DataPropertyExpression onProperty;
+  attr int cardinality;
+  val DataRange onDataRange;
+}
+
+class DataMaxCardinality extends DataPropertyRestriction {
+  val DataPropertyExpression onProperty;
+  attr int cardinality;
+  val DataRange onDataRange;
+}
+
+class DataMinCardinality extends DataPropertyRestriction {
+  val DataPropertyExpression onProperty;
+  attr int cardinality;
+  val DataRange onDataRange;
+}
+
+abstract class Individual {
+	op ClassExpression[*] listTypes();
+}
+
+class AnonymousIndividual extends Individual {
+  attr String nodeID;
+}
+
+abstract class ObjectPropertyExpression {
+}
+
+class ObjectPropertyChain extends ObjectPropertyExpression {
+  val ObjectPropertyExpression[*] properties;
+}
+
+abstract class DataPropertyExpression {
+}
+
+class AnnotationPropertyExpression {
+}
+
+class Literal {
+  attr String value;
+  val EntityExpression datatypeExpression;
+}
+
+class Annotation {
+  val Annotation[*] annotations;
+  val AnnotationPropertyExpression property;
+  val Literal value;
+}
+
+abstract class Assertion extends Axiom {}
+
+class SameIndividual extends Assertion {
+	val Individual[*] individuals;
+}
+
+class DifferentIndividuals extends Assertion {
+	val Individual[*] individuals;
+}
+
+class ClassAssertion extends Assertion {
+   val ClassExpression classExpression;
+   val Individual individual;
+}
+
+class ObjectPropertyAssertion extends Assertion {
+   val ObjectPropertyExpression objectProperty;
+   val Individual sourceIndividual;
+   val Individual targetIndividual;
+}
+
+class NegativeObjectPropertyAssertion extends Assertion {
+   val ObjectPropertyExpression objectProperty;
+   val Individual sourceIndividual;
+   val Individual targetIndividual;
+}
+
+class DataPropertyAssertion extends Assertion {
+   val DataPropertyExpression dataProperty;
+   val Individual sourceIndividual;
+   val Literal targetValue;
+}
+
+class NegativeDataPropertyAssertion extends Assertion {
+   val DataPropertyExpression dataProperty;
+   val Individual sourceIndividual;
+   val Literal targetValue;
+}

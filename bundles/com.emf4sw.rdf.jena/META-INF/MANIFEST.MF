@@ -7,6 +7,6 @@ Bundle-Vendor: eclipselabs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.rdf.jena,
  com.emf4sw.rdf.resource.impl
-Require-Bundle: org.openjena,
- com.emf4sw.rdf,
- org.eclipse.emf.ecore
+Require-Bundle: com.emf4sw.rdf,
+ org.eclipse.emf.ecore,
+ org.openjena

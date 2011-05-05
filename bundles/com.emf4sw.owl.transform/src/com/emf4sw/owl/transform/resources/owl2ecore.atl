@@ -1,0 +1,377 @@
+-- @atlcompiler atl2006
+-- @nsURI ecore=http://www.eclipse.org/emf/2002/Ecore
+-- @path owl=platform://com.emf4sw.owl/model/owl2.ecore
+
+--- *******************************************************************************
+--- * Copyright (c) 2009 L3i ( http://l3i.univ-larochelle.fr ).
+--- * All rights reserved. This program and the accompanying materials
+--- * are made available under the terms of the Eclipse Public License v1.0
+--- * which accompanies this distribution, and is available at
+--- * http://www.eclipse.org/legal/epl-v10.html
+--- *
+--- *******************************************************************************/
+
+module owl2ecore;
+create OUT:ecore from IN:owl;
+
+--- =============================================================================
+--- OWL2Ecore
+--- version 1.8
+---	OWL2 support
+--- release date : 15/03/2010
+--- author : Guillaume Hillairet (g.hillairet@gmail.com)
+--- =============================================================================
+	
+uses OWLHelpers;
+uses OWL2EcoreHelpers;
+
+helper def: ID: Integer = 1;
+	
+helper context owl!OWLClass def: name(): String = self.URI.resolveLocalName();
+helper context owl!ClassProperty def: name(): String = self.URI.resolveLocalName();
+
+helper context owl!ObjectIntersectionOf def: name(): String = 'ObjectIntersectionOf' + 
+	self.intersectionOf->iterate(it; res: String = '' | 
+		res + '_' + it.name()
+	);
+helper context owl!ObjectUnionOf def: name(): String = 'ObjectUnionOf' + 
+	self.unionOf->iterate(it; res: String = '' | 
+		res + '_' + it.name()
+	);
+helper context owl!ObjectExactCardinality def: name(): String = 'ObjectExactCardinality_' + self.property.name();
+helper context owl!ObjectMinCardinality def: name(): String = 'ObjectMinCardinality_' + self.property.name();
+helper context owl!ObjectMaxCardinality def: name(): String = 'ObjectMaxCardinality_' + self.property.name();
+
+helper context owl!DataExactCardinality def: name(): String = 'DataExactCardinality_' + self.property.name();
+helper context owl!DataMinCardinality def: name(): String = 'DataMinCardinality_' + self.property.name();
+helper context owl!DataMaxCardinality def: name(): String = 'DataMaxCardinality_' + self.property.name();
+
+helper context owl!Ontology def: name(): String = 
+	let ns: String = 
+		if (self.URI.endsWith('#'))
+			then self.URI.substring(1, self.URI.size()-1) 
+			else self.URI 
+		endif
+	in ns.resolveLocalName();
+
+rule Ontology2EPackage {
+	from o : owl!Ontology
+	to e : ecore!EPackage (
+		name <- o.name(),
+		nsURI <- o.URI,
+		nsPrefix <- o.name(),
+		eClassifiers <- Sequence {
+			o.classExpressions,
+			o.classes,
+			owl!OWLDatatype.allInstances()
+		},
+		eAnnotations <- Sequence{ann_rdf}
+	),
+	ann_rdf: ecore!EAnnotation ( source <- 'http://www.w3.org/2002/07/owl#Ontology', details <- Sequence{ann_uri, ann_prefix} ),
+	ann_prefix: ecore!EStringToStringMapEntry ( key <- 'prefix', value <- o.name() ),
+	ann_uri: ecore!EStringToStringMapEntry ( key <- 'uri', value <- o.URI )
+}
+	
+abstract rule ClassExpression2OWLClass {
+	from o: owl!ClassExpression
+	to
+		e:ecore!EClass ()
+}
+
+rule OWLClass2EClass extends ClassExpression2OWLClass {
+	from o : owl!OWLClass ( not o.getURI().oclIsUndefined() )
+	using {
+		name : String = o.URI.resolveLocalName();
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+		unionOf: Sequence(owl!ObjectUnionOf) = owl!ObjectUnionOf.allInstances()->select(u | u.unionOf.includes(o)); 
+	}
+	to	e : ecore!EClass (
+		name <- o.name()
+	,	eSuperTypes <- superTypes->append(unionOf)	
+	,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+	,	eAnnotations <- Sequence {ann_rdf}
+	),
+	ann_rdf: ecore!EAnnotation ( source <- 'http://www.w3.org/2002/07/owl#Class', details <- Sequence{ann_uri} ),
+	ann_uri: ecore!EStringToStringMapEntry ( key <- 'uri', value <- o.URI )
+}
+
+rule ObjectUnionOf2EClass {
+	from o:owl!ObjectUnionOf
+	using {
+		name : String = 'UnionOf_' + thisModule.ID;
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	eSuperTypes <- superTypes
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		,	interface <- true
+		,	eAnnotations <- Sequence{}
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'http://www.w3.org/2002/07/owl#unionOf', details <- Sequence{ann_unionOf} ),
+--		ann_unionOf: ecore!EStringToStringMapEntry ( 
+--			key <- 'unionOf',
+--			value <- thisModule.commaSeparatedNames( o.unionOf ) 
+--		)
+	do {
+		thisModule.ID <- thisModule.ID + 1;
+	}
+}
+
+rule ObjectIntersectionOf2EClass {
+	from o:owl!ObjectIntersectionOf
+	using {
+		name : String = 'IntersectionOf_' + thisModule.ID;
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	eSuperTypes <- superTypes->append(o.intersectionOf)
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		,	eAnnotations <- Sequence{}
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'ObjectIntersectionOf') -- details <- Sequence{ann_interOf} ),
+--		ann_interOf: ecore!EStringToStringMapEntry ( 
+--			key <- 'intersectionOf', 
+--			value <- thisModule.commaSeparatedNames( o.intersectionOf ) 
+--		)
+}
+
+----- ==========================================================================================================================
+----- Cardinality Restriction
+
+rule ObjectExactCardinality2EClass {
+	from o: owl!ObjectExactCardinality
+	using {
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+--			eAnnotations <- Sequence{ann_rdf}
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'ObjectExactCardinality', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+}
+
+rule DataExactCardinality2EClass {
+	from o:owl!DataExactCardinality
+	using {
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf; 
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'DataExactCardinality', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+}
+
+rule ObjectMaxCardinality2EClass {
+	from o:owl!ObjectMaxCardinality
+	using {
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'ObjectMaxCardinality', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+}
+
+rule DataMaxCardinality2EClass {
+	from o:owl!DataMaxCardinality
+	using {
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'DataMaxCardinality', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+}
+
+rule ObjectMinCardinality2EClass {
+	from o:owl!ObjectMinCardinality
+	using {
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf;
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'ObjectMinCardinality', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+}
+
+rule DataMinCardinality2EClass {
+	from o:owl!DataMinCardinality
+	using {
+		properties: Set(owl!ClassProperty) = thisModule.properties->select(p | p.domain.includes(o));
+		superTypes: Sequence(owl!ClassExpression) = o.subClassOf; 
+	}
+	to
+		e:ecore!EClass (
+			name <- o.name()
+		,	abstract <- true
+		,	eStructuralFeatures <- Sequence { properties->collect(c | thisModule.ClassProperty2EStructuralFeature(c)) }
+		)
+--		ann_rdf: ecore!EAnnotation ( source <- 'DataMinCardinality', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+}
+
+----- ==========================================================================================================================
+----- Value Restriction
+--
+--rule ObjectAllValuesFrom2EClass extends AnonymousClassExpression {
+--	from o:owl!ObjectAllValuesFrom
+--	to
+--		e:ecore!EClass (
+--			name <- o.getName(),
+--			abstract <- true,
+--			eStructuralFeatures <- Sequence {
+--				thisModule.OWLProperty2EStructuralFeature(o.onProperty.get(), o, o.allValuesFrom)
+--			},
+--			eAnnotations <- Sequence{ann_rdf}
+--		),
+--		ann_rdf: ecore!EAnnotation ( source <- 'ObjectAllValuesFrom', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+--		
+--	do {
+--		thisModule.ID <- thisModule.ID + 1;
+--	}
+--}
+--
+--rule ObjectSomeValuesFrom2EClass extends AnonymousClassExpression {
+--	from o:owl!ObjectSomeValuesFrom
+--	to
+--		e:ecore!EClass (
+--			name <- o.getName(),
+--			abstract <- true,
+--			eStructuralFeatures <- Sequence {
+--				thisModule.OWLProperty2EStructuralFeature(o.onProperty.get(), o, o.someValuesFrom)
+--			},
+--			eAnnotations <- Sequence{ann_rdf}
+--		),
+--		ann_rdf: ecore!EAnnotation ( source <- 'ObjectSomeValuesFrom', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+--		
+--	do {
+--		thisModule.ID <- thisModule.ID + 1;
+--	}
+--}
+--
+--rule DataAllValuesFrom2EClass extends AnonymousClassExpression {
+--	from o: owl!DataAllValuesFrom
+--	using {
+--		range: owl!DataRange = if (o.allValuesFrom.oclIsUndefined()) then thisModule.XString else o.allValuesFrom endif;
+--	}
+--	to
+--		e: ecore!EClass (
+--			name <- o.getName(),
+--			abstract <- true,
+--			eStructuralFeatures <-
+--				if (range.oclIsUndefined()) then Sequence{} else
+--					Sequence {
+--						thisModule.OWLProperty2EStructuralFeature(o.onProperties->first().get(), o, range)
+--					}
+--				endif,
+--			eAnnotations <- Sequence{ann_rdf}
+--		),
+--		ann_rdf: ecore!EAnnotation ( source <- 'DataAllValuesFrom', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+--	
+--	do {
+--		thisModule.ID <- thisModule.ID + 1;
+--	}
+--}
+--
+--rule DataSomeValuesFrom2EClass extends AnonymousClassExpression {
+--	from o:owl!DataSomeValuesFrom
+--	using {
+--		range: owl!DataRange = if (o.someValuesFrom.oclIsUndefined()) then thisModule.XString else o.someValuesFrom endif;
+--	}
+--	to
+--		e:ecore!EClass (
+--			name <- o.getName(),
+--			abstract <- true,
+--			eStructuralFeatures <-
+--				if (range.oclIsUndefined()) then Sequence{} else
+--				Sequence {
+--					thisModule.OWLProperty2EStructuralFeature(o.onProperties->first().get(), o, o.someValuesFrom)
+--				} endif,
+--			eAnnotations <- Sequence{ann_rdf}
+--		),
+--		ann_rdf: ecore!EAnnotation ( source <- 'DataSomeValuesFrom', details <- Sequence{ann_onProperty} ),
+--		ann_onProperty: ecore!EStringToStringMapEntry ( key <- 'onProperty', value <- o.onProperty.getName() )
+--	do {
+--		thisModule.ID <- thisModule.ID + 1;
+--	}
+--}
+--
+----- ==========================================================================================================================
+----- Properties
+--
+
+lazy abstract rule ClassProperty2EStructuralFeature {
+	from o: owl!ClassProperty
+	to	
+		e: ecore!EStructuralFeature (
+			name <- o.URI.resolveLocalName()
+		)
+}
+
+lazy rule DatatypeProperty2EAttribute extends ClassProperty2EStructuralFeature {
+	from o: owl!DataProperty (o.range.size() < 2)
+	to
+		e: ecore!EAttribute (	
+			eAnnotations <- Sequence {ann_rdf}
+		,	eType <- o.range.first()
+		),
+		ann_rdf: ecore!EAnnotation ( source <- 'http://www.w3.org/2002/07/owl#DatatypeProperty', details <- Sequence{ann_uri} ),
+		ann_uri: ecore!EStringToStringMapEntry ( key <- 'uri', value <- o.URI )
+}
+
+lazy rule ObjectProperty2Reference extends ClassProperty2EStructuralFeature {
+	from o: owl!ObjectProperty (o.range.size() < 2)
+	to
+		e: ecore!EReference (
+			eAnnotations <- Sequence {ann_rdf}
+		,	eType <- o.range.first()
+		),
+		ann_rdf: ecore!EAnnotation ( source <- 'http://www.w3.org/2002/07/owl#ObjectProperty', details <- Sequence{ann_uri} ),
+		ann_uri: ecore!EStringToStringMapEntry ( key <- 'uri', value <- o.URI )	
+}
+
+rule OWLDatatype2EDataType {
+	from o: owl!OWLDatatype
+	to
+		e: ecore!EDataType (
+			name <- o.URI.resolveLocalName()
+		)
+}
+
