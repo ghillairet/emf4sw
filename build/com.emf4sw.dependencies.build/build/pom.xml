@@ -8,10 +8,12 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>../../../bundles/org.openjena</module>
+		<module>../../../dependencies/org.openjena</module>
 		<module>../../../features/org.openjena.feature</module>
-		<module>../../../bundles/org.openrdf</module>
+		<module>../../../dependencies/org.openrdf</module>
 		<module>../../../features/org.openrdf.feature</module>
+		<module>../../../dependencies/org.codehaus.jackson</module>
+		<module>../../../features/org.codehaus.jackson.feature</module>
 		<module>../../com.emf4sw.dependencies.repository</module>
 	</modules>
 

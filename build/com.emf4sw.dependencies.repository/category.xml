@@ -6,6 +6,9 @@
    <feature url="features/org.openrdf.feature_2.3.2.jar" id="org.openrdf.feature" version="2.3.2">
       <category name="emf4sw-dependencies"/>
    </feature>
+   <feature url="features/org.codehaus.jackson.feature_1.7.4.jar" id="org.codehaus.jackson.feature" version="1.7.4">
+      <category name="emf4sw-dependencies"/>
+   </feature>
    <category-def name="emf4sw-dependencies" label="emf4sw dependencies">
       <description>
          emf4sw-dependencies
