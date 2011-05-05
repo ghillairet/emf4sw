@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.openjena.feature"
-      label="Feature"
+      label="jena osgi bundle"
       version="2.6.4">
 
    <description url="http://www.example.com/description">

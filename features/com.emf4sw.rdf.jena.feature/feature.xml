@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.emf4sw.rdf.jena.feature"
-      label="Feature"
+      label="emf4sw jena adapter"
       version="0.7.1.qualifier"
       provider-name="eclipselabs">
 
@@ -19,9 +19,8 @@
 
    <requires>
       <import plugin="com.emf4sw.rdf"/>
-      <import plugin="org.openjena"/>
-      <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.openjena"/>
    </requires>
 
    <plugin

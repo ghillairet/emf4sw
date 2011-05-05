@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.emf4sw.rdf.sesame.feature"
-      label="Feature"
+      label="emf4sw sesame adapter"
       version="0.7.1.qualifier"
       provider-name="eclipselabs">
 

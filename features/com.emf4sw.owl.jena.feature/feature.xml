@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.openrdf.feature"
-      label="sesame osgi bundle"
-      version="2.3.2">
+      id="com.emf4sw.owl.jena.feature"
+      label="owl jena adapter"
+      version="0.7.1.qualifier"
+      provider-name="eclipselabs">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -17,9 +18,10 @@
    </license>
 
    <plugin
-         id="org.openrdf"
+         id="com.emf4sw.owl.jena"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.openrdf.feature"
-      label="sesame osgi bundle"
-      version="2.3.2">
+      id="org.codehaus.jackson.feature"
+      label="jackson osgi bundle"
+      version="1.7.4"
+      provider-name="eclipselabs">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -17,7 +18,7 @@
    </license>
 
    <plugin
-         id="org.openrdf"
+         id="org.codehaus.jackson"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
