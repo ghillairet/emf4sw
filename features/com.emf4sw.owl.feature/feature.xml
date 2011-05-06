@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import plugin="com.emf4sw.rdf"/>
+   </requires>
+
    <plugin
          id="com.emf4sw.owl"
          download-size="0"

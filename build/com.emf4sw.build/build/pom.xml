@@ -10,27 +10,33 @@
 	<modules>
 		<module>../../../bundles/com.emf4sw.rdf</module>
 		<module>../../../features/com.emf4sw.rdf.feature</module>
+		
 		<module>../../../bundles/com.emf4sw.rdf.jena</module>
 		<module>../../../features/com.emf4sw.rdf.jena.feature</module>
+		
 		<module>../../../bundles/com.emf4sw.rdf.sesame</module>
 		<module>../../../features/com.emf4sw.rdf.sesame.feature</module>
+		
 		<module>../../../bundles/com.emf4sw.rdf.transform</module>
 		<module>../../../features/com.emf4sw.rdf.transform.feature</module>
+		
 		<module>../../../bundles/com.emf4sw.rdf.json</module>
 		<module>../../../features/com.emf4sw.rdf.json.feature</module>
 
 		<module>../../../bundles/com.emf4sw.owl</module>
 		<module>../../../features/com.emf4sw.owl.feature</module>
+		
 		<module>../../../bundles/com.emf4sw.owl.jena</module>
 		<module>../../../features/com.emf4sw.owl.jena.feature</module>
+		
 		<module>../../../bundles/com.emf4sw.owl.transform</module>
 		<module>../../../features/com.emf4sw.owl.transform.feature</module>
-
+		
 		<module>../../com.emf4sw.repository</module>
 	</modules>
 
 	<properties>
-		<tycho-version>0.13.0-SNAPSHOT</tycho-version>
+		<tycho-version>0.12.0</tycho-version>
 		<targets>../../../com.emf4sw.repository/target/</targets>
 	</properties>
 
@@ -67,7 +73,7 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>maven-osgi-compiler-plugin</artifactId>
+				<artifactId>tycho-compiler-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
 					<source>1.6</source>
@@ -77,7 +83,7 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>maven-osgi-source-plugin</artifactId>
+				<artifactId>tycho-source-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<executions>
 					<execution>
@@ -123,7 +129,7 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>maven-osgi-packaging-plugin</artifactId>
+				<artifactId>tycho-packaging-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
 					<format>'v'yyyyMMdd-HHmm</format>

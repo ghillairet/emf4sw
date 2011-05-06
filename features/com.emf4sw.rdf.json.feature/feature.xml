@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import plugin="org.codehaus.jackson"/>
+      <import plugin="org.codehaus.jackson" version="1.7.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="com.emf4sw.rdf"/>
    </requires>
