@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sesame
 Bundle-SymbolicName: org.openrdf
-Bundle-Version: 2.3.2
+Bundle-Version: 2.4.0
 Bundle-ClassPath: commons-httpclient-3.1.jar,
  commons-logging-1.1.1.jar,
  slf4j-api-1.5.6.jar,
