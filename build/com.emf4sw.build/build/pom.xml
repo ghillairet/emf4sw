@@ -30,7 +30,7 @@
 	</modules>
 
 	<properties>
-		<tycho-version>0.11.1</tycho-version>
+		<tycho-version>0.13.0-SNAPSHOT</tycho-version>
 		<targets>../../../com.emf4sw.repository/target/</targets>
 	</properties>
 
@@ -59,14 +59,14 @@
 		<plugins>
 
 			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
 			</plugin>
 
 			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>maven-osgi-compiler-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
@@ -76,7 +76,7 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>maven-osgi-source-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<executions>
@@ -91,7 +91,7 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
@@ -122,7 +122,7 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>maven-osgi-packaging-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
@@ -138,7 +138,7 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.sonatype.tycho</groupId>
+						<groupId>org.eclipse.tycho</groupId>
 						<artifactId>target-platform-configuration</artifactId>
 						<version>${tycho-version}</version>
 						<configuration>
