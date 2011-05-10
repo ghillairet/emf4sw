@@ -37,19 +37,31 @@ import com.emf4sw.rdf.URIElement;
  */
 public class RDFGraph2SesameGraph {
 
-	private final static ValueFactory sesameFactory = new ValueFactoryImpl();
-
 	private RDFGraph2SesameGraph() {}
 
 	public static void extract(RDFGraph graph, Graph sesameGraph, String namedGraph) {
+		final ValueFactory valueFactory = new ValueFactoryImpl();
 		for (Triple triple: graph.getTriples()) 
 		{
-			Statement aStatement = extractAsSesameStatement(triple, namedGraph);
+			Statement aStatement = extractAsSesameStatement(triple, namedGraph, valueFactory);
 			if (aStatement != null) 
 			{
 				sesameGraph.add( aStatement );
 			}
 		}
+	}
+
+	public static Graph extract(Iterable<Triple> triples, String namedGraphURI, ValueFactory valueFactory) {
+		final Graph aGraph = new GraphImpl();
+		for (Triple triple: triples) 
+		{
+			Statement aStatement = extractAsSesameStatement(triple, namedGraphURI, valueFactory);
+			if (aStatement != null) 
+			{
+				aGraph.add( aStatement );
+			}
+		}
+		return aGraph;
 	}
 
 	public static Graph extract(RDFGraph graph) {
@@ -58,10 +70,11 @@ public class RDFGraph2SesameGraph {
 	
 	public static Graph extract(RDFGraph graph, String namedGraph) {
 		final Graph aGraph = new GraphImpl();
-	
+		final ValueFactory valueFactory = new ValueFactoryImpl();
+		
 		for (Triple triple: graph.getTriples()) 
 		{
-			Statement aStatement = extractAsSesameStatement(triple, namedGraph);
+			Statement aStatement = extractAsSesameStatement(triple, namedGraph, valueFactory);
 			if (aStatement != null)
 			{
 				aGraph.add( aStatement );
@@ -77,10 +90,11 @@ public class RDFGraph2SesameGraph {
 	
 	public static Graph extract(Iterable<Triple> triples, String namedGraph) {
 		final Graph aGraph = new GraphImpl();
-	
+		final ValueFactory valueFactory = new ValueFactoryImpl();
+		
 		for (Triple triple: triples) 
 		{
-			Statement aStatement = extractAsSesameStatement(triple, namedGraph);
+			Statement aStatement = extractAsSesameStatement(triple, namedGraph, valueFactory);
 			if (aStatement != null)
 			{
 				aGraph.add( aStatement );
@@ -90,15 +104,15 @@ public class RDFGraph2SesameGraph {
 		return aGraph;
 	}
 	
-	public static Statement extractAsSesameStatement(Triple triple, String namedGraph) {
-		final org.openrdf.model.Resource aResource = asSesameResource( triple.getSubject() );
+	public static Statement extractAsSesameStatement(Triple triple, String namedGraph, ValueFactory valueFactory) {
+		final org.openrdf.model.Resource aResource = asSesameResource( triple.getSubject(), valueFactory );
 		final URI aURI = asSesameURI( triple.getPredicate() );
-		final Value aValue = asSesameValue( triple.getObject());
+		final Value aValue = asSesameValue( triple.getObject(), valueFactory);
 		
 		return (aResource != null && aURI != null && aValue != null) ?
 				(namedGraph == null) ?
-					sesameFactory.createStatement(aResource, aURI, aValue) :
-							sesameFactory.createStatement(aResource, aURI, aValue, sesameFactory.createURI(namedGraph))
+						valueFactory.createStatement(aResource, aURI, aValue) :
+							valueFactory.createStatement(aResource, aURI, aValue, valueFactory.createURI(namedGraph))
 					:
 				null;
 	}
@@ -107,52 +121,53 @@ public class RDFGraph2SesameGraph {
 		return new URIImpl(predicate.getURI());
 	}
 
-	private static org.openrdf.model.Resource asSesameResource(Node aNode) {
+	private static org.openrdf.model.Resource asSesameResource(Node aNode, ValueFactory valueFactory) {
 		org.openrdf.model.Resource aResource = null;
 		
 		if (aNode instanceof Resource || 
 				aNode instanceof NamedGraph || 
 					aNode instanceof TripleNode) {
-			aResource = asSesameResource((URIElement)aNode);
+			aResource = asSesameResource((URIElement)aNode, valueFactory);
 		}
 		
 		return aResource;
 	}
 	
-	private static org.openrdf.model.Resource asSesameResource(URIElement aNode) {	
-		return sesameFactory.createURI( aNode.getURI() );
+	private static org.openrdf.model.Resource asSesameResource(URIElement aNode, ValueFactory valueFactory) {	
+		return valueFactory.createURI( aNode.getURI() );
 	}
 
-	private static Value asSesameValue(Node aNode) {
+	private static Value asSesameValue(Node aNode, ValueFactory valueFactory) {
 		Value value = null;
 		if (aNode instanceof Resource || 
 				aNode instanceof NamedGraph || 
 					aNode instanceof TripleNode) 
 		{
-			value = asSesameResource((URIElement)aNode);
+			value = asSesameResource((URIElement)aNode, valueFactory);
 		}
 		else if (aNode instanceof BlankNode) 
 		{
-			value = sesameFactory.createBNode();
+			value = valueFactory.createBNode();
 		}
 		else if (aNode instanceof Literal)
 		{
 			Literal aLiteral = (Literal) aNode;
 			if (aLiteral.getLang() != null && !aLiteral.getLang().trim().isEmpty()) 
 			{
-				value = sesameFactory.createLiteral(aLiteral.getLexicalForm(), aLiteral.getLang());
+				value = valueFactory.createLiteral(aLiteral.getLexicalForm(), aLiteral.getLang());
 			} 
 			else if (aLiteral.getDatatype() != null) 
 			{
-				value = sesameFactory.createLiteral(aLiteral.getLexicalForm(), 
-						sesameFactory.createURI(aLiteral.getDatatype().getURI()));
+				value = valueFactory.createLiteral(aLiteral.getLexicalForm(), 
+						valueFactory.createURI(aLiteral.getDatatype().getURI()));
 			}
 			else 
 			{
-				value = sesameFactory.createLiteral(aLiteral.getLexicalForm());
+				value = valueFactory.createLiteral(aLiteral.getLexicalForm());
 			}
 		}
 		return value;
 	}
+
 
 }

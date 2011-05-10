@@ -159,7 +159,7 @@ unique lazy rule EClass2SimpleInElement {
 			varName <- 'r',
 			type <- in_el_type ),
 		in_el_type: ATL!OclModelElement (
-			name <- 'Node', 
+			name <- 'SubjectNode', 
 			model <- thisModule.Rdf(thisModule.mapping) )
 }
 
@@ -208,7 +208,7 @@ lazy rule EAttributeMany2Binding extends EStructuralFeature2Binding {
 			arguments <- val_src_args
 		),
 		val_src_args: ATL!StringExp (
-			stringSymbol <- e.getURI()
+			stringSymbol <- e.getRdfType()
 		)
 }
 
@@ -232,7 +232,7 @@ lazy abstract rule EStructuralFeatureOne2Statement {
 			arguments <- cond_var_args
 		),
 		cond_var_args: ATL!StringExp (
-			stringSymbol <- e.getURI()
+			stringSymbol <- e.getRdfType()
 		),
 		cond_var: ATL!VariableExp (
 			referredVariable <- thisModule.EClass2SimpleInElement(c)
@@ -275,7 +275,7 @@ lazy rule EAttributeEEnum2Binding extends EStructuralFeatureOne2Statement {
 			arguments <- val_src_args
 		),
 		val_src_args: ATL!StringExp (
-			stringSymbol <- e.getURI()
+			stringSymbol <- e.getRdfType()
 		)
 }
 
@@ -336,7 +336,7 @@ lazy rule EReferenceIsNotCreate2Binding extends EStructuralFeature2Binding {
 			arguments <- args
 		),
 		args: ATL!StringExp (
-			stringSymbol <- e.getURI()
+			stringSymbol <- e.getRdfType()
 		)
 }
 
@@ -392,7 +392,7 @@ lazy rule EReferenceIsCreate2Binding extends EStructuralFeature2Binding {
 			arguments <- args
 		),
 		args: ATL!StringExp (
-			stringSymbol <- e.getURI()
+			stringSymbol <- e.getRdfType()
 		)
 }
 
@@ -409,7 +409,7 @@ lazy rule EReference2Binding extends EStructuralFeature2Binding {
 			arguments <- args
 		),
 		args: ATL!StringExp (
-			stringSymbol <- e.getURI()
+			stringSymbol <- e.getRdfType()
 		)
 }
 

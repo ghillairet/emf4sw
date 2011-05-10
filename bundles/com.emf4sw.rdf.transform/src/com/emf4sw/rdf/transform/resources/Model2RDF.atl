@@ -60,12 +60,12 @@ rule EObject2Node {
 								then
 									if (v.oclIsKindOf(Model!EDataType)) -- ???
 									then
-										thisModule.MakeTripleWithURI(e, f.getURI(), v.getRdfId(), e.eClass().getGraph())
+										thisModule.MakeTripleWithURI(e, f.getRdfType(), v.getRdfId(), e.eClass().getGraph())
 									else
-										thisModule.MakeTriple(e, f.getURI(), v, e.eClass().getGraph()) 
+										thisModule.MakeTriple(e, f.getRdfType(), v, e.eClass().getGraph()) 
 									endif
 								else 
-									thisModule.MakeTripleWithLiteral(e, f.getURI(), v, f.getType(), e.eClass().getGraph())
+									thisModule.MakeTripleWithLiteral(e, f.getRdfType(), v, f.getType(), e.eClass().getGraph())
 								endif
 							})
 			}->flatten()

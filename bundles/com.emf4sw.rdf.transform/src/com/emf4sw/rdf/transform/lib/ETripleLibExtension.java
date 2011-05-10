@@ -73,11 +73,17 @@ public class ETripleLibExtension implements LibExtension {
 			public String exec(AbstractStackFrame frame) {
 				Object[] localVars = frame.getLocalVars();
 				if (localVars[0] instanceof EObject) {
-					String generatedId = EcoreUtil.getIdentification((EObject) localVars[0]);
-					String cut = generatedId.substring(generatedId.indexOf("#"), generatedId.length() - 1);
-					if (cut.startsWith("#//"))
-						cut = cut.substring(3);
-					return cut;			
+//					URI generatedId = null;//EcoreUtil.getURI((EObject) localVars[0]);
+//					if (generatedId == null) {
+//						String ns = ((EObject) localVars[0]).eClass().getEPackage().getNsURI();
+//						ns = ns.endsWith("/") ? ns : ns+"/";
+						
+						return EcoreUtil.generateUUID();
+//					}
+//					String cut = generatedId.toString().substring(generatedId.toString().indexOf("#"), generatedId.toString().length() - 1);
+//					if (cut.startsWith("#//"))
+//						cut = cut.substring(3);
+//					return cut;			
 				}
 				throw new IllegalArgumentException("Cannot get URI from " + localVars[0]);
 			}
