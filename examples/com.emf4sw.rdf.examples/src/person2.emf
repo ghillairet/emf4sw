@@ -1,0 +1,11 @@
+@namespace(uri="http://eclipselabs.org/emf4sw/person", prefix="person")
+package person;
+
+@OWLClass(uri="http://xmlns.com/foaf/0.1/Person")
+class Person {
+   @Id(base="http://eclipselabs.org/emf4sw/persons/")
+   @rdf(uri="http://xmlns.com/foaf/0.1/name")
+   attr String name;
+   @rdf(uri="http://xmlns.com/foaf/0.1/knows")
+   ref Person[*] knows;
+}

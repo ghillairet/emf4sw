@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:person="http://eclipselabs.org/emf4sw/person">
+  <person:Person name="John" knows="/1 /2"/>
+  <person:Person name="Georges"/>
+  <person:Person name="Dan" knows="/0 /1"/>
+</xmi:XMI>

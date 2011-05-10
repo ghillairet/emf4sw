@@ -1,0 +1,8 @@
+@namespace(uri="http://eclipselabs.org/emf4sw/person", prefix="person")
+package person;
+
+
+class Person {
+   attr String name;
+   ref Person[*] knows;
+}
