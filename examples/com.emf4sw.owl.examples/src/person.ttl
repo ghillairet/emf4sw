@@ -1,0 +1,24 @@
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<http://xmlns.com/foaf/0.1/Person>
+      a       owl:Class ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:cardinality "1"^^xsd:int ;
+                owl:onProperty <http://eclipselabs.org/emf4sw/person#name>
+              ] .
+
+<http://eclipselabs.org/emf4sw/person#knows>
+      a       owl:ObjectProperty ;
+      rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+      rdfs:range <http://xmlns.com/foaf/0.1/Person> .
+
+<http://eclipselabs.org/emf4sw/person#name>
+      a       owl:DatatypeProperty ;
+      rdfs:domain <http://xmlns.com/foaf/0.1/Person> .
+
+<http://eclipselabs.org/emf4sw/person>
+      a       owl:Ontology .

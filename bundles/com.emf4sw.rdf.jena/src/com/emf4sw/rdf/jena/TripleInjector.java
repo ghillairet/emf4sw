@@ -74,7 +74,7 @@ public class TripleInjector {
 		@Override
 		public Object visitBlank(Resource node, AnonId arg1) {
 			final BlankNode ret = factory.createBlankNode();
-			ret.setNodeID( arg1.getLabelString() );
+			ret.setNodeID( arg1.toString() );
 			graph.getBlankNodes().add(ret);
 			
 			return ret;

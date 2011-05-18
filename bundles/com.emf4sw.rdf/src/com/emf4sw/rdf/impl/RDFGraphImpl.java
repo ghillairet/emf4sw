@@ -82,7 +82,6 @@ public abstract class RDFGraphImpl extends URIElementImpl implements RDFGraph {
 	 */
 	protected RDFGraphImpl() {
 		super();
-//		eAdapters().add(new ModelAdapterImpl());
 	}
 
 	/**
@@ -223,13 +222,29 @@ public abstract class RDFGraphImpl extends URIElementImpl implements RDFGraph {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public SubjectNode listSubjectsWithProperty(Property property, Node object) {
+	public EList<SubjectNode> listSubjectsWithProperty(Property property) {
+		final EList<SubjectNode> nodes = new BasicEList<SubjectNode>();
 		for (Triple triple: listAllTriples()) {
-			if (triple.getPredicate().equals(property) && triple.getObject().equals(object)) {
-				return triple.getSubject();
+			if (triple.getPredicate().equals(property)) {
+				nodes.add(triple.getSubject());
 			}
 		}
-		return null;
+		return nodes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<SubjectNode> listSubjectsWithPropertyValue(Property property, Node object) {
+		final EList<SubjectNode> nodes = new BasicEList<SubjectNode>();
+		for (Triple triple: listAllTriples()) {
+			if (triple.getPredicate().equals(property) && triple.getObject().equals(object)) {
+				nodes.add(triple.getSubject());
+			}
+		}
+		return nodes;
 	}
 
 	/**
@@ -504,17 +519,13 @@ public abstract class RDFGraphImpl extends URIElementImpl implements RDFGraph {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (nodes: ");
-		result.append(nodes);
-		result.append(')');
-		return result.toString();
+		
+		return "<"+uri+">";
 	}
 
 } //RDFGraphImpl

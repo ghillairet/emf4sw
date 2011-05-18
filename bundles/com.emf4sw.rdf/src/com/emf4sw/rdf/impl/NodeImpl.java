@@ -283,16 +283,7 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 	 */
 	@Override
 	public String toString() {
-//		if (eIsProxy()) 
 		return super.toString();
-
-//		StringBuffer result = new StringBuffer(super.toString());
-//		result.append(" (label: ");
-//		result.append(label);
-//		result.append(", comment: ");
-//		result.append(comment);
-//		result.append(')');
-//		return result.toString();
 	}
 
 } //NodeImpl

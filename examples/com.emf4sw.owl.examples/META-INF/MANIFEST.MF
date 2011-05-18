@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OWL Examples
+Bundle-SymbolicName: com.emf4sw.owl.examples
+Bundle-Version: 0.7.1.qualifier
+Bundle-Vendor: eclipselabs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.6.1",
+ com.emf4sw.rdf;bundle-version="0.7.1",
+ com.emf4sw.owl;bundle-version="0.7.1",
+ com.emf4sw.owl.jena;bundle-version="0.7.1",
+ com.emf4sw.owl.transform;bundle-version="0.7.1",
+ org.openjena;bundle-version="2.6.4",
+ org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
+ com.atl.common;bundle-version="0.7.1"

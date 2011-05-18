@@ -80,7 +80,7 @@ rule EPackage2Ontology
 		o : owl!Ontology (
 			URI <- e.getURI()
 --		,	imports <- imported->collect(i | thisModule.MakeImportedPackage(i))
-		,	classes <- classes->collect(e | if (e.eIsProxy()) then e.resolve() else e endif).debug('classes')
+		,	classes <- classes->collect(c | if (c.eIsProxy()) then c.resolve() else c endif)
 		,	objectProperties <- classes->collect(c | c.eAllReferences)->flatten()->asSet()
 		,	dataProperties <- classes->collect(c | c.eAllAttributes)->flatten()->asSet()
 		)

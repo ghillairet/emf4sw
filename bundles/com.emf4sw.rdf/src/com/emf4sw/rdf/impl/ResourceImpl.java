@@ -475,16 +475,9 @@ public class ResourceImpl extends SubjectNodeImpl implements Resource {
 	 */
 	@Override
 	public String toString() {
-//		if (eIsProxy()) 
-		return super.toString();
-
-//		StringBuffer result = new StringBuffer(super.toString());
-//		result.append(" (label: ");
-//		result.append(label);
-//		result.append(", comment: ");
-//		result.append(comment);
-//		result.append(')');
-//		return result.toString();
+		if (eIsProxy()) return super.toString();
+		
+		return "<"+uri+">";
 	}
 
 } //ResourceImpl

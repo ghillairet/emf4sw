@@ -912,7 +912,10 @@ public class RDFPackageImpl extends EPackageImpl implements RDFPackage {
 		addEParameter(op, this.getProperty(), "property", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getNode(), "object", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = addEOperation(rdfGraphEClass, this.getSubjectNode(), "listSubjectsWithProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(rdfGraphEClass, this.getSubjectNode(), "listSubjectsWithProperty", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getProperty(), "property", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = addEOperation(rdfGraphEClass, this.getSubjectNode(), "listSubjectsWithPropertyValue", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getProperty(), "property", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getNode(), "object", 0, 1, IS_UNIQUE, IS_ORDERED);
 

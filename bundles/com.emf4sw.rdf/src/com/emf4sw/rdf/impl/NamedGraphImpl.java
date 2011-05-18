@@ -451,19 +451,13 @@ public class NamedGraphImpl extends RDFGraphImpl implements NamedGraph {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (label: ");
-		result.append(label);
-		result.append(", comment: ");
-		result.append(comment);
-		result.append(')');
-		return result.toString();
+		
+		return "<"+uri+">";
 	}
 
 } //NamedGraphImpl

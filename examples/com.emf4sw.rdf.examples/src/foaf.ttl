@@ -1,0 +1,190 @@
+@prefix :        <http://xmlns.com/foaf/0.1/> .
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix wot:     <http://xmlns.com/wot/0.1/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rss:     <http://purl.org/rss/1.0/> .
+@prefix vCard:   <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix cc:      <http://web.resource.org/cc/> .
+
+<>    dc:creator "Chris Bizer"^^rdfs:Literal ;
+      dc:date "2007-01-16"^^rdfs:Literal ;
+      dc:description "FOAF Profile of Chris Bizer"^^rdfs:Literal ;
+      cc:license <http://creativecommons.org/licenses/nc/1.0> ;
+      foaf:maker <http://www.bizer.de#chris> ;
+      foaf:primaryTopic <http://www.bizer.de#chris> .
+
+<http://dblp.l3s.de/d2r/resource/publications/conf/wirtschaftsinformatik/BizerHMOTE05>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .
+
+<http://www.bizer.de#chris>
+      a       foaf:Person ;
+      vCard:ADR
+              [ a       vCard:work ;
+                rdfs:label "Work Address"^^rdfs:Literal ;
+                vCard:Country <http://www.cogsci.princeton.edu/~wn/concept#106442182> , "  Germany "@en ;
+                vCard:Locality <http://www.cogsci.princeton.edu/~wn/concept#106443523> , "Berlin"^^rdfs:Literal ;
+                vCard:Pcode "D-14195"^^rdfs:Literal ;
+                vCard:Street "Garystr. 21"^^rdfs:Literal ;
+                foaf:based_near <http://sws.geonames.org/2950159/>
+              ] ;
+      vCard:ADR
+              [ a       vCard:home ;
+                rdfs:label "Home Address"^^rdfs:Literal ;
+                vCard:Country "Germany"@en , <http://www.cogsci.princeton.edu/~wn/concept#106442182> ;
+                vCard:Locality <http://www.cogsci.princeton.edu/~wn/concept#106443523> , "Berlin"^^rdfs:Literal ;
+                vCard:Pcode "D-10965"^^rdfs:Literal ;
+                vCard:Street "Heimstr. 16"^^rdfs:Literal
+              ] ;
+      vCard:BDAY "1973-09-20"^^rdfs:Literal ;
+      vCard:EMAIL
+              [ a       vCard:internet ;
+                rdf:value "chris@bizer.de"^^rdfs:Literal
+              ] ;
+      vCard:FN "Chris Bizer"^^rdfs:Literal ;
+      vCard:N [ vCard:Family "Bizer"^^rdfs:Literal ;
+                vCard:Given "Chris"^^rdfs:Literal ;
+                vCard:Other "Alexander"^^rdfs:Literal ;
+                vCard:Prefix "Dr."^^rdfs:Literal
+              ] ;
+      vCard:ROLE
+              [ a       rdf:Bag ;
+                rdf:_1  "researcher"@en ;
+                rdf:_2  "teacher"@en ;
+                rdf:_3  "software engineer"@en ;
+                rdf:_4  <http://www.cogsci.princeton.edu/~wn/concept#107530046> ;
+                rdf:_5  <http://www.cogsci.princeton.edu/~wn/concept#107551581> ;
+                rdf:_6  <http://www.cogsci.princeton.edu/~wn/concept#107504924>
+              ] ;
+      vCard:TEL
+              [ a       vCard:work , vCard:voice ;
+                rdf:value "+49 30 838 54057"^^rdfs:Literal ;
+                rdfs:label "Work Phone"^^rdfs:Literal
+              ] ;
+      vCard:TEL
+              [ a       vCard:work , vCard:fax ;
+                rdf:value "+49 30 838 52027"^^rdfs:Literal ;
+                rdfs:label "Work Fax"^^rdfs:Literal
+              ] ;
+      vCard:TITLE "Wissenschaftlicher Mitarbeiter"@de , "Graduate Research Associate"@en ;
+      vCard:URL
+              [ a       vCard:home , vCard:internet ;
+                rdf:value "www.bizer.de"^^rdfs:Literal
+              ] ;
+      vCard:URL
+              [ a       vCard:work , vCard:internet ;
+                rdf:value " http://www.wiwiss.fu-berlin.de/suhl/ueber_uns/team/chris_bizer.htm "^^rdfs:Literal
+              ] ;
+      owl:sameAs <http://dblp.l3s.de/d2r/page/authors/Christian_Bizer> , <http://www4.wiwiss.fu-berlin.de/is-group/resource/persons/Person4> , <http://www4.wiwiss.fu-berlin.de/dblp/resource/person/315759> ;
+      foaf:based_near <http://sws.geonames.org/2950159/> , <http://dbpedia.org/resource/Berlin> ;
+      foaf:currentProject <http://www4.wiwiss.fu-berlin.de/is-group/resource/projects/Project3> , <http://www4.wiwiss.fu-berlin.de/is-group/resource/projects/Project5> , <http://www4.wiwiss.fu-berlin.de/is-group/resource/projects/Project7> ;
+      foaf:currentProject
+              [ a       foaf:Project ;
+                dc:description "The project Travel Knowledge has a duration of 20 month and is funded by the Investitionsbank Berlin (IBB) and European Regional Development Fund (ERDF)."^^rdfs:Literal ;
+                dc:identifier <http://www.inf.fu-berlin.de/inst/ag-nbi/research/reisewissen/> ;
+                dc:title "Travel Knowledge"^^rdfs:Literal ;
+                foaf:homepage <http://www.inf.fu-berlin.de/inst/ag-nbi/research/reisewissen/index-en.htm> ;
+                foaf:name "Travel Knowledge"^^rdfs:Literal
+              ] ;
+      foaf:currentProject
+              [ a       foaf:Project ;
+                dc:description "The resource guide collects papers, ontologies, schemata and standards that might be building blocks for a future Semantic Web Trust and Security Framework."^^rdfs:Literal ;
+                dc:identifier <http://www.wiwiss.fu-berlin.de/suhl/bizer#SemWebSecurityTrustResourceGuide> ;
+                dc:title "Semantic Web Trust and Security Resource Guide"^^rdfs:Literal ;
+                foaf:homepage <http://www.wiwiss.fu-berlin.de/suhl/bizer/SWTSGuide/index.htm> ;
+                foaf:name "Semantic Web Trust and Security Resource Guide"^^rdfs:Literal
+              ] ;
+      foaf:currentProject
+              [ a       foaf:Project ;
+                dc:description "Knowledge Nets is part of the InterVal - Berlin Research Centre for the Internet Economy and is funded by the German Ministry of Research BMBF."^^rdfs:Literal ;
+                dc:identifier <http://www.inf.fu-berlin.de/inst/ag-nbi/research/wissensnetze> ;
+                dc:title "InterVal - Knowledge Web"^^rdfs:Literal ;
+                foaf:homepage <http://www.inf.fu-berlin.de/inst/ag-nbi/research/wissensnetze> ;
+                foaf:name "InterVal - Knowledge Web"^^rdfs:Literal
+              ] ;
+      foaf:depiction <http://www.wiwiss.fu-berlin.de/suhl/ueber_uns/team/Fotos/ChrisPassbild.jpg> ;
+      foaf:firstname "Chris"^^rdfs:Literal ;
+      foaf:interest <http://www.w3.org/RDF/> , <http://www.w3.org/2001/sw/> ;
+      foaf:knows <http://www4.wiwiss.fu-berlin.de/is-group/resource/persons/Person7> , <http://www.dajobe.org/foaf.rdf#i> , <http://www4.wiwiss.fu-berlin.de/is-group/resource/persons/Person8> , <http://www.w3.org/People/djweitzner/foaf#DJW> , <http://ebiquity.umbc.edu/person/foaf/Lalana/Kagal/foaf#lk> , <http://www4.wiwiss.fu-berlin.de/is-group/resource/persons/Person6> , <http://www.w3.org/People/Berners-Lee/card#i> , <http://richard.cyganiak.de/foaf.rdf#cygri> , <http://www4.wiwiss.fu-berlin.de/is-group/resource/persons/Person13> , <http://danbri.org/foaf#danbri> , <http://bblfish.net/people/henry/card#me> , <http://www.w3.org/People/Connolly/#me> , <http://www.ivan-herman.net/foaf.rdf#me> ;
+      foaf:knows
+              [ a       foaf:Person ;
+                foaf:mbox <mailto:jjc@hplb.hpl.hp.com> ;
+                foaf:name "Jeremy Carroll"^^rdfs:Literal
+              ] ;
+      foaf:knows
+              [ a       foaf:Person ;
+                foaf:mbox <mailto:andy.seaborne@hp.com> ;
+                foaf:mbox_sha1sum "d84b2e439ae33d719820f02e60a47ed39ad98e67"^^rdfs:Literal ;
+                foaf:name "Andy Seaborne"^^rdfs:Literal
+              ] ;
+      foaf:knows
+              [ a       foaf:Person ;
+                rdfs:seeAlso <http://www.gnowsis.com/leo/foaf.xml> ;
+                foaf:mbox <mailto:leo@gnowsis.com> ;
+                foaf:mbox_sha1sum "eaa363e2b75a11db14e62afb8995340a198e8b9e"^^rdfs:Literal ;
+                foaf:name "Leo Sauermann"^^rdfs:Literal
+              ] ;
+      foaf:knows
+              [ a       foaf:Person ;
+                rdfs:seeAlso <http://swordfish.rdfweb.org/people/libby/rdfweb/webwho.xrdf> ;
+                foaf:mbox <mailto:libby.miller@bristol.ac.uk> ;
+                foaf:name "Libby Miller"^^rdfs:Literal
+              ] ;
+      foaf:knows
+              [ a       foaf:Person ;
+                rdfs:seeAlso <http://www.csd.abdn.ac.uk/~ggrimnes/foaf.rdf> ;
+                foaf:mbox <mailto:ggrimnes@csd.abdn.ac.uk> ;
+                foaf:name "Gunnar AAstrand Grimnes"^^rdfs:Literal
+              ] ;
+      foaf:knows
+              [ a       foaf:Person ;
+                rdfs:seeAlso <http://dannyayers.com/misc/foaf/foaf.rdf> ;
+                foaf:mbox <mailto:danny666@virgilio.it> ;
+                foaf:mbox_sha1sum "ff7a6a9e58db00ecce4aa2daa9667ec8ad64144f"^^rdfs:Literal ;
+                foaf:name "Danny Ayers"^^rdfs:Literal
+              ] ;
+      foaf:mbox <mailto:chris@bizer.de> ;
+      foaf:mbox_sha1sum "50c02ff93e7d477ace450e3fbddd63d228fb23f3\""^^rdfs:Literal ;
+      foaf:name "Chris Bizer"^^rdfs:Literal ;
+      foaf:nick "ChrisB"^^rdfs:Literal ;
+      foaf:phone <tel:+49-03-83854057> ;
+      foaf:surname "Bizer"^^rdfs:Literal ;
+      foaf:workInfoHomepage
+              <http://www.wiwiss.fu-berlin.de/suhl/ueber_uns/team/chris_bizer.htm> ;
+      foaf:workplaceHomepage
+              <http://www.wiwiss.fu-berlin.de/suhl/> .
+
+<http://www4.wiwiss.fu-berlin.de/is-group/resource/publications/Publication3>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .
+
+<http://www4.wiwiss.fu-berlin.de/dblp/resource/record/conf/www/BizerO04>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .
+
+<http://dblp.l3s.de/d2r/resource/publications/conf/semweb/PietrigaBKL06>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .
+
+<http://www4.wiwiss.fu-berlin.de/is-group/resource/publications/Publication11>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .
+
+<http://www4.wiwiss.fu-berlin.de/is-group/resource/publications/Publication2>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .
+
+<http://richard.cyganiak.de/foaf.rdf#cygri>
+      a       foaf:Person ;
+      rdfs:seeAlso <http://richard.cyganiak.de/foaf.rdf> ;
+      foaf:currentProject <http://page.mi.fu-berlin.de/~cyganiak/foaf.rdf#StatCvs> , <http://www.wiwiss.fu-berlin.de/suhl/bizer#d2rq> ;
+      foaf:mbox_sha1sum "20e08403232aa02d12a45edb2bda9ccd0f857a24"^^rdfs:Literal ;
+      foaf:name "Richard Cyganiak"^^rdfs:Literal .
+
+<http://dblp.l3s.de/d2r/resource/publications/journals/ws/CarrollBHS05>
+      a       foaf:Document ;
+      dc:author <http://www.bizer.de#chris> .

@@ -1,6 +1,7 @@
 package com.emf4sw.rdf.examples;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -10,7 +11,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import com.emf4sw.rdf.RDFGraph;
 import com.emf4sw.rdf.SubjectNode;
 import com.emf4sw.rdf.Triple;
-import com.emf4sw.rdf.URIElement;
 import com.emf4sw.rdf.resource.impl.RDFXMLResourceFactory;
 import com.emf4sw.rdf.resource.impl.TTLResourceFactory;
 import com.emf4sw.rdf.vocabulary.RDF;
@@ -49,10 +49,11 @@ public class ReadRdfFile {
 			System.out.println(triple);
 		}
 		
-		SubjectNode node = 
-			graph.listSubjectsWithProperty(graph.getProperty(RDF.type), graph.getResource(foaf+"Person"));
+		List<SubjectNode> nodes = 
+			graph.listSubjectsWithPropertyValue(graph.getProperty(RDF.type), graph.getResource(foaf+"Person"));
 		
-		System.out.println("found " + ((URIElement) node).getURI());
+		for (SubjectNode node: nodes) 
+			System.out.println("found "+node);
 		
 		// Save the file in turtle
 		Resource ttl = resourceSet.createResource(URI.createURI("src/foaf.ttl"));

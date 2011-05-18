@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ASCII"?>
+<OWL:Ontology xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:OWL="http://www.w3.org/2002/07/owl" URI="http://eclipselabs.org/emf4sw/person">
+  <classes objectOf="//@triples.4 //@triples.5 //@triples.6" subjectOf="//@triples.0 //@triples.3" URI="http://xmlns.com/foaf/0.1/Person" subClassOf="//@classExpressions.0"/>
+  <properties URI="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" predicateOf="//@triples.0 //@triples.1 //@triples.2"/>
+  <resources objectOf="//@triples.0" URI="http://www.w3.org/2002/07/owl#Class"/>
+  <objectProperties subjectOf="//@triples.1 //@triples.5 //@triples.6" URI="http://eclipselabs.org/emf4sw/person#knows" domain="http://xmlns.com/foaf/0.1/Person" range="http://xmlns.com/foaf/0.1/Person"/>
+  <resources objectOf="//@triples.1" URI="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  <dataProperties subjectOf="//@triples.2 //@triples.4" URI="http://eclipselabs.org/emf4sw/person#name" domain="http://xmlns.com/foaf/0.1/Person"/>
+  <resources objectOf="//@triples.2" URI="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  <properties URI="http://www.w3.org/2000/01/rdf-schema#subClassOf" predicateOf="//@triples.3"/>
+  <classExpressions xsi:type="OWL:DataMaxCardinality" objectOf="//@triples.3" superClass="http://xmlns.com/foaf/0.1/Person" cardinality="1" property="http://eclipselabs.org/emf4sw/person#name"/>
+  <properties URI="http://www.w3.org/2000/01/rdf-schema#domain" predicateOf="//@triples.4 //@triples.5"/>
+  <properties URI="http://www.w3.org/2000/01/rdf-schema#range" predicateOf="//@triples.6"/>
+  <triples subject="http://xmlns.com/foaf/0.1/Person" predicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" object="http://www.w3.org/2002/07/owl#Class"/>
+  <triples subject="http://eclipselabs.org/emf4sw/person#knows" predicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" object="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  <triples subject="http://eclipselabs.org/emf4sw/person#name" predicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" object="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  <triples subject="http://xmlns.com/foaf/0.1/Person" predicate="http://www.w3.org/2000/01/rdf-schema#subClassOf" object="//@classExpressions.0"/>
+  <triples subject="http://eclipselabs.org/emf4sw/person#name" predicate="http://www.w3.org/2000/01/rdf-schema#domain" object="http://xmlns.com/foaf/0.1/Person"/>
+  <triples subject="http://eclipselabs.org/emf4sw/person#knows" predicate="http://www.w3.org/2000/01/rdf-schema#domain" object="http://xmlns.com/foaf/0.1/Person"/>
+  <triples subject="http://eclipselabs.org/emf4sw/person#knows" predicate="http://www.w3.org/2000/01/rdf-schema#range" object="http://xmlns.com/foaf/0.1/Person"/>
+</OWL:Ontology>

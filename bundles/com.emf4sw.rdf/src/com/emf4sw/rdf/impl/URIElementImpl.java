@@ -146,12 +146,10 @@ public abstract class URIElementImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public String getLocalName() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return uri.substring(uri.lastIndexOf('/'), uri.length());
 	}
 
 	/**
@@ -231,13 +229,8 @@ public abstract class URIElementImpl extends MinimalEObjectImpl.Container implem
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer();
-		result.append('<');
-		result.append(uri);
-		result.append('>');
 		
-		return result.toString();
+		return "<"+uri+">";
 	}
 	
 } //URIElementImpl

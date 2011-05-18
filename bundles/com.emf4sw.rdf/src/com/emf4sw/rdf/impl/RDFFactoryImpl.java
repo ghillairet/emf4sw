@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.emf4sw.rdf.BlankNode;
 import com.emf4sw.rdf.Datatype;
@@ -53,7 +54,7 @@ public class RDFFactoryImpl extends EFactoryImpl implements RDFFactory {
 			}
 		}
 		catch (Exception exception) {
-//			EcorePlugin.INSTANCE.log(exception);
+			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new RDFFactoryImpl();
 	}

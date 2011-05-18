@@ -59,7 +59,7 @@ public class BlankNodeImpl extends SubjectNodeImpl implements BlankNode {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected BlankNodeImpl() {
 		super();
@@ -252,17 +252,13 @@ public class BlankNodeImpl extends SubjectNodeImpl implements BlankNode {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (nodeID: ");
-		result.append(nodeID);
-		result.append(')');
-		return result.toString();
+		
+		return "_:"+nodeID;
 	}
 
 } //BlankNodeImpl

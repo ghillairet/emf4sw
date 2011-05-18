@@ -37,7 +37,10 @@
       <eParameters name="property" eType="#//Property"/>
       <eParameters name="object" eType="#//Node"/>
     </eOperations>
-    <eOperations name="listSubjectsWithProperty" eType="#//SubjectNode">
+    <eOperations name="listSubjectsWithProperty" upperBound="-1" eType="#//SubjectNode">
+      <eParameters name="property" eType="#//Property"/>
+    </eOperations>
+    <eOperations name="listSubjectsWithPropertyValue" upperBound="-1" eType="#//SubjectNode">
       <eParameters name="property" eType="#//Property"/>
       <eParameters name="object" eType="#//Node"/>
     </eOperations>

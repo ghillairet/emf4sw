@@ -21,7 +21,8 @@ abstract class RDFGraph extends URIElement {
   op RDFGraph diff(RDFGraph graph);
   
   op Triple addTriple(Node subject, Property property, Node object);
-  op SubjectNode listSubjectsWithProperty(Property property, Node object);
+  op SubjectNode[*] listSubjectsWithProperty(Property property);
+  op SubjectNode[*] listSubjectsWithPropertyValue(Property property, Node object);
   op SubjectNode[*] listSubjects();
   
   op Resource getResource(String uri);
