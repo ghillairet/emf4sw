@@ -8,21 +8,36 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>../../../dependencies/org.openjena</module>
-		<module>../../../features/org.openjena.feature</module>
+		<module>bundles/com.emf4sw.rdf</module>
+		<module>features/com.emf4sw.rdf.feature</module>
 		
-		<module>../../../dependencies/org.openrdf</module>
-		<module>../../../features/org.openrdf.feature</module>
+		<module>bundles/com.emf4sw.rdf.jena</module>
+		<module>features/com.emf4sw.rdf.jena.feature</module>
 		
-		<module>../../../dependencies/org.codehaus.jackson</module>
-		<module>../../../features/org.codehaus.jackson.feature</module>
+		<module>bundles/com.emf4sw.rdf.sesame</module>
+		<module>features/com.emf4sw.rdf.sesame.feature</module>
 		
-		<module>../../com.emf4sw.dependencies.repository</module>
+		<module>bundles/com.emf4sw.rdf.transform</module>
+		<module>features/com.emf4sw.rdf.transform.feature</module>
+		
+		<module>bundles/com.emf4sw.rdf.json</module>
+		<module>features/com.emf4sw.rdf.json.feature</module>
+
+		<module>bundles/com.emf4sw.owl</module>
+		<module>features/com.emf4sw.owl.feature</module>
+		
+		<module>bundles/com.emf4sw.owl.jena</module>
+		<module>features/com.emf4sw.owl.jena.feature</module>
+		
+		<module>bundles/com.emf4sw.owl.transform</module>
+		<module>features/com.emf4sw.owl.transform.feature</module>
+		
+		<module>build/repository</module>
 	</modules>
 
 	<properties>
 		<tycho-version>0.12.0</tycho-version>
-		<targets>../../../com.emf4sw.dependencies.repository/target/</targets>
+		<targets>build/repository/target/</targets>
 	</properties>
 
 	<repositories>
@@ -31,17 +46,44 @@
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/releases/helios</url>
 		</repository>
+		<repository>
+			<id>sesame</id>
+			<url>http://repo.aduna-software.org/maven2</url>
+		</repository>
+        <repository>
+			<id>jena</id>
+			<url>http://openjena.org/repo</url>
+		</repository>
+        <repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org/</url>
+		</repository>
+        <repository>
+            <id>atl-commons</id>
+            <layout>p2</layout>
+            <url>http://svn.codespot.com/a/eclipselabs.org/atl-commons/snapshots/</url>
+        </repository>
 	</repositories>
+
+<!-- 	<dependencies> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.openrdf</groupId> -->
+<!-- 			<artifactId>sesame-rio-api</artifactId> -->
+<!-- 			<version>2.3.3</version> -->
+<!-- 		</dependency> -->
+<!-- 	</dependencies> -->
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-compiler-plugin</artifactId>
@@ -54,12 +96,29 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<execution>
+						<id>attach-source</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
 					<!-- recommended: use p2-based target platform resolver -->
 					<resolver>p2</resolver>
+					<pomDependencies>consider</pomDependencies>
 					<pomDependenciesConsider>true</pomDependenciesConsider>
+					<ignoreTychoRepositories>true</ignoreTychoRepositories>
 					<!-- configure the p2 target environments for multi-platform build -->
 					<environments>
 						<environment>
@@ -81,6 +140,15 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<format>'v'yyyyMMdd-HHmm</format>
+				</configuration>
+			</plugin>
+			
 		</plugins>
 	</build>
 

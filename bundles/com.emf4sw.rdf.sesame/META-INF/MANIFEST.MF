@@ -8,5 +8,14 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.rdf.resource.impl,
  com.emf4sw.rdf.sesame
 Require-Bundle: org.eclipse.emf.ecore,
- org.openrdf,
  com.emf4sw.rdf
+Import-Package: org.openrdf.model,
+ org.openrdf.model.impl,
+ org.openrdf.repository,
+ org.openrdf.repository.sail,
+ org.openrdf.rio,
+ org.openrdf.rio.helpers,
+ org.openrdf.rio.rdfxml,
+ org.openrdf.rio.rdfxml.util,
+ org.openrdf.rio.turtle,
+ org.openrdf.sail.memory

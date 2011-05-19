@@ -4,7 +4,7 @@
 		<artifactId>build</artifactId>
 		<groupId>com.emf4sw</groupId>
 		<version>0.7.1-SNAPSHOT</version>
-		<relativePath>../com.emf4sw.build/build/pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.emf4sw</groupId>

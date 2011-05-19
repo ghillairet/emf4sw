@@ -7,3 +7,5 @@ bin/
 /bundles/com.emf4sw.rdf.transform/.settings
 /bundles/com.emf4sw.rdf.sesame/.settings
 /bundles/org.openrdf/.settings
+bundles/com.emf4sw.rdf.json/.settings/org.eclipse.pde.core.prefs
+bundles/com.emf4sw.owl.jena/.settings/org.eclipse.pde.core.prefs

@@ -8,5 +8,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.rdf.jena,
  com.emf4sw.rdf.resource.impl
 Require-Bundle: com.emf4sw.rdf,
- org.eclipse.emf.ecore,
- org.openjena
+ org.eclipse.emf.ecore
+Import-Package: com.hp.hpl.jena.datatypes,
+ com.hp.hpl.jena.graph,
+ com.hp.hpl.jena.rdf.model,
+ com.hp.hpl.jena.util.iterator,
+ com.hp.hpl.jena.vocabulary

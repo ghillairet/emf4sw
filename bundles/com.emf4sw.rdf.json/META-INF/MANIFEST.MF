@@ -7,6 +7,8 @@ Bundle-Vendor: eclipselabs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.rdf.json,
  com.emf4sw.rdf.resource.impl
-Require-Bundle: org.codehaus.jackson;bundle-version="1.7.4",
- org.eclipse.emf.ecore,
+Require-Bundle: org.eclipse.emf.ecore,
  com.emf4sw.rdf
+Import-Package: org.codehaus.jackson,
+ org.codehaus.jackson.map,
+ org.codehaus.jackson.node
