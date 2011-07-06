@@ -12,7 +12,7 @@
     <extension
         point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.emf4sw.org/2009/OWL"
+            uri="http://www.w3.org/2002/07/owl"
             class="com.emf4sw.owl.OWLPackage"
             genModel="model/owl.genmodel">
       </package>

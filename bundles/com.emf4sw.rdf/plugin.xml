@@ -11,7 +11,7 @@
 <plugin>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.emf4sw.org/2008/RDF"
+            uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
             class="com.emf4sw.rdf.RDFPackage"
             genModel="model/rdf.genmodel"/>
    </extension>

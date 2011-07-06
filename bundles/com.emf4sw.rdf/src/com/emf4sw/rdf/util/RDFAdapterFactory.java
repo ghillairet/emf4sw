@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.emf4sw.rdf.util;
 
+import com.emf4sw.rdf.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;

@@ -1,4 +1,4 @@
-@namespace(uri="http://www.emf4sw.org/2008/RDF", prefix="RDF")
+@namespace(uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#", prefix="RDF")
 package rdf;
 
 abstract class URIElement {
