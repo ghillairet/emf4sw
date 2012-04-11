@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.emf4sw.rdf.feature_0.7.1.qualifier.jar" id="com.emf4sw.rdf.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.owl.feature_0.7.2.qualifier.jar" id="com.emf4sw.owl.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.rdf.jena.feature_0.7.1.qualifier.jar" id="com.emf4sw.rdf.jena.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.owl.jena.feature_0.7.2.qualifier.jar" id="com.emf4sw.owl.jena.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.rdf.sesame.feature_0.7.1.qualifier.jar" id="com.emf4sw.rdf.sesame.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.owl.transform.feature_0.7.2.qualifier.jar" id="com.emf4sw.owl.transform.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.rdf.transform.feature_0.7.1.qualifier.jar" id="com.emf4sw.rdf.transform.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.rdf.feature_0.7.2.qualifier.jar" id="com.emf4sw.rdf.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.owl.feature_0.7.1.qualifier.jar" id="com.emf4sw.owl.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.rdf.jena.feature_0.7.2.qualifier.jar" id="com.emf4sw.rdf.jena.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.owl.jena.feature_0.7.1.qualifier.jar" id="com.emf4sw.owl.jena.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.rdf.json.feature_0.7.2.qualifier.jar" id="com.emf4sw.rdf.json.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.owl.transform.feature_0.7.1.qualifier.jar" id="com.emf4sw.owl.transform.feature" version="0.7.1.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.rdf.sesame.feature_0.7.2.qualifier.jar" id="com.emf4sw.rdf.sesame.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <feature url="features/com.emf4sw.rdf.json.feature_0.1.0.qualifier.jar" id="com.emf4sw.rdf.json.feature" version="0.1.0.qualifier">
-      <category name="emf4sw"/>
+   <feature url="features/com.emf4sw.rdf.transform.feature_0.7.2.qualifier.jar" id="com.emf4sw.rdf.transform.feature" version="0.7.2.qualifier">
+      <category name="com.emf4sw"/>
    </feature>
-   <category-def name="emf4sw" label="emf4sw">
+   <category-def name="com.emf4sw" label="Eclipse Modeling For Semantic Web">
       <description>
          Eclipse Modeling for Semantic Web.
       </description>
    </category-def>
-   <category-def name="emf4sw-source" label="emf4sw source"/>
 </site>

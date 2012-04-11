@@ -2,7 +2,7 @@
 <feature
       id="com.emf4sw.owl.transform.feature"
       label="owl transform"
-      version="0.7.1.qualifier"
+      version="0.7.2.qualifier"
       provider-name="eclipselabs">
 
    <description url="http://www.example.com/description">
@@ -18,9 +18,14 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="com.emf4sw.owl"/>
       <import plugin="com.atl.common"/>
+      <import plugin="com.emf4sw.owl"/>
+      <import plugin="com.emf4sw.rdf"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.m2m.atl.core"/>
+      <import plugin="org.eclipse.m2m.atl.core.emf"/>
+      <import plugin="org.eclipse.m2m.atl.engine.emfvm"/>
    </requires>
 
    <plugin

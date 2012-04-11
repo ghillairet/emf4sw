@@ -3,8 +3,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.emf4sw</groupId>
-	<artifactId>build</artifactId>
-	<version>0.7.1-SNAPSHOT</version>
+	<artifactId>emf4sw</artifactId>
+	<version>0.7.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -36,27 +36,20 @@
 	</modules>
 
 	<properties>
-		<tycho-version>0.12.0</tycho-version>
-		<targets>build/repository/target/</targets>
+		<tycho-version>0.14.0</tycho-version>
+		<build-type>snapshots</build-type>
 	</properties>
 
 	<repositories>
 		<repository>
-			<id>helios</id>
+			<id>eclipse</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/helios</url>
+			<url>http://download.eclipse.org/releases/indigo</url>
 		</repository>
 		<repository>
-			<id>sesame</id>
-			<url>http://repo.aduna-software.org/maven2</url>
-		</repository>
-        <repository>
-			<id>jena</id>
-			<url>http://openjena.org/repo</url>
-		</repository>
-        <repository>
-			<id>codehaus</id>
-			<url>http://repository.codehaus.org/</url>
+			<id>dependencies</id>
+			<layout>p2</layout>
+			<url>http://ghillairet.github.com/p2</url>
 		</repository>
         <repository>
             <id>atl-commons</id>
@@ -64,19 +57,9 @@
             <url>http://svn.codespot.com/a/eclipselabs.org/atl-commons/snapshots/</url>
         </repository>
 	</repositories>
-
-<!-- 	<dependencies> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.openrdf</groupId> -->
-<!-- 			<artifactId>sesame-rio-api</artifactId> -->
-<!-- 			<version>2.3.3</version> -->
-<!-- 		</dependency> -->
-<!-- 	</dependencies> -->
-
+	
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
-
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -86,55 +69,36 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-compiler-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<id>attach-source</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>plugin-source</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<!-- recommended: use p2-based target platform resolver -->
 					<resolver>p2</resolver>
 					<pomDependencies>consider</pomDependencies>
-					<pomDependenciesConsider>true</pomDependenciesConsider>
-					<ignoreTychoRepositories>true</ignoreTychoRepositories>
-					<!-- configure the p2 target environments for multi-platform build -->
 					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86_64</arch>
 						</environment>
 						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
+							<os>win32</os>
+							<ws>win32</ws>
 							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
-							<arch>x86</arch>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
 						</environment>
 					</environments>
 				</configuration>
@@ -142,36 +106,37 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-packaging-plugin</artifactId>
+				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<format>'v'yyyyMMdd-HHmm</format>
+					<argLine>-Xmx512M</argLine>
+					<includes>
+						<include>**/junit/suite/TestSuite.java</include>
+					</includes>
 				</configuration>
 			</plugin>
-			
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<includeAllDependencies>false</includeAllDependencies>
+					<createArtifactRepository>true</createArtifactRepository>
+					<compress>true</compress>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-publisher-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<publishArtifacts>true</publishArtifacts>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.tycho</groupId>
-						<artifactId>target-platform-configuration</artifactId>
-						<version>${tycho-version}</version>
-						<configuration>
-							<environments combine.children="append">
-								<environment>
-									<os>win32</os>
-									<ws>win32</ws>
-									<arch>x86</arch>
-								</environment>
-							</environments>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	
 </project>

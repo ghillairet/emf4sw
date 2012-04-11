@@ -1063,15 +1063,15 @@
 			<new/>
 			<dup/>
 			<push arg="12"/>
-			<call arg="13"/>
+			<pcall arg="13"/>
 			<dup/>
 			<push arg="14"/>
 			<push arg="11"/>
 			<new/>
 			<dup/>
 			<push arg="15"/>
-			<call arg="13"/>
-			<call arg="16"/>
+			<pcall arg="13"/>
+			<pcall arg="16"/>
 			<set arg="3"/>
 			<getasm/>
 			<push arg="17"/>
@@ -1103,9 +1103,9 @@
 			<new/>
 			<set arg="1"/>
 			<getasm/>
-			<call arg="31"/>
+			<pcall arg="31"/>
 			<getasm/>
-			<call arg="32"/>
+			<pcall arg="32"/>
 		</code>
 		<linenumbertable>
 			<lne id="33" begin="17" end="19"/>
@@ -1201,13 +1201,13 @@
 		</parameters>
 		<code>
 			<getasm/>
-			<call arg="69"/>
+			<pcall arg="69"/>
 			<getasm/>
-			<call arg="70"/>
+			<pcall arg="70"/>
 			<getasm/>
-			<call arg="71"/>
+			<pcall arg="71"/>
 			<getasm/>
-			<call arg="72"/>
+			<pcall arg="72"/>
 		</code>
 		<linenumbertable>
 		</linenumbertable>
@@ -1228,7 +1228,7 @@
 			<store arg="29"/>
 			<getasm/>
 			<load arg="29"/>
-			<call arg="76"/>
+			<pcall arg="76"/>
 			<enditerate/>
 			<getasm/>
 			<get arg="1"/>
@@ -1238,7 +1238,7 @@
 			<store arg="29"/>
 			<getasm/>
 			<load arg="29"/>
-			<call arg="78"/>
+			<pcall arg="78"/>
 			<enditerate/>
 			<getasm/>
 			<get arg="1"/>
@@ -1248,7 +1248,7 @@
 			<store arg="29"/>
 			<getasm/>
 			<load arg="29"/>
-			<call arg="80"/>
+			<pcall arg="80"/>
 			<enditerate/>
 			<getasm/>
 			<get arg="1"/>
@@ -1258,7 +1258,7 @@
 			<store arg="29"/>
 			<getasm/>
 			<load arg="29"/>
-			<call arg="82"/>
+			<pcall arg="82"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -1290,19 +1290,19 @@
 			<new/>
 			<dup/>
 			<push arg="74"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="88"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="90"/>
 			<push arg="91"/>
 			<push arg="92"/>
 			<new/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pusht/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -1413,11 +1413,11 @@
 			<new/>
 			<dup/>
 			<push arg="77"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="88"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="136"/>
 			<push arg="57"/>
@@ -1438,7 +1438,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="144"/>
 			<push arg="57"/>
@@ -1459,7 +1459,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="100"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="147"/>
 			<push arg="57"/>
@@ -1480,15 +1480,15 @@
 			<enditerate/>
 			<dup/>
 			<store arg="148"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="90"/>
 			<push arg="91"/>
 			<push arg="92"/>
 			<new/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pusht/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -2223,11 +2223,11 @@
 			<new/>
 			<dup/>
 			<push arg="23"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="306"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<getasm/>
 			<load arg="29"/>
 			<call arg="499"/>
@@ -2257,7 +2257,7 @@
 			<new/>
 			<dup/>
 			<store arg="148"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<dup/>
 			<push arg="504"/>
 			<push arg="505"/>
@@ -2265,9 +2265,9 @@
 			<new/>
 			<dup/>
 			<store arg="175"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="148"/>
 			<dup/>
 			<getasm/>
@@ -2446,11 +2446,11 @@
 			<new/>
 			<dup/>
 			<push arg="26"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="306"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<getasm/>
 			<load arg="29"/>
 			<call arg="499"/>
@@ -2480,7 +2480,7 @@
 			<new/>
 			<dup/>
 			<store arg="148"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<dup/>
 			<push arg="504"/>
 			<push arg="505"/>
@@ -2488,9 +2488,9 @@
 			<new/>
 			<dup/>
 			<store arg="175"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="148"/>
 			<dup/>
 			<getasm/>
@@ -2696,15 +2696,15 @@
 			<new/>
 			<dup/>
 			<push arg="666"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="306"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="667"/>
 			<load arg="58"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<getasm/>
 			<load arg="29"/>
 			<call arg="499"/>
@@ -2756,9 +2756,9 @@
 			<new/>
 			<dup/>
 			<store arg="176"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="176"/>
 			<dup/>
 			<getasm/>
@@ -2920,15 +2920,15 @@
 			<new/>
 			<dup/>
 			<push arg="742"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="306"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="667"/>
 			<load arg="58"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<getasm/>
 			<load arg="29"/>
 			<call arg="499"/>
@@ -2980,9 +2980,9 @@
 			<new/>
 			<dup/>
 			<store arg="176"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="176"/>
 			<dup/>
 			<getasm/>
@@ -3133,15 +3133,15 @@
 			<new/>
 			<dup/>
 			<push arg="91"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="306"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="667"/>
 			<load arg="58"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="90"/>
 			<push arg="91"/>
@@ -3149,9 +3149,9 @@
 			<new/>
 			<dup/>
 			<store arg="100"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="100"/>
 			<dup/>
 			<getasm/>
@@ -3214,11 +3214,11 @@
 			<new/>
 			<dup/>
 			<push arg="503"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="667"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="90"/>
 			<push arg="503"/>
@@ -3226,9 +3226,9 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="58"/>
 			<dup/>
 			<getasm/>
@@ -3307,11 +3307,11 @@
 			<new/>
 			<dup/>
 			<push arg="853"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="88"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<load arg="29"/>
 			<get arg="181"/>
 			<push arg="855"/>
@@ -3331,7 +3331,7 @@
 			<new/>
 			<dup/>
 			<store arg="148"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<dup/>
 			<push arg="504"/>
 			<push arg="505"/>
@@ -3339,9 +3339,9 @@
 			<new/>
 			<dup/>
 			<store arg="175"/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pushf/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<load arg="148"/>
 			<dup/>
 			<getasm/>
@@ -3461,19 +3461,19 @@
 			<new/>
 			<dup/>
 			<push arg="79"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="88"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="90"/>
 			<push arg="91"/>
 			<push arg="92"/>
 			<new/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pusht/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -3597,18 +3597,18 @@
 			<new/>
 			<dup/>
 			<push arg="81"/>
-			<call arg="87"/>
+			<pcall arg="87"/>
 			<dup/>
 			<push arg="88"/>
 			<load arg="29"/>
-			<call arg="89"/>
+			<pcall arg="89"/>
 			<dup/>
 			<push arg="932"/>
 			<load arg="29"/>
 			<get arg="137"/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="933"/>
 			<push arg="57"/>
@@ -3628,7 +3628,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="100"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="936"/>
 			<push arg="57"/>
@@ -3648,7 +3648,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="148"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="938"/>
 			<push arg="57"/>
@@ -3668,7 +3668,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="175"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="940"/>
 			<push arg="57"/>
@@ -3688,7 +3688,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="176"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="941"/>
 			<push arg="57"/>
@@ -3712,15 +3712,15 @@
 			<call arg="310"/>
 			<dup/>
 			<store arg="180"/>
-			<call arg="143"/>
+			<pcall arg="143"/>
 			<dup/>
 			<push arg="90"/>
 			<push arg="91"/>
 			<push arg="92"/>
 			<new/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<pusht/>
-			<call arg="94"/>
+			<pcall arg="94"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>

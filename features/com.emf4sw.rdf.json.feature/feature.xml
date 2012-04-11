@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.emf4sw.rdf.json.feature"
-      label="emf4sw rdf json"
-      version="0.1.0.qualifier"
-      provider-name="eclipselabs">
+      label="EMF4SW RDF JSON"
+      version="0.7.2.qualifier"
+      provider-name="Eclipse Labs">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -18,9 +18,9 @@
    </license>
 
    <requires>
-      <import plugin="org.codehaus.jackson" version="1.7.4" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="com.emf4sw.rdf"/>
+      <import plugin="org.codehaus.jackson.core"/>
+      <import plugin="org.codehaus.jackson.mapper"/>
    </requires>
 
    <plugin

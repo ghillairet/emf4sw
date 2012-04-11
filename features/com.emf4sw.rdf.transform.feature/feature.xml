@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.emf4sw.rdf.transform.feature"
-      label="emf4sw rdf transform"
-      version="0.7.1.qualifier"
-      provider-name="eclipselabs">
+      label="EMF4SW RDF Transformation"
+      version="0.7.2.qualifier"
+      provider-name="Eclipse Labs">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -18,9 +18,13 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.emf.ecore" version="2.6.1" match="greaterOrEqual"/>
-      <import plugin="com.emf4sw.rdf"/>
       <import plugin="com.atl.common"/>
+      <import plugin="com.emf4sw.rdf"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.m2m.atl.core"/>
+      <import plugin="org.eclipse.m2m.atl.core.emf"/>
+      <import plugin="org.eclipse.m2m.atl.engine.emfvm"/>
    </requires>
 
    <plugin

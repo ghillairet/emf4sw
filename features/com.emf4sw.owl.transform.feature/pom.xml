@@ -1,14 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>build</artifactId>
 		<groupId>com.emf4sw</groupId>
-		<version>0.7.1-SNAPSHOT</version>
+		<version>0.7.2-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
+		<artifactId>emf4sw</artifactId>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.emf4sw</groupId>
 	<artifactId>com.emf4sw.owl.transform.feature</artifactId>
-	<version>0.7.1-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>

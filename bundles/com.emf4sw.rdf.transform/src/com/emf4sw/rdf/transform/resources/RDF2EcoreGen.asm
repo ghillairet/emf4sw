@@ -897,15 +897,15 @@
 			<new/>
 			<dup/>
 			<push arg="10"/>
-			<call arg="11"/>
+			<pcall arg="11"/>
 			<dup/>
 			<push arg="12"/>
 			<push arg="9"/>
 			<new/>
 			<dup/>
 			<push arg="13"/>
-			<call arg="11"/>
-			<call arg="14"/>
+			<pcall arg="11"/>
+			<pcall arg="14"/>
 			<set arg="3"/>
 			<getasm/>
 			<push arg="15"/>
@@ -920,11 +920,11 @@
 			<new/>
 			<set arg="1"/>
 			<getasm/>
-			<call arg="20"/>
+			<pcall arg="20"/>
 			<getasm/>
-			<call arg="21"/>
+			<pcall arg="21"/>
 			<getasm/>
-			<call arg="22"/>
+			<pcall arg="22"/>
 		</code>
 		<linenumbertable>
 			<lne id="23" begin="17" end="19"/>
@@ -1009,7 +1009,7 @@
 		</parameters>
 		<code>
 			<getasm/>
-			<call arg="49"/>
+			<pcall arg="49"/>
 		</code>
 		<linenumbertable>
 		</linenumbertable>
@@ -1030,7 +1030,7 @@
 			<store arg="28"/>
 			<getasm/>
 			<load arg="28"/>
-			<call arg="53"/>
+			<pcall arg="53"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -1283,11 +1283,11 @@
 			<new/>
 			<dup/>
 			<push arg="16"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="147"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="149"/>
 			<push arg="56"/>
@@ -1295,9 +1295,9 @@
 			<new/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="38"/>
 			<dup/>
 			<getasm/>
@@ -1342,11 +1342,11 @@
 			<new/>
 			<dup/>
 			<push arg="155"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="147"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="149"/>
 			<push arg="56"/>
@@ -1354,9 +1354,9 @@
 			<new/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="38"/>
 			<dup/>
 			<getasm/>
@@ -1401,11 +1401,11 @@
 			<new/>
 			<dup/>
 			<push arg="159"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="147"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="149"/>
 			<push arg="56"/>
@@ -1413,9 +1413,9 @@
 			<new/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="38"/>
 			<dup/>
 			<getasm/>
@@ -1460,11 +1460,11 @@
 			<new/>
 			<dup/>
 			<push arg="163"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="147"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="149"/>
 			<push arg="56"/>
@@ -1472,9 +1472,9 @@
 			<new/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="38"/>
 			<dup/>
 			<getasm/>
@@ -1519,18 +1519,18 @@
 			<new/>
 			<dup/>
 			<push arg="51"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="42"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="171"/>
 			<load arg="28"/>
 			<call arg="172"/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="173"/>
+			<pcall arg="173"/>
 			<dup/>
 			<push arg="174"/>
 			<push arg="37"/>
@@ -1556,7 +1556,7 @@
 			<enditerate/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="173"/>
+			<pcall arg="173"/>
 			<dup/>
 			<push arg="181"/>
 			<push arg="37"/>
@@ -1582,111 +1582,111 @@
 			<enditerate/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="173"/>
+			<pcall arg="173"/>
 			<dup/>
 			<push arg="137"/>
 			<push arg="186"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="187"/>
 			<push arg="188"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="189"/>
 			<push arg="190"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="191"/>
 			<push arg="192"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="193"/>
 			<push arg="194"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="195"/>
 			<push arg="190"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="196"/>
 			<push arg="197"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="198"/>
 			<push arg="199"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="200"/>
 			<push arg="201"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="202"/>
 			<push arg="203"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="204"/>
 			<push arg="192"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="205"/>
 			<push arg="197"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="206"/>
 			<push arg="207"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="208"/>
 			<push arg="209"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="210"/>
 			<push arg="211"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="212"/>
 			<push arg="199"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="213"/>
 			<push arg="214"/>
 			<push arg="55"/>
 			<new/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pusht/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -2247,11 +2247,11 @@
 			<new/>
 			<dup/>
 			<push arg="395"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="42"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="137"/>
 			<push arg="398"/>
@@ -2259,7 +2259,7 @@
 			<new/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="399"/>
 			<push arg="199"/>
@@ -2267,9 +2267,9 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="38"/>
 			<dup/>
 			<getasm/>
@@ -2335,15 +2335,15 @@
 			<new/>
 			<dup/>
 			<push arg="415"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="42"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="417"/>
 			<load arg="38"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<load arg="28"/>
 			<push arg="175"/>
 			<push arg="16"/>
@@ -2379,7 +2379,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="423"/>
 			<push arg="194"/>
@@ -2387,7 +2387,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="424"/>
 			<push arg="190"/>
@@ -2395,7 +2395,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="291"/>
 			<push arg="207"/>
@@ -2403,7 +2403,7 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="425"/>
 			<push arg="192"/>
@@ -2411,7 +2411,7 @@
 			<new/>
 			<dup/>
 			<store arg="262"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="426"/>
 			<push arg="197"/>
@@ -2419,7 +2419,7 @@
 			<new/>
 			<dup/>
 			<store arg="263"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="427"/>
 			<push arg="190"/>
@@ -2427,7 +2427,7 @@
 			<new/>
 			<dup/>
 			<store arg="264"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="428"/>
 			<push arg="197"/>
@@ -2435,7 +2435,7 @@
 			<new/>
 			<dup/>
 			<store arg="265"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="429"/>
 			<push arg="192"/>
@@ -2443,9 +2443,9 @@
 			<new/>
 			<dup/>
 			<store arg="143"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="57"/>
 			<dup/>
 			<getasm/>
@@ -2587,7 +2587,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="423"/>
 			<push arg="192"/>
@@ -2595,7 +2595,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="438"/>
 			<push arg="211"/>
@@ -2603,7 +2603,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="439"/>
 			<push arg="199"/>
@@ -2611,7 +2611,7 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="440"/>
 			<push arg="422"/>
@@ -2619,7 +2619,7 @@
 			<new/>
 			<dup/>
 			<store arg="262"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="441"/>
 			<push arg="203"/>
@@ -2627,7 +2627,7 @@
 			<new/>
 			<dup/>
 			<store arg="263"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="442"/>
 			<push arg="443"/>
@@ -2635,7 +2635,7 @@
 			<new/>
 			<dup/>
 			<store arg="264"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="427"/>
 			<push arg="190"/>
@@ -2643,7 +2643,7 @@
 			<new/>
 			<dup/>
 			<store arg="265"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="426"/>
 			<push arg="197"/>
@@ -2651,7 +2651,7 @@
 			<new/>
 			<dup/>
 			<store arg="143"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="429"/>
 			<push arg="192"/>
@@ -2659,9 +2659,9 @@
 			<new/>
 			<dup/>
 			<store arg="266"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="57"/>
 			<dup/>
 			<getasm/>
@@ -2823,7 +2823,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="423"/>
 			<push arg="190"/>
@@ -2831,7 +2831,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="426"/>
 			<push arg="197"/>
@@ -2839,7 +2839,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="429"/>
 			<push arg="192"/>
@@ -2847,9 +2847,9 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="57"/>
 			<dup/>
 			<getasm/>
@@ -2920,7 +2920,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="423"/>
 			<push arg="443"/>
@@ -2928,7 +2928,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="427"/>
 			<push arg="190"/>
@@ -2936,7 +2936,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="426"/>
 			<push arg="197"/>
@@ -2944,7 +2944,7 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="429"/>
 			<push arg="192"/>
@@ -2952,9 +2952,9 @@
 			<new/>
 			<dup/>
 			<store arg="262"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="57"/>
 			<dup/>
 			<getasm/>
@@ -3248,15 +3248,15 @@
 			<new/>
 			<dup/>
 			<push arg="603"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="42"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="417"/>
 			<load arg="38"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<load arg="28"/>
 			<push arg="175"/>
 			<push arg="16"/>
@@ -3291,7 +3291,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="606"/>
 			<push arg="190"/>
@@ -3299,7 +3299,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="423"/>
 			<push arg="190"/>
@@ -3307,7 +3307,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="428"/>
 			<push arg="197"/>
@@ -3315,7 +3315,7 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="607"/>
 			<push arg="190"/>
@@ -3323,7 +3323,7 @@
 			<new/>
 			<dup/>
 			<store arg="262"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="608"/>
 			<push arg="192"/>
@@ -3331,7 +3331,7 @@
 			<new/>
 			<dup/>
 			<store arg="263"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="609"/>
 			<push arg="197"/>
@@ -3339,7 +3339,7 @@
 			<new/>
 			<dup/>
 			<store arg="264"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="610"/>
 			<push arg="192"/>
@@ -3347,7 +3347,7 @@
 			<new/>
 			<dup/>
 			<store arg="265"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="611"/>
 			<push arg="612"/>
@@ -3355,7 +3355,7 @@
 			<new/>
 			<dup/>
 			<store arg="143"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="613"/>
 			<push arg="203"/>
@@ -3363,7 +3363,7 @@
 			<new/>
 			<dup/>
 			<store arg="266"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="614"/>
 			<push arg="192"/>
@@ -3371,7 +3371,7 @@
 			<new/>
 			<dup/>
 			<store arg="267"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="429"/>
 			<push arg="192"/>
@@ -3379,7 +3379,7 @@
 			<new/>
 			<dup/>
 			<store arg="268"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="615"/>
 			<push arg="192"/>
@@ -3387,7 +3387,7 @@
 			<new/>
 			<dup/>
 			<store arg="33"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="616"/>
 			<push arg="617"/>
@@ -3395,9 +3395,9 @@
 			<new/>
 			<dup/>
 			<store arg="269"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="57"/>
 			<dup/>
 			<getasm/>
@@ -3585,7 +3585,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="606"/>
 			<push arg="190"/>
@@ -3593,7 +3593,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="423"/>
 			<push arg="190"/>
@@ -3601,7 +3601,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="426"/>
 			<push arg="197"/>
@@ -3609,7 +3609,7 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="427"/>
 			<push arg="190"/>
@@ -3617,7 +3617,7 @@
 			<new/>
 			<dup/>
 			<store arg="262"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="624"/>
 			<push arg="197"/>
@@ -3625,7 +3625,7 @@
 			<new/>
 			<dup/>
 			<store arg="263"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="428"/>
 			<push arg="197"/>
@@ -3633,7 +3633,7 @@
 			<new/>
 			<dup/>
 			<store arg="264"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="607"/>
 			<push arg="190"/>
@@ -3641,7 +3641,7 @@
 			<new/>
 			<dup/>
 			<store arg="265"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="608"/>
 			<push arg="192"/>
@@ -3649,7 +3649,7 @@
 			<new/>
 			<dup/>
 			<store arg="143"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="609"/>
 			<push arg="197"/>
@@ -3657,7 +3657,7 @@
 			<new/>
 			<dup/>
 			<store arg="266"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="610"/>
 			<push arg="192"/>
@@ -3665,7 +3665,7 @@
 			<new/>
 			<dup/>
 			<store arg="267"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="611"/>
 			<push arg="612"/>
@@ -3673,7 +3673,7 @@
 			<new/>
 			<dup/>
 			<store arg="268"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="613"/>
 			<push arg="203"/>
@@ -3681,7 +3681,7 @@
 			<new/>
 			<dup/>
 			<store arg="33"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="614"/>
 			<push arg="192"/>
@@ -3689,7 +3689,7 @@
 			<new/>
 			<dup/>
 			<store arg="269"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="429"/>
 			<push arg="192"/>
@@ -3697,7 +3697,7 @@
 			<new/>
 			<dup/>
 			<store arg="35"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="615"/>
 			<push arg="192"/>
@@ -3705,7 +3705,7 @@
 			<new/>
 			<dup/>
 			<store arg="30"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="616"/>
 			<push arg="617"/>
@@ -3713,9 +3713,9 @@
 			<new/>
 			<dup/>
 			<store arg="270"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="57"/>
 			<dup/>
 			<getasm/>
@@ -4249,11 +4249,11 @@
 			<new/>
 			<dup/>
 			<push arg="783"/>
-			<call arg="146"/>
+			<pcall arg="146"/>
 			<dup/>
 			<push arg="147"/>
 			<load arg="28"/>
-			<call arg="148"/>
+			<pcall arg="148"/>
 			<dup/>
 			<push arg="137"/>
 			<push arg="785"/>
@@ -4261,7 +4261,7 @@
 			<new/>
 			<dup/>
 			<store arg="38"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="786"/>
 			<push arg="787"/>
@@ -4269,7 +4269,7 @@
 			<new/>
 			<dup/>
 			<store arg="57"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="788"/>
 			<push arg="789"/>
@@ -4277,7 +4277,7 @@
 			<new/>
 			<dup/>
 			<store arg="58"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="790"/>
 			<push arg="791"/>
@@ -4285,7 +4285,7 @@
 			<new/>
 			<dup/>
 			<store arg="59"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="792"/>
 			<push arg="793"/>
@@ -4293,7 +4293,7 @@
 			<new/>
 			<dup/>
 			<store arg="65"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="794"/>
 			<push arg="795"/>
@@ -4301,7 +4301,7 @@
 			<new/>
 			<dup/>
 			<store arg="262"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="796"/>
 			<push arg="797"/>
@@ -4309,7 +4309,7 @@
 			<new/>
 			<dup/>
 			<store arg="263"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="607"/>
 			<push arg="190"/>
@@ -4317,7 +4317,7 @@
 			<new/>
 			<dup/>
 			<store arg="264"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="606"/>
 			<push arg="192"/>
@@ -4325,7 +4325,7 @@
 			<new/>
 			<dup/>
 			<store arg="265"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="798"/>
 			<push arg="799"/>
@@ -4333,7 +4333,7 @@
 			<new/>
 			<dup/>
 			<store arg="143"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="800"/>
 			<push arg="201"/>
@@ -4341,7 +4341,7 @@
 			<new/>
 			<dup/>
 			<store arg="266"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="801"/>
 			<push arg="802"/>
@@ -4349,7 +4349,7 @@
 			<new/>
 			<dup/>
 			<store arg="267"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="803"/>
 			<push arg="190"/>
@@ -4357,7 +4357,7 @@
 			<new/>
 			<dup/>
 			<store arg="268"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="804"/>
 			<push arg="190"/>
@@ -4365,7 +4365,7 @@
 			<new/>
 			<dup/>
 			<store arg="33"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<dup/>
 			<push arg="805"/>
 			<push arg="192"/>
@@ -4373,9 +4373,9 @@
 			<new/>
 			<dup/>
 			<store arg="269"/>
-			<call arg="150"/>
+			<pcall arg="150"/>
 			<pushf/>
-			<call arg="151"/>
+			<pcall arg="151"/>
 			<load arg="38"/>
 			<dup/>
 			<getasm/>

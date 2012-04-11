@@ -260,15 +260,15 @@
 			<new/>
 			<dup/>
 			<push arg="12"/>
-			<call arg="13"/>
+			<pcall arg="13"/>
 			<dup/>
 			<push arg="14"/>
 			<push arg="11"/>
 			<new/>
 			<dup/>
 			<push arg="15"/>
-			<call arg="13"/>
-			<call arg="16"/>
+			<pcall arg="13"/>
+			<pcall arg="16"/>
 			<set arg="3"/>
 			<getasm/>
 			<push arg="17"/>
@@ -293,9 +293,9 @@
 			<new/>
 			<set arg="1"/>
 			<getasm/>
-			<call arg="25"/>
+			<pcall arg="25"/>
 			<getasm/>
-			<call arg="26"/>
+			<pcall arg="26"/>
 		</code>
 		<linenumbertable>
 			<lne id="27" begin="17" end="17"/>
@@ -386,7 +386,7 @@
 		</parameters>
 		<code>
 			<getasm/>
-			<call arg="59"/>
+			<pcall arg="59"/>
 		</code>
 		<linenumbertable>
 		</linenumbertable>
@@ -407,7 +407,7 @@
 			<store arg="38"/>
 			<getasm/>
 			<load arg="38"/>
-			<call arg="63"/>
+			<pcall arg="63"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -456,18 +456,18 @@
 			<new/>
 			<dup/>
 			<push arg="61"/>
-			<call arg="77"/>
+			<pcall arg="77"/>
 			<dup/>
 			<push arg="52"/>
 			<load arg="38"/>
-			<call arg="78"/>
+			<pcall arg="78"/>
 			<dup/>
 			<push arg="79"/>
 			<load arg="38"/>
 			<call arg="80"/>
 			<dup/>
 			<store arg="48"/>
-			<call arg="81"/>
+			<pcall arg="81"/>
 			<dup/>
 			<push arg="82"/>
 			<load arg="38"/>
@@ -475,7 +475,7 @@
 			<call arg="84"/>
 			<dup/>
 			<store arg="85"/>
-			<call arg="81"/>
+			<pcall arg="81"/>
 			<dup/>
 			<push arg="86"/>
 			<load arg="38"/>
@@ -483,15 +483,15 @@
 			<call arg="87"/>
 			<dup/>
 			<store arg="88"/>
-			<call arg="81"/>
+			<pcall arg="81"/>
 			<dup/>
 			<push arg="89"/>
 			<push arg="90"/>
 			<push arg="91"/>
 			<new/>
-			<call arg="92"/>
+			<pcall arg="92"/>
 			<pusht/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<enditerate/>
 		</code>
 		<linenumbertable>
@@ -800,11 +800,11 @@
 			<new/>
 			<dup/>
 			<push arg="234"/>
-			<call arg="77"/>
+			<pcall arg="77"/>
 			<dup/>
 			<push arg="237"/>
 			<load arg="38"/>
-			<call arg="78"/>
+			<pcall arg="78"/>
 			<dup/>
 			<push arg="89"/>
 			<push arg="234"/>
@@ -812,9 +812,9 @@
 			<new/>
 			<dup/>
 			<store arg="48"/>
-			<call arg="92"/>
+			<pcall arg="92"/>
 			<pushf/>
-			<call arg="93"/>
+			<pcall arg="93"/>
 			<load arg="48"/>
 			<dup/>
 			<getasm/>

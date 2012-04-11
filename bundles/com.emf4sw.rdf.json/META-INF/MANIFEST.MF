@@ -1,14 +1,19 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: emf4sw rdf json
+Bundle-Name: EMF4SW RDF JSON
 Bundle-SymbolicName: com.emf4sw.rdf.json
-Bundle-Version: 0.1.0.qualifier
-Bundle-Vendor: eclipselabs
+Bundle-Version: 0.7.2.qualifier
+Bundle-Vendor: Eclipse Labs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.rdf.json,
  com.emf4sw.rdf.resource.impl
-Require-Bundle: org.eclipse.emf.ecore,
- com.emf4sw.rdf
-Import-Package: org.codehaus.jackson,
- org.codehaus.jackson.map,
- org.codehaus.jackson.node
+Import-Package: com.emf4sw.rdf,
+ com.emf4sw.rdf.util,
+ org.codehaus.jackson;version="1.9.5",
+ org.codehaus.jackson.map;version="1.9.5",
+ org.codehaus.jackson.node;version="1.9.5",
+ org.eclipse.emf.common,
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.resource.impl

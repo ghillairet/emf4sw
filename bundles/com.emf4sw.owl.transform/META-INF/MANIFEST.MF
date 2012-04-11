@@ -1,14 +1,25 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: owl transform
+Bundle-Name: EMF4SW OWL Transformation
 Bundle-SymbolicName: com.emf4sw.owl.transform
-Bundle-Version: 0.7.1.qualifier
-Bundle-Vendor: eclipseabs
+Bundle-Version: 0.7.2.qualifier
+Bundle-Vendor: Eclipse Labs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.emf4sw.owl.transform,
  com.emf4sw.owl.transform.ecore2owl,
  com.emf4sw.owl.transform.owl2ecore,
  com.emf4sw.owl.transform.utils
-Require-Bundle: org.eclipse.emf.ecore,
+Import-Package: com.atl.common.models,
+ com.atl.common.models.extensions,
+ com.atl.common.trans,
+ com.atl.common.utils,
  com.emf4sw.owl,
- com.atl.common
+ com.emf4sw.owl.resource,
+ com.emf4sw.rdf,
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.util,
+ org.eclipse.m2m.atl.core,
+ org.eclipse.m2m.atl.core.emf,
+ org.eclipse.m2m.atl.engine.emfvm.lib

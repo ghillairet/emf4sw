@@ -1,44 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>build</artifactId>
+		<artifactId>emf4sw</artifactId>
 		<groupId>com.emf4sw</groupId>
-		<version>0.7.1-SNAPSHOT</version>
+		<version>0.7.2-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.emf4sw</groupId>
 	<artifactId>com.emf4sw.repository</artifactId>
-	<version>0.7.1-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
-	<build>
-		<plugins>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-repository-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<includeAllDependencies>false</includeAllDependencies>
-					<createArtifactRepository>true</createArtifactRepository>
-					<compress>true</compress>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-publisher-plugin</artifactId>
-				<version>${tycho-version}</version>				 
-				<configuration>
-					<publishArtifacts>true</publishArtifacts>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
 
 	<profiles>
-
 		<profile>
 			<id>deploy-repo</id>
 			<activation>
@@ -46,6 +18,7 @@
 					<name>deploy-repo</name>
 				</property>
 			</activation>
+
 			<build>
 				<plugins>
 					<plugin>
@@ -57,7 +30,7 @@
 								<phase>install</phase>
 								<configuration>
 									<tasks>
-										<unzip src="target/com.emf4sw.repository.zip" dest="../../repository/${build-type}" />
+										<unzip src="target/com.emf4sw.repository.zip" dest="../../../p2/emf4sw/${build-type}" />
 									</tasks>
 								</configuration>
 								<goals>
@@ -68,7 +41,7 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
 
+		</profile>
 	</profiles>
 </project>

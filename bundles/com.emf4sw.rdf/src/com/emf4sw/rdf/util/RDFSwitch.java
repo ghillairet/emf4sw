@@ -10,7 +10,6 @@
  *******************************************************************************/
 package com.emf4sw.rdf.util;
 
-import com.emf4sw.rdf.*;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;

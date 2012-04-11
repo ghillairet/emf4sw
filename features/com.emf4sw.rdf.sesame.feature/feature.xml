@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.emf4sw.rdf.sesame.feature"
-      label="emf4sw sesame adapter"
-      version="0.7.1.qualifier"
-      provider-name="eclipselabs">
+      label="EMF4SW RDF Sesame Adapter"
+      version="0.7.2.qualifier"
+      provider-name="Eclipse Labs">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -21,7 +21,7 @@
       <import plugin="com.emf4sw.rdf"/>
       <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.openrdf"/>
+      <import plugin="org.openrdf.sesame"/>
    </requires>
 
    <plugin

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.emf4sw.rdf.feature"
-      label="emf4sw rdf"
-      version="0.7.1.qualifier"
-      provider-name="eclipselabs">
+      label="EMF4SW RDF"
+      version="0.7.2.qualifier"
+      provider-name="Eclipse Labs">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -19,13 +19,14 @@
 
    <requires>
       <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.emf.common"/>
    </requires>
 
    <plugin
          id="com.emf4sw.rdf"
          download-size="0"
          install-size="0"
-         version="0.7.1.qualifier"
+         version="0.7.2.qualifier"
          unpack="false"/>
 
 </feature>

@@ -379,15 +379,15 @@
 			<new/>
 			<dup/>
 			<push arg="12"/>
-			<call arg="13"/>
+			<pcall arg="13"/>
 			<dup/>
 			<push arg="14"/>
 			<push arg="11"/>
 			<new/>
 			<dup/>
 			<push arg="15"/>
-			<call arg="13"/>
-			<call arg="16"/>
+			<pcall arg="13"/>
+			<pcall arg="16"/>
 			<set arg="3"/>
 			<getasm/>
 			<push arg="17"/>
@@ -412,9 +412,9 @@
 			<new/>
 			<set arg="1"/>
 			<getasm/>
-			<call arg="25"/>
+			<pcall arg="25"/>
 			<getasm/>
-			<call arg="26"/>
+			<pcall arg="26"/>
 		</code>
 		<linenumbertable>
 			<lne id="27" begin="17" end="17"/>

@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: RDF Examples
 Bundle-SymbolicName: com.emf4sw.rdf.examples
-Bundle-Version: 0.7.1.qualifier
-Bundle-Vendor: eclipselabs
+Bundle-Version: 0.7.2.qualifier
+Bundle-Vendor: Eclipse Labs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.6.1",
  com.emf4sw.rdf;bundle-version="0.7.1",
