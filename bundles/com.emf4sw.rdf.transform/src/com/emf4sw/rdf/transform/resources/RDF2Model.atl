@@ -47,7 +47,7 @@ helper context RDF!Resource def: getTypes(): Set(String) =
 helper context RDF!Resource def: isTypeOf(uri: String): Boolean =
 	self.listTypes()->exists(e | e = uri);
 
-helper context Ecore!EClass def: isValidObject(res: RDF!Resource): Boolean =
+helper context Ecore!EClass def: isValidObject(res: RDF!Resource): Boolean = 
 	if (res.oclIsKindOf(RDF!Resource)) then
 		if thisModule.OPTION_USE_STRICT_VALIDATION() then
 			self.strictValidationOf(res)
@@ -55,7 +55,8 @@ helper context Ecore!EClass def: isValidObject(res: RDF!Resource): Boolean =
 	else false endif;
 
 helper context Ecore!EClass def: relaxValidationOf(res: RDF!Resource): Boolean =
-	self.getAllRdfTypes().symetricDifference(res.getTypes()).isEmpty();
+--	self.getAllRdfTypes().symetricDifference(res.getTypes()).debug().isEmpty();
+	res.getTypes()->includes(self.getRdfType());
 
 helper context Ecore!EClass def: strictValidationOf(res: RDF!Resource): Boolean =
 	-- check rdf types
