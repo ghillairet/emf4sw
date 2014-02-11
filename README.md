@@ -1,7 +1,3 @@
-# Eclipse Modeling For Semantic Web
+Deprecated
 
-EMF4SW is a set of Eclipse plugins that brings Semantic Web (SW) languages such as OWL, RDF and SPARQL to the Eclipse Modeling Framework Eclipse Modeling Framework (EMF).
-
-see googlecode project for installation and usage instructions.
-
-googlecode project: http://code.google.com/a/eclipselabs.org/p/emf4sw/
+This project is deprecated and will not see any further development. If you are looking for a solution to convert ecore models into RDF, take a look at [emftriple](https://github.com/ghillairet/emf4sw).
